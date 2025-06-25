@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{910FACDB-91E4-43DC-8F60-76D6EC05B996}|SauceDemo.Core\\SauceDemo.Core.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.core\\saucedemo.core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{910FACDB-91E4-43DC-8F60-76D6EC05B996}|SauceDemo.Core\\SauceDemo.Core.csproj|solutionrelative:saucedemo.core\\saucedemo.core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\utilities\\webdriverfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|solutionrelative:saucedemo.tests\\utilities\\webdriverfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\tests\\logintests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|solutionrelative:saucedemo.tests\\tests\\logintests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\base\\basepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|solutionrelative:saucedemo.tests\\base\\basepage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\pages\\loginpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|solutionrelative:saucedemo.tests\\pages\\loginpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\pages\\dashboardpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|solutionrelative:saucedemo.tests\\pages\\dashboardpage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7B2D0B11-E17B-4231-B66F-1CA16F0C3E7F}|SauceDemo.Tests\\SauceDemo.Tests.csproj|c:\\users\\svetl\\onedrive\\documents\\epam\\repos\\_automation_tests\\saucedemotestautomation\\saucedemo.tests\\saucedemo.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -18,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,29 +42,80 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SauceDemo.Core",
-              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Core\\SauceDemo.Core.csproj",
-              "RelativeDocumentMoniker": "SauceDemo.Core\\SauceDemo.Core.csproj",
-              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Core\\SauceDemo.Core.csproj",
-              "RelativeToolTip": "SauceDemo.Core\\SauceDemo.Core.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-25T11:51:16.753Z",
+              "DocumentIndex": 1,
+              "Title": "LoginTests.cs",
+              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Tests\\LoginTests.cs",
+              "RelativeDocumentMoniker": "SauceDemo.Tests\\Tests\\LoginTests.cs",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Tests\\LoginTests.cs",
+              "RelativeToolTip": "SauceDemo.Tests\\Tests\\LoginTests.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA2wC0AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T17:19:31.278Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SauceDemo.Tests",
+              "DocumentIndex": 4,
+              "Title": "DashboardPage.cs",
+              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Pages\\DashboardPage.cs",
+              "RelativeDocumentMoniker": "SauceDemo.Tests\\Pages\\DashboardPage.cs",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Pages\\DashboardPage.cs",
+              "RelativeToolTip": "SauceDemo.Tests\\Pages\\DashboardPage.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAywA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T13:40:24.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginPage.cs",
+              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Pages\\LoginPage.cs",
+              "RelativeDocumentMoniker": "SauceDemo.Tests\\Pages\\LoginPage.cs",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Pages\\LoginPage.cs",
+              "RelativeToolTip": "SauceDemo.Tests\\Pages\\LoginPage.cs",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAwHwAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T13:40:08.899Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BasePage.cs",
+              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Base\\BasePage.cs",
+              "RelativeDocumentMoniker": "SauceDemo.Tests\\Base\\BasePage.cs",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Base\\BasePage.cs",
+              "RelativeToolTip": "SauceDemo.Tests\\Base\\BasePage.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAkwF0AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T13:39:42.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WebDriverFactory.cs",
+              "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Utilities\\WebDriverFactory.cs",
+              "RelativeDocumentMoniker": "SauceDemo.Tests\\Utilities\\WebDriverFactory.cs",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\Utilities\\WebDriverFactory.cs",
+              "RelativeToolTip": "SauceDemo.Tests\\Utilities\\WebDriverFactory.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAACEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T13:07:35.403Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SauceDemo.Tests.csproj",
               "DocumentMoniker": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\SauceDemo.Tests.csproj",
               "RelativeDocumentMoniker": "SauceDemo.Tests\\SauceDemo.Tests.csproj",
-              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\SauceDemo.Tests.csproj*",
-              "RelativeToolTip": "SauceDemo.Tests\\SauceDemo.Tests.csproj*",
+              "ToolTip": "C:\\Users\\svetl\\OneDrive\\Documents\\EPAM\\Repos\\_automation_tests\\SauceDemoTestAutomation\\SauceDemo.Tests\\SauceDemo.Tests.csproj",
+              "RelativeToolTip": "SauceDemo.Tests\\SauceDemo.Tests.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-25T11:49:46.903Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-25T11:49:46.903Z"
             }
           ]
         }

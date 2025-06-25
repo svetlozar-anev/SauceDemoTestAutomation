@@ -33,7 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SauceDemo.Core\SauceDemo.Core.csproj" />
+    <Folder Include="Config\" />
+    <Folder Include="Models\" />
+    <Folder Include="TestData\" />
   </ItemGroup>
 
 </Project>
