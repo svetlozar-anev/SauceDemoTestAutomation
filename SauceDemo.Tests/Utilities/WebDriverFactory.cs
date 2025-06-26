@@ -1,9 +1,13 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
+﻿// <copyright file="WebDriverFactory.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SauceDemo.Tests.Utilities
 {
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Edge;
+
     /// <summary>
     /// This is a per-thread Singleton-style factory: each thread gets its own WebDriver instance.
     /// It enables safe parallel test execution.
@@ -12,25 +16,31 @@ namespace SauceDemo.Tests.Utilities
     /// </summary>
     public sealed class WebDriverFactory
     {
-        // ThreadLocal ensures each test thread has its own separate WebDriver instance.
-        private static ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
-
-        // Private constructor prevents instantiation of the factory class.
-        private WebDriverFactory() { }
+        /// <summary>
+        /// Holds the WebDriver instance for the current thread.
+        /// </summary>
+        private static ThreadLocal<IWebDriver?> driver = new ThreadLocal<IWebDriver?>();
 
         /// <summary>
-        /// Provides access to the current thread's WebDriver instance.
-        /// Throws an error if the driver hasn't been initialized for this thread.
+        /// Prevents a default instance of the <see cref="WebDriverFactory"/> class from being created.
+        /// </summary>
+        private WebDriverFactory()
+        {
+        }
+
+        /// <summary>
+        /// Gets the current thread's WebDriver instance.
+        /// Throws <see cref="InvalidOperationException"/> if the driver is not initialized.
         /// </summary>
         public static IWebDriver Driver => driver.Value ?? throw new InvalidOperationException("WebDriver instance was not initialized.");
 
         /// <summary>
-        /// Initializes the WebDriver instance for the current thread.
-        /// Supports Chrome and Edge browsers. Maximizes the browser window by default.
-        /// If already initialized, it does nothing (safe for repeated calls).
+        /// Initializes the WebDriver instance for the current thread with the specified browser.
+        /// If a driver already exists, it will be quit and disposed before creating a new one.
         /// </summary>
-        /// <param name="browser">Browser to use: "chrome" or "edge". Defaults to Chrome.</param>
-        public static void InitDriver(string browser = "chrome")
+        /// <param name="browser">The browser to use (e.g., "chrome" or "edge").</param>
+        /// <exception cref="ArgumentException">Thrown when an unsupported browser is specified.</exception>
+        public static void InitDriver(string browser)
         {
             QuitDriver();
 
@@ -56,15 +66,15 @@ namespace SauceDemo.Tests.Utilities
         }
 
         /// <summary>
-        /// Quits and disposes the WebDriver instance for the current thread, if it exists.
-        /// Clears the ThreadLocal storage to free up memory and system resources.
+        /// Quits and disposes of the current thread's WebDriver instance if it exists.
         /// </summary>
         public static void QuitDriver()
         {
             if (driver.IsValueCreated && driver.Value != null)
             {
-                driver.Value.Quit(); // Close browser window and shutdown session
-                driver.Value.Dispose(); // Release unmanaged resources
+                driver.Value.Quit();
+                driver.Value.Dispose();
+                driver.Value = null;
             }
         }
     }

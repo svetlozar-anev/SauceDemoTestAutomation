@@ -1,8 +1,12 @@
-﻿using OpenQA.Selenium;
-using SauceDemo.Tests.Base;
+﻿// <copyright file="LoginPage.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SauceDemo.Tests.Pages
 {
+    using OpenQA.Selenium;
+    using SauceDemo.Tests.Base;
+
     /// <summary>
     /// Page Object Model for the Login Page of saucedemo.com
     /// Contains locators and methods for interacting with login elements.
@@ -10,11 +14,10 @@ namespace SauceDemo.Tests.Pages
     public class LoginPage : BasePage
     {
         // === LOCATORS ===
-
-        private readonly By UsernameInput = By.CssSelector("#user-name");
-        private readonly By PasswordInput = By.CssSelector("#password");
-        private readonly By LoginButton = By.CssSelector("#login-button");
-        private readonly By ErrorMessage = By.CssSelector("h3[data-test='error']");
+        private readonly By usernameInput = By.CssSelector("#user-name");
+        private readonly By passwordInput = By.CssSelector("#password");
+        private readonly By loginButton = By.CssSelector("#login-button");
+        private readonly By errorMessage = By.CssSelector("h3[data-test='error']");
 
         // === ACTIONS ===
 
@@ -23,68 +26,25 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void Open()
         {
-            NavigateTo("https://www.saucedemo.com/");
-            // DisableAutoFill();
-           // DisableAutofillRobustly();
-        }
-
-        public void DisableAutofillRobustly()
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
-
-            IWebElement usernameElement = Driver.FindElement(UsernameInput);
-            IWebElement passwordElement = Driver.FindElement(PasswordInput);
-
-            // JavaScript to first set autocomplete attributes, then clear with a slight delay
-            // and dispatch events. This is a robust attempt to counter aggressive autofill.
-            string script = @"
-            var usernameField = arguments[0];
-            var passwordField = arguments[1];
-
-            // 1. Force autocomplete off (standard approach)
-            usernameField.setAttribute('autocomplete', 'off');
-            passwordField.setAttribute('autocomplete', 'new-password'); // More specific for password fields
-
-            // 2. Clear values immediately
-            usernameField.value = '';
-            passwordField.value = '';
-
-            // 3. Add a small delay and then re-clear and dispatch events
-            //    This helps if autofill re-populates very quickly after initial load
-            setTimeout(function() {
-                usernameField.value = '';
-                passwordField.value = '';
-
-                // Dispatch 'change' and 'blur' events to notify browser of changes
-                // This can sometimes trigger autofill to re-evaluate or clear itself.
-                usernameField.dispatchEvent(new Event('change', { bubbles: true }));
-                usernameField.dispatchEvent(new Event('blur', { bubbles: true }));
-                passwordField.dispatchEvent(new Event('change', { bubbles: true }));
-                passwordField.dispatchEvent(new Event('blur', { bubbles: true }));
-            }, 100); // 100ms delay
-        ";
-
-            js.ExecuteScript(script, usernameElement, passwordElement);
-
-            // Optional: A small C# side sleep after the JS executes to ensure
-            // the browser has processed everything.
-            Thread.Sleep(200); // Wait a bit for the script to finish
+            this.NavigateTo(Config.TestConfig.BaseUrl);
         }
 
         /// <summary>
         /// Enters the username into the input field.
         /// </summary>
+        /// <param name="username">The username to be entered.</param>
         public void EnterUsername(string username)
         {
-            TypeText(UsernameInput, username);
+            this.TypeText(this.usernameInput, username);
         }
 
         /// <summary>
         /// Enters the password into the input field.
         /// </summary>
+        /// <param name="password">The password to be entered.</param>
         public void EnterPassword(string password)
         {
-            TypeText(PasswordInput, password);
+            this.TypeText(this.passwordInput, password);
         }
 
         /// <summary>
@@ -92,7 +52,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClearUsername()
         {
-            ClearField(UsernameInput);
+            this.ClearField(this.usernameInput);
         }
 
         /// <summary>
@@ -100,7 +60,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClearPassword()
         {
-            ClearField(PasswordInput);
+            this.ClearField(this.passwordInput);
         }
 
         /// <summary>
@@ -108,47 +68,28 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClickLogin()
         {
-            Click(LoginButton);
+            this.Click(this.loginButton);
         }
 
         /// <summary>
         /// Gets the error message text displayed after a failed login.
         /// </summary>
+        /// <returns>The error message text shown on the login page.</returns>
         public string GetErrorMessage()
         {
-            return GetElementText(ErrorMessage);
+            return this.GetElementText(this.errorMessage);
         }
 
         /// <summary>
         /// Fills in username and password and clicks login.
         /// </summary>
+        /// <param name="username">The username to be entered.</param>
+        /// <param name="password">The password to be entered.</param>
         public void Login(string username, string password)
         {
-            EnterUsername(username);
-            EnterPassword(password);
-            ClickLogin();
-        }
-
-        /// <summary>
-        /// Uses JavaScript to forcibly clear inputs, defeating autofill.
-        /// </summary>
-        public void ForceClearWithJS()
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
-
-            js.ExecuteScript("document.querySelector('#user-name').value = '';");
-            js.ExecuteScript("document.querySelector('#password').value = '';");
-        }
-
-        // Disable browser autocomplete and autofill on inputs using JS
-        public void DisableAutoFill()
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
-            IWebElement passwordElement = Driver.FindElement(PasswordInput);
-            js.ExecuteScript("arguments[0].setAttribute('readonly', 'readonly');", passwordElement);
-            js.ExecuteScript("arguments[0].value = '';", passwordElement);
-            js.ExecuteScript("arguments[0].removeAttribute('readonly');", passwordElement);
-
+            this.EnterUsername(username);
+            this.EnterPassword(password);
+            this.ClickLogin();
         }
     }
 }
