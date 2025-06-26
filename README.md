@@ -38,9 +38,6 @@ This test automation project verifies login functionality on [https://www.sauced
 | Chrome & Edge         | Cross-browser support       |
 | CSS Selectors         | Element location strategy   |
 | ThreadLocal WebDriver | Parallel test support       |
-| Log4Net *(optional)*  | Logging                     |
-| Design Patterns       | Singleton, Builder, Decorator (optional) |
-| [Optional] BDD        | Gherkin-style specs         |
 
 ---
 

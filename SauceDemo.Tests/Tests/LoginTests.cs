@@ -15,8 +15,8 @@ namespace SauceDemo.Tests.Tests
     [Parallelizable(ParallelScope.Self)]
     public class LoginTests
     {
-        private LoginPage loginPage;
-        private DashboardPage dashboardPage;
+        private LoginPage? loginPage;
+        private DashboardPage? dashboardPage;
 
         /// <summary>
         /// Initializes the WebDriver and page objects before each test.
@@ -47,14 +47,14 @@ namespace SauceDemo.Tests.Tests
         [Description("UC-1: Login attempt with empty credentials shows 'Username is required' error")]
         public void Login_WithEmptyCredentials_ShowsUsernameRequiredError()
         {
-            this.loginPage.EnterUsername("standard_user");
-            this.loginPage.EnterPassword("secret_sauce");
-            this.loginPage.ClearUsername();
-            this.loginPage.ClearPassword();
+            this.loginPage?.EnterUsername("standard_user");
+            this.loginPage?.EnterPassword("secret_sauce");
+            this.loginPage?.ClearUsername();
+            this.loginPage?.ClearPassword();
 
-            this.loginPage.ClickLogin();
+            this.loginPage?.ClickLogin();
 
-            this.loginPage.GetErrorMessage().Should().Be("Epic sadface: Username is required");
+            this.loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
         }
 
         /// <summary>
@@ -65,13 +65,13 @@ namespace SauceDemo.Tests.Tests
         [Description("UC-2: Login attempt without password shows 'Password is required' error")]
         public void Login_WithMissingPassword_ShowsPasswordRequiredError()
         {
-            this.loginPage.EnterUsername("standard_user");
-            this.loginPage.EnterPassword("secret_sauce");
-            this.loginPage.ClearPassword();
+            this.loginPage?.EnterUsername("standard_user");
+            this.loginPage?.EnterPassword("secret_sauce");
+            this.loginPage?.ClearPassword();
 
-            this.loginPage.ClickLogin();
+            this.loginPage?.ClickLogin();
 
-            this.loginPage.GetErrorMessage().Should().Be("Epic sadface: Password is required");
+            this.loginPage?.GetErrorMessage().Should().Be("Epic sadface: Password is required");
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace SauceDemo.Tests.Tests
         [Description("UC-3: Successful login with accepted credentials navigates to dashboard")]
         public void Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
-            this.loginPage.Login(username, password);
+            this.loginPage?.Login(username, password);
 
-            this.dashboardPage.IsAtDashboard().Should().BeTrue("the user should be redirected to the dashboard");
-            this.dashboardPage.GetPageTitle().Should().Be("Swag Labs");
+            this.dashboardPage?.IsAtDashboard().Should().BeTrue("the user should be redirected to the dashboard");
+            this.dashboardPage?.GetPageTitle().Should().Be("Swag Labs");
         }
     }
 }
