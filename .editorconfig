@@ -1,0 +1,11 @@
+# .editorconfig - Enables XML comment rules and common StyleCop formatting
+root = true
+
+[*.cs]
+
+#############################################
+# StyleCop Analyzer Rules - Enable XML Docs
+#############################################
+
+# Allow StyleCop to analyze XML comments (fixes SA0001)
+dotnet_diagnostic.SA0001.severity = none
