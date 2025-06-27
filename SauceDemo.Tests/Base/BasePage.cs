@@ -6,8 +6,8 @@ namespace SauceDemo.Tests.Base
 {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using SauceDemo.Tests.Config;
-    using SauceDemo.Tests.Utilities;
+    using SauceDemo.Core.Config;
+    using SauceDemo.Core.Utilities;
     using SeleniumExtras.WaitHelpers;
 
     /// <summary>

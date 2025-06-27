@@ -1,4 +1,4 @@
-# SauceDemo Automated UI Test Suite
+# SauceDemo Testing
 
 This test automation project verifies login functionality on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver with NUnit and Fluent Assertions.
 
@@ -38,6 +38,35 @@ This test automation project verifies login functionality on [https://www.sauced
 | Chrome & Edge         | Cross-browser support       |
 | CSS Selectors         | Element location strategy   |
 | ThreadLocal WebDriver | Parallel test support       |
+
+---
+
+## 🔧 Project Structure and Design
+
+This solution is organized into **three separate projects** to follow clean architecture and separation of concerns:
+
+### 1. `SauceDemo.Core`
+- Shared utilities and configuration
+- Base classes (`BasePage`, `WebDriverFactory`)
+- Common config (`TestConfig`, `appsettings.json`)
+- 💡 Does **not** depend on any other project.
+
+### 2. `SauceDemo.UI`
+- Page Object Model classes like `LoginPage`, `DashboardPage`
+- Encapsulates all UI-specific interactions
+- Depends **only on** `SauceDemo.Core`
+
+### 3. `SauceDemo.Tests`
+- NUnit test classes like `LoginTests`
+- Test definitions and assertions
+- Depends on both `SauceDemo.UI` and `SauceDemo.Core`
+
+### 🔁 Dependency Direction
+- Core -> (no dependencies)
+- UI -> Core
+- Tests -> UI, Core
+
+This layout supports scalability, test isolation, and reuse of logic across different test suites.
 
 ---
 

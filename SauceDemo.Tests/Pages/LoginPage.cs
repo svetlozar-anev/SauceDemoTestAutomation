@@ -5,6 +5,7 @@
 namespace SauceDemo.Tests.Pages
 {
     using OpenQA.Selenium;
+    using SauceDemo.Core.Config;
     using SauceDemo.Tests.Base;
 
     /// <summary>
@@ -26,7 +27,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void Open()
         {
-            this.NavigateTo(Config.TestConfig.BaseUrl);
+            this.NavigateTo(TestConfig.BaseUrl);
         }
 
         /// <summary>

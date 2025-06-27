@@ -5,8 +5,9 @@
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
+    using SauceDemo.Core.Config;
+    using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Pages;
-    using SauceDemo.Tests.Utilities;
 
     /// <summary>
     /// Contains automated UI tests related to login functionality for SauceDemo.
@@ -24,7 +25,7 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void Setup()
         {
-            WebDriverFactory.InitDriver(Config.TestConfig.Browser);
+            WebDriverFactory.InitDriver(TestConfig.Browser);
             this.loginPage = new LoginPage();
             this.dashboardPage = new DashboardPage();
             this.loginPage.Open();
@@ -89,7 +90,7 @@ namespace SauceDemo.Tests.Tests
             this.loginPage?.Login(username, password);
 
             this.dashboardPage?.IsAtDashboard().Should().BeTrue("the user should be redirected to the dashboard");
-            this.dashboardPage?.GetPageTitle().Should().Be("Swag Labs");
+            dashboardPage?.GetPageTitle().Should().Be("Swag Labs");
         }
     }
 }
