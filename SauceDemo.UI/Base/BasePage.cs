@@ -42,7 +42,7 @@ namespace SauceDemo.UI.Base
         /// <param name="url">The URL to navigate to.</param>
         public void NavigateTo(string url)
         {
-            this.Driver.Navigate().GoToUrl(url);
+            Driver.Navigate().GoToUrl(url);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SauceDemo.UI.Base
         /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
         protected IWebElement WaitForElementVisible(By locator)
         {
-            return this.Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SauceDemo.UI.Base
         /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
         protected IWebElement WaitForElementClickable(By locator)
         {
-            return this.Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
+            return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SauceDemo.UI.Base
         /// <param name="locator">The locator used to find the element.</param>
         protected void Click(By locator)
         {
-            this.WaitForElementClickable(locator).Click();
+            WaitForElementClickable(locator).Click();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace SauceDemo.UI.Base
         /// <param name="text">The text to type into the element.</param>
         protected void TypeText(By locator, string text)
         {
-            var element = this.WaitForElementVisible(locator);
+            var element = WaitForElementVisible(locator);
             element.Clear();
             element.SendKeys(text);
         }
@@ -93,7 +93,7 @@ namespace SauceDemo.UI.Base
         /// <returns>The text content of the visible element.</returns>
         protected string GetElementText(By locator)
         {
-            return this.WaitForElementVisible(locator).Text;
+            return WaitForElementVisible(locator).Text;
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SauceDemo.UI.Base
         {
             try
             {
-                return this.WaitForElementVisible(locator).Displayed;
+                return WaitForElementVisible(locator).Displayed;
             }
             catch (WebDriverTimeoutException)
             {
@@ -119,7 +119,7 @@ namespace SauceDemo.UI.Base
         /// <param name="locator">The locator used to find the element.</param>
         protected void ClearField(By locator)
         {
-            var element = this.WaitForElementVisible(locator);
+            var element = WaitForElementVisible(locator);
             element.Clear();
             element.SendKeys(" ");
             element.SendKeys(Keys.Backspace);

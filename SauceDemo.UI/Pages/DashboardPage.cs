@@ -22,7 +22,7 @@ namespace SauceDemo.UI.Pages
         /// <returns>True if the dashboard logo is visible; otherwise, false.</returns>
         public bool IsAtDashboard()
         {
-            return this.IsElementDisplayed(this.appLogo);
+            return IsElementDisplayed(appLogo);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SauceDemo.UI.Pages
         /// <returns>The title of the current browser page.</returns>
         public string GetPageTitle()
         {
-            return this.Driver.Title;
+            return Driver.Title;
         }
     }
 }

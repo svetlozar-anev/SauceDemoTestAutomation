@@ -27,7 +27,7 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void Open()
         {
-            this.NavigateTo(TestConfig.BaseUrl);
+            NavigateTo(TestConfig.BaseUrl);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SauceDemo.UI.Pages
         /// <param name="username">The username to be entered.</param>
         public void EnterUsername(string username)
         {
-            this.TypeText(this.usernameInput, username);
+            TypeText(usernameInput, username);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace SauceDemo.UI.Pages
         /// <param name="password">The password to be entered.</param>
         public void EnterPassword(string password)
         {
-            this.TypeText(this.passwordInput, password);
+            TypeText(passwordInput, password);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClearUsername()
         {
-            this.ClearField(this.usernameInput);
+            ClearField(usernameInput);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClearPassword()
         {
-            this.ClearField(this.passwordInput);
+            ClearField(passwordInput);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClickLogin()
         {
-            this.Click(this.loginButton);
+            Click(loginButton);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SauceDemo.UI.Pages
         /// <returns>The error message text shown on the login page.</returns>
         public string GetErrorMessage()
         {
-            return this.GetElementText(this.errorMessage);
+            return GetElementText(errorMessage);
         }
 
         /// <summary>
@@ -88,9 +88,9 @@ namespace SauceDemo.UI.Pages
         /// <param name="password">The password to be entered.</param>
         public void Login(string username, string password)
         {
-            this.EnterUsername(username);
-            this.EnterPassword(password);
-            this.ClickLogin();
+            EnterUsername(username);
+            EnterPassword(password);
+            ClickLogin();
         }
     }
 }
