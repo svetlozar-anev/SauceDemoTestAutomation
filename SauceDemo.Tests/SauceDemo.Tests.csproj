@@ -8,7 +8,7 @@
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
+		<!--<PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />-->
 		<PackageReference Include="FluentAssertions" Version="8.4.0" />
 		<!--<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />-->
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
@@ -30,11 +30,5 @@
 
 	<ItemGroup>
 		<Using Include="NUnit.Framework" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Config\appsettings___.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 </Project>

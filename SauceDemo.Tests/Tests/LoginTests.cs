@@ -7,7 +7,7 @@ namespace SauceDemo.Tests.Tests
     using FluentAssertions;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
-    using SauceDemo.Tests.Pages;
+    using SauceDemo.UI.Pages;
 
     /// <summary>
     /// Contains automated UI tests related to login functionality for SauceDemo.
