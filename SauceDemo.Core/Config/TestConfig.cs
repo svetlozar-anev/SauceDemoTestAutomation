@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests.Config
+namespace SauceDemo.Core.Config
 {
     using Microsoft.Extensions.Configuration;
 

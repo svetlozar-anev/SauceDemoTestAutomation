@@ -9,3 +9,4 @@ root = true
 
 # Allow StyleCop to analyze XML comments (fixes SA0001)
 dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1101.severity = none

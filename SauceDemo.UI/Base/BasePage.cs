@@ -2,12 +2,12 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests.Base
+namespace SauceDemo.UI.Base
 {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using SauceDemo.Tests.Config;
-    using SauceDemo.Tests.Utilities;
+    using SauceDemo.Core.Config;
+    using SauceDemo.Core.Utilities;
     using SeleniumExtras.WaitHelpers;
 
     /// <summary>
@@ -22,14 +22,14 @@ namespace SauceDemo.Tests.Base
         /// </summary>
         protected BasePage()
         {
-            this.Driver = WebDriverFactory.Driver;
-            this.Wait = new WebDriverWait(this.Driver, TimeSpan.FromSeconds(TestConfig.WebDriverWaitSeconds));
+            Driver = WebDriverFactory.Driver;
+            Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(TestConfig.WebDriverWaitSeconds));
         }
 
         /// <summary>
         /// Gets thread-safe WebDriver instance from the WebDriverFactory.
         /// </summary>
-        protected IWebDriver Driver { get; }
+        public IWebDriver Driver { get; }
 
         /// <summary>
         /// Gets webDriverWait instance for waiting conditions.
@@ -42,7 +42,7 @@ namespace SauceDemo.Tests.Base
         /// <param name="url">The URL to navigate to.</param>
         public void NavigateTo(string url)
         {
-            this.Driver.Navigate().GoToUrl(url);
+            Driver.Navigate().GoToUrl(url);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SauceDemo.Tests.Base
         /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
         protected IWebElement WaitForElementVisible(By locator)
         {
-            return this.Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SauceDemo.Tests.Base
         /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
         protected IWebElement WaitForElementClickable(By locator)
         {
-            return this.Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
+            return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SauceDemo.Tests.Base
         /// <param name="locator">The locator used to find the element.</param>
         protected void Click(By locator)
         {
-            this.WaitForElementClickable(locator).Click();
+            WaitForElementClickable(locator).Click();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace SauceDemo.Tests.Base
         /// <param name="text">The text to type into the element.</param>
         protected void TypeText(By locator, string text)
         {
-            var element = this.WaitForElementVisible(locator);
+            var element = WaitForElementVisible(locator);
             element.Clear();
             element.SendKeys(text);
         }
@@ -93,7 +93,7 @@ namespace SauceDemo.Tests.Base
         /// <returns>The text content of the visible element.</returns>
         protected string GetElementText(By locator)
         {
-            return this.WaitForElementVisible(locator).Text;
+            return WaitForElementVisible(locator).Text;
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SauceDemo.Tests.Base
         {
             try
             {
-                return this.WaitForElementVisible(locator).Displayed;
+                return WaitForElementVisible(locator).Displayed;
             }
             catch (WebDriverTimeoutException)
             {
@@ -119,7 +119,7 @@ namespace SauceDemo.Tests.Base
         /// <param name="locator">The locator used to find the element.</param>
         protected void ClearField(By locator)
         {
-            var element = this.WaitForElementVisible(locator);
+            var element = WaitForElementVisible(locator);
             element.Clear();
             element.SendKeys(" ");
             element.SendKeys(Keys.Backspace);

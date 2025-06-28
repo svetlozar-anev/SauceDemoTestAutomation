@@ -2,10 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests.Pages
+namespace SauceDemo.UI.Pages
 {
     using OpenQA.Selenium;
-    using SauceDemo.Tests.Base;
+    using SauceDemo.UI.Base;
 
     /// <summary>
     /// Page Object Model for the post-login Dashboard page ("Swag Labs").
@@ -22,7 +22,7 @@ namespace SauceDemo.Tests.Pages
         /// <returns>True if the dashboard logo is visible; otherwise, false.</returns>
         public bool IsAtDashboard()
         {
-            return this.IsElementDisplayed(this.appLogo);
+            return IsElementDisplayed(appLogo);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SauceDemo.Tests.Pages
         /// <returns>The title of the current browser page.</returns>
         public string GetPageTitle()
         {
-            return this.Driver.Title;
+            return Driver.Title;
         }
     }
 }

@@ -2,10 +2,11 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests.Pages
+namespace SauceDemo.UI.Pages
 {
     using OpenQA.Selenium;
-    using SauceDemo.Tests.Base;
+    using SauceDemo.Core.Config;
+    using SauceDemo.UI.Base;
 
     /// <summary>
     /// Page Object Model for the Login Page of saucedemo.com
@@ -26,7 +27,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void Open()
         {
-            this.NavigateTo(Config.TestConfig.BaseUrl);
+            NavigateTo(TestConfig.BaseUrl);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace SauceDemo.Tests.Pages
         /// <param name="username">The username to be entered.</param>
         public void EnterUsername(string username)
         {
-            this.TypeText(this.usernameInput, username);
+            TypeText(usernameInput, username);
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace SauceDemo.Tests.Pages
         /// <param name="password">The password to be entered.</param>
         public void EnterPassword(string password)
         {
-            this.TypeText(this.passwordInput, password);
+            TypeText(passwordInput, password);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClearUsername()
         {
-            this.ClearField(this.usernameInput);
+            ClearField(usernameInput);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClearPassword()
         {
-            this.ClearField(this.passwordInput);
+            ClearField(passwordInput);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace SauceDemo.Tests.Pages
         /// </summary>
         public void ClickLogin()
         {
-            this.Click(this.loginButton);
+            Click(loginButton);
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace SauceDemo.Tests.Pages
         /// <returns>The error message text shown on the login page.</returns>
         public string GetErrorMessage()
         {
-            return this.GetElementText(this.errorMessage);
+            return GetElementText(errorMessage);
         }
 
         /// <summary>
@@ -87,9 +88,9 @@ namespace SauceDemo.Tests.Pages
         /// <param name="password">The password to be entered.</param>
         public void Login(string username, string password)
         {
-            this.EnterUsername(username);
-            this.EnterPassword(password);
-            this.ClickLogin();
+            EnterUsername(username);
+            EnterPassword(password);
+            ClickLogin();
         }
     }
 }
