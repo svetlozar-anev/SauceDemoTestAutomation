@@ -47,12 +47,12 @@ This solution is organized into **three separate projects** to follow clean arch
 
 ### 1. `SauceDemo.Core`
 - Shared utilities and configuration
-- Base classes (`BasePage`, `WebDriverFactory`)
+- Base classes like `WebDriverFactory`
 - Common config (`TestConfig`, `appsettings.json`)
 - 💡 Does **not** depend on any other project.
 
 ### 2. `SauceDemo.UI`
-- Page Object Model classes like `LoginPage`, `DashboardPage`
+- Page Object Model classes (`BasePage` `LoginPage`, `DashboardPage`)
 - Encapsulates all UI-specific interactions
 - Depends **only on** `SauceDemo.Core`
 
