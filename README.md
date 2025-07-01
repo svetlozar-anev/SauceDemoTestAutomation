@@ -20,7 +20,7 @@ This test automation project verifies login functionality on [https://www.sauced
 - Assert error message: `"Epic sadface: Password is required"`
 
 ### UC-3: Valid login
-- Fill in valid username (e.g., `standard_user`)
+- Fill in valid username (`standard_user`, `problem_user`, `performance_glitch_user`, `error_user`, `visual_user`)
 - Enter password: `secret_sauce`
 - Click **Login**
 - Assert dashboard title: `"Swag Labs"`
