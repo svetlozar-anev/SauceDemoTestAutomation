@@ -82,14 +82,6 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 │   └── WebDriverFactory.cs
 └── SauceDemo.Core.csproj
 
-🖥️ SauceDemo.UI/
-├── Base/
-│   └── BasePage.cs
-├── Pages/
-│   ├── DashboardPage.cs
-│   └── LoginPage.cs
-└── SauceDemo.UI.csproj
-
 🧪 SauceDemo.Tests/
 ├── Features/
 │   └── Login.feature
@@ -102,6 +94,14 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 ├── specflow.json
 └── SauceDemo.Tests.csproj
 
+🖥️ SauceDemo.UI/
+├── Base/
+│   └── BasePage.cs
+├── Pages/
+│   ├── DashboardPage.cs
+│   └── LoginPage.cs
+└── SauceDemo.UI.csproj
+
 📁 Root Solution Files:
 ├── .editorconfig
 ├── .gitignore
@@ -109,7 +109,6 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 ├── stylecop.json
 └── SauceDemo.sln
 ```
-
 
 ---
 
