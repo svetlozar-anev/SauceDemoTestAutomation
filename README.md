@@ -72,7 +72,9 @@ This solution is organized into **three separate projects** to follow clean arch
 This layout supports scalability, test isolation, and reuse of logic across different test suites.
 
 ## 🗂️ Project Layout
-SauceDemo.Core/
+
+```text
+🧰 SauceDemo.Core/
 ├── Config/
 │   ├── appsettings.json
 │   └── TestConfig.cs
@@ -80,7 +82,7 @@ SauceDemo.Core/
 │   └── WebDriverFactory.cs
 └── SauceDemo.Core.csproj
 
-SauceDemo.UI/
+🖥️ SauceDemo.UI/
 ├── Base/
 │   └── BasePage.cs
 ├── Pages/
@@ -88,7 +90,7 @@ SauceDemo.UI/
 │   └── LoginPage.cs
 └── SauceDemo.UI.csproj
 
-SauceDemo.Tests/
+🧪 SauceDemo.Tests/
 ├── Features/
 │   └── Login.feature
 ├── Hooks/
@@ -100,12 +102,14 @@ SauceDemo.Tests/
 ├── specflow.json
 └── SauceDemo.Tests.csproj
 
-Root Solution Files:
+📁 Root Solution Files:
 ├── .editorconfig
 ├── .gitignore
 ├── README.md
 ├── stylecop.json
 └── SauceDemo.sln
+```
+
 
 ---
 
