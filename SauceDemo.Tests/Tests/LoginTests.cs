@@ -13,7 +13,8 @@ namespace SauceDemo.Tests.Tests
     /// Contains automated UI tests related to login functionality for SauceDemo.
     /// </summary>
     [TestFixture]
-    [Parallelizable(ParallelScope.Self)]
+    [Parallelizable(ParallelScope.All)]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     public class LoginTests
     {
         private LoginPage? loginPage;
@@ -84,6 +85,8 @@ namespace SauceDemo.Tests.Tests
         [TestCase("standard_user", "secret_sauce")]
         [TestCase("problem_user", "secret_sauce")]
         [TestCase("performance_glitch_user", "secret_sauce")]
+        [TestCase("error_user", "secret_sauce")]
+        [TestCase("visual_user", "secret_sauce")]
         [Description("UC-3: Successful login with accepted credentials navigates to dashboard")]
         public void Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {

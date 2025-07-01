@@ -14,7 +14,7 @@ namespace SauceDemo.UI.Pages
     public class DashboardPage : BasePage
     {
         // === LOCATORS ===
-        private readonly By appLogo = By.CssSelector(".app_logo"); // Common identifier on the dashboard
+        private readonly By appLogo = By.CssSelector(".app_logo");
 
         /// <summary>
         /// Checks if the user is on the Swag Labs dashboard by verifying the logo is visible.
