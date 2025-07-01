@@ -10,14 +10,14 @@ This test automation project verifies login functionality on [https://www.sauced
 - Fill in **any** text in username and password fields
 - Clear both fields
 - Click **Login**
-- Assert error message: `"Username is required"`
+- Assert error message: `"Epic sadface: Username is required"`
 
 ### UC-2: Login with missing password
 - Fill in a username
 - Fill in password
 - Clear only the password
 - Click **Login**
-- Assert error message: `"Password is required"`
+- Assert error message: `"Epic sadface: Password is required"`
 
 ### UC-3: Valid login
 - Fill in valid username (e.g., `standard_user`)
@@ -29,15 +29,18 @@ This test automation project verifies login functionality on [https://www.sauced
 
 ## 🛠️ Tech Stack
 
-| Tool / Library        | Purpose                     |
-|-----------------------|-----------------------------|
-| C#                    | Main language               |
-| Selenium WebDriver    | UI interaction              |
-| NUnit                 | Test framework              |
-| FluentAssertions      | Clean assertions            |
-| Chrome & Edge         | Cross-browser support       |
-| CSS Selectors         | Element location strategy   |
-| ThreadLocal WebDriver | Parallel test support       |
+| Tool / Library        | Purpose                              |
+|-----------------------|---------------------------------------|
+| C#                    | Main language                        |
+| Selenium WebDriver    | UI interaction                       |
+| NUnit                 | Test framework (used for core tests) |
+| SpecFlow              | Gherkin-based BDD test support       |
+| FluentAssertions      | Clean assertions                     |
+| Chrome & Edge         | Cross-browser support                |
+| CSS Selectors         | Element location strategy            |
+| ThreadLocal WebDriver | Parallel test support                |
+
+> 🔄 Both **NUnit tests** and **SpecFlow scenarios** are implemented side-by-side.
 
 ---
 
@@ -67,6 +70,42 @@ This solution is organized into **three separate projects** to follow clean arch
 - Tests -> UI, Core
 
 This layout supports scalability, test isolation, and reuse of logic across different test suites.
+
+## 🗂️ Project Layout
+SauceDemo.Core/
+├── Config/
+│   ├── appsettings.json
+│   └── TestConfig.cs
+├── Utilities/
+│   └── WebDriverFactory.cs
+└── SauceDemo.Core.csproj
+
+SauceDemo.UI/
+├── Base/
+│   └── BasePage.cs
+├── Pages/
+│   ├── DashboardPage.cs
+│   └── LoginPage.cs
+└── SauceDemo.UI.csproj
+
+SauceDemo.Tests/
+├── Features/
+│   └── Login.feature
+├── Hooks/
+│   └── Hooks.cs
+├── Steps/
+│   └── LoginSteps.cs
+├── Tests/
+│   └── LoginTests.cs
+├── specflow.json
+└── SauceDemo.Tests.csproj
+
+Root Solution Files:
+├── .editorconfig
+├── .gitignore
+├── README.md
+├── stylecop.json
+└── SauceDemo.sln
 
 ---
 
