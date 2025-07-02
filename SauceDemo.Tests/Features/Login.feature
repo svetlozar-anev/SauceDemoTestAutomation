@@ -32,3 +32,35 @@
       | performance_glitch_user | secret_sauce |
       | error_user      | secret_sauce   |
       | visual_user      | secret_sauce   |
+
+  Scenario: UC-5 Login fails with incorrect password
+    Given I am on the login page
+    And I enter "standard_user" in the username field
+    And I enter "wrong_password" in the password field
+    When I click the login button
+    Then I should see the error message "Epic sadface: Username and password do not match any user in this service"
+
+  Scenario: UC-6 Login fails with empty username and password
+    Given I am on the login page
+    When I click the login button
+    Then I should see the error message "Epic sadface: Username is required"
+
+  Scenario: UC-7 Login fails with empty username
+    Given I am on the login page
+    And I enter "secret_sauce" in the password field
+    When I click the login button
+    Then I should see the error message "Epic sadface: Username is required"
+
+  Scenario: UC-8 Login with special characters in username and password
+    Given I am on the login page
+    And I enter "!@#$%^&*()" in the username field
+    And I enter "!@#$%^&*()" in the password field
+    When I click the login button
+    Then I should see the error message "Epic sadface: Username and password do not match any user in this service"
+
+  Scenario: UC-9 Login with whitespace-only username and password
+    Given I am on the login page
+    And I enter "    " in the username field
+    And I enter "    " in the password field
+    When I click the login button
+    Then I should see the error message "Epic sadface: Username and password do not match any user in this service"

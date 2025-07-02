@@ -6,8 +6,10 @@ This test automation project verifies different functionalities on [https://www.
 
 ## ✅ Use Cases
 
+```text
 The project covers way too many scenarios and validations. 
 For the full list of use cases and step-by-step breakdowns, check the [Use Cases Documentation](./docs/use-cases.md).
+```
 
 ---
 
