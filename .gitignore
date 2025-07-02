@@ -39,3 +39,6 @@ msedgedriver.exe
 *.resharper
 *.ncrunch*
 nunit-*.xml
+
+# Ignore log files
+/logs/

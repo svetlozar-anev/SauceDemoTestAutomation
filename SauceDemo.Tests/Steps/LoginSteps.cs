@@ -45,6 +45,7 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I enter ""(.*)"" in the username field")]
         public void GivenIEnterInTheUsernameField(string username)
         {
+            Logger.Log.Information("Entering username: {Username}", username);
             loginPage.EnterUsername(username);
         }
 
@@ -55,6 +56,7 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I enter ""(.*)"" in the password field")]
         public void GivenIEnterInThePasswordField(string password)
         {
+            Logger.Log.Information("Entering password: [PROTECTED]");
             loginPage.EnterPassword(password);
         }
 
@@ -82,6 +84,7 @@ namespace SauceDemo.Tests.Steps
         [When(@"I click the login button")]
         public void WhenIClickTheLoginButton()
         {
+            Logger.Log.Information("Clicking the login button");
             loginPage.ClickLogin();
         }
 
@@ -92,6 +95,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"I should see the error message ""(.*)""")]
         public void ThenIShouldSeeTheErrorMessage(string expectedMessage)
         {
+            Logger.Log.Information("Verifying error message: {ExpectedMessage}", expectedMessage);
             loginPage.GetErrorMessage().Should().Be(expectedMessage);
         }
 
@@ -101,6 +105,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"I should be redirected to the dashboard")]
         public void ThenIShouldBeRedirectedToTheDashboard()
         {
+            Logger.Log.Information("Verifying redirection to dashboard");
             dashboardPage.IsAtDashboard().Should().BeTrue();
         }
 

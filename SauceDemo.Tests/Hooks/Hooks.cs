@@ -14,13 +14,22 @@ namespace SauceDemo.Tests.Hooks
     [Binding]
     public class Hooks
     {
+        [BeforeTestRun]
+        public static void BeforeTestRun()
+        {
+            Logger.Init();
+            //Logger.Log.Information("=== Test Run started ===");
+        }
+
         /// <summary>
         /// Initializes the WebDriver instance before each scenario runs.
         /// The browser type is read from the test configuration.
         /// </summary>
         [BeforeScenario]
-        public void BeforeScenario()
+        public void BeforeScenario(ScenarioContext scenario)
         {
+           // Logger.Init();
+            Logger.Log.Information("=== Scenario started: {scenario}", scenario.ScenarioInfo.Title);
             WebDriverFactory.InitDriver(TestConfig.Browser);
         }
 
@@ -29,8 +38,17 @@ namespace SauceDemo.Tests.Hooks
         /// Ensures clean browser sessions between tests.
         /// </summary>
         [AfterScenario]
-        public void AfterScenario()
+        public void AfterScenario(ScenarioContext scenario)
         {
+            if (scenario.TestError != null)
+            {
+                Logger.Log.Error(scenario.TestError, "Scenario failed: {ScenarioTitle} \n", scenario.ScenarioInfo.Title);
+            }
+            else
+            {
+                Logger.Log.Information("Scenario finished successfully: {ScenarioTitle} \n", scenario.ScenarioInfo.Title);
+            }
+
             WebDriverFactory.QuitDriver();
         }
     }

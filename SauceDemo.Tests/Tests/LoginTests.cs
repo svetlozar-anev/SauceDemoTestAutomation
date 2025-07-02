@@ -26,6 +26,8 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void Setup()
         {
+            Logger.Init();
+            Logger.Log.Information("Test Setup started");
             WebDriverFactory.InitDriver(TestConfig.Browser);
             loginPage = new LoginPage();
             dashboardPage = new DashboardPage();
@@ -38,6 +40,18 @@ namespace SauceDemo.Tests.Tests
         [TearDown]
         public void TearDown()
         {
+            var testName = TestContext.CurrentContext.Test.Name;
+            var result = TestContext.CurrentContext.Result.Outcome.Status;
+
+            if (result == NUnit.Framework.Interfaces.TestStatus.Failed)
+            {
+                Logger.Log.Error("Test {TestName} FAILED", testName);
+            }
+            else
+            {
+                Logger.Log.Information("Test {TestName} PASSED", testName);
+            }
+
             WebDriverFactory.QuitDriver();
         }
 
