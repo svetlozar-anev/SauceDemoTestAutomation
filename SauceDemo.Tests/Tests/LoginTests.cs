@@ -46,7 +46,7 @@ namespace SauceDemo.Tests.Tests
         /// shows the appropriate 'Username is required' error message.
         /// </summary>
         [Test]
-        [Description("UC-1: Login attempt with empty credentials shows 'Username is required' error")]
+        [Description("UC-1: Login fails with empty credentials")]
         public void Login_WithEmptyCredentials_ShowsUsernameRequiredError()
         {
             loginPage?.EnterUsername("standard_user");
@@ -64,7 +64,7 @@ namespace SauceDemo.Tests.Tests
         /// shows the appropriate 'Password is required' error message.
         /// </summary>
         [Test]
-        [Description("UC-2: Login attempt without password shows 'Password is required' error")]
+        [Description("UC-2: Login Login fails with missing password")]
         public void Login_WithMissingPassword_ShowsPasswordRequiredError()
         {
             loginPage?.EnterUsername("standard_user");
@@ -94,6 +94,67 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage?.IsAtDashboard().Should().BeTrue("the user should be redirected to the dashboard");
             dashboardPage?.GetPageTitle().Should().Be("Swag Labs");
+        }
+
+        /// <summary>
+        /// Verifies that login with a locked out user shows the appropriate error message.
+        /// </summary>
+        [Test]
+        [Description("UC-4: Login fails with locked out user")]
+        public void Login_WithLockedOutUser_ShowsLockedOutError()
+        {
+            loginPage?.Login("locked_out_user", "secret_sauce");
+
+            loginPage?.GetErrorMessage().Should().Be("Epic sadface: Sorry, this user has been locked out.");
+        }
+
+        /// <summary>
+        /// Verifies that login with incorrect password shows the appropriate error message.
+        /// </summary>
+        [Test]
+        [Description("UC-5: Login fails with incorrect password")]
+        public void Login_WithIncorrectPassword_ShowsNoMatchInServiceError()
+        {
+            loginPage?.Login("standard_user", "wrong_password");
+
+            loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username and password do not match any user in this service");
+        }
+
+        /// <summary>
+        /// Verifies that login with empty username and valid password shows 'Username is required'.
+        /// </summary>
+        [Test]
+        [Description("UC-6: Login fails with empty username")]
+        public void Login_WithEmptyUsername_ShowsUsernameRequiredError()
+        {
+            loginPage?.EnterPassword("secret_sauce");
+            loginPage?.ClickLogin();
+
+            loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
+        }
+
+        /// <summary>
+        /// Verifies that login with special characters in username and password shows invalid credentials error.
+        /// </summary>
+        [Test]
+        [Description("UC-7: Login fails with special characters as username and password")]
+        public void Login_WithSpecialCharacters_ShowsNoMatchInServiceError()
+        {
+            loginPage?.Login("!@#$%^&*()", "!@#$%^&*()");
+
+            loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username and password do not match any user in this service");
+        }
+
+        /// <summary>
+        /// Verifies that login with whitespace-only credentials fails with invalid credentials error.
+        /// </summary>
+        [Test]
+        [Description("UC-8: Login with whitespace-only credentials fails with invalid credentials error")]
+        public void Login_WithWhitespaceOnlyCredentials_ShowsNoMatchInServiceError()
+        {
+            loginPage?.Login("    ", "    ");
+
+            loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username and password do not match any user in this service");
         }
     }
 }

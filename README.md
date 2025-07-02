@@ -1,29 +1,13 @@
 # SauceDemo Testing
 
-This test automation project verifies login functionality on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver with NUnit and Fluent Assertions.
+This test automation project verifies different functionalities on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver, SpecFlow, NUnit and Fluent Assertions.
 
 ---
 
-## ✅ Use Cases Covered
+## ✅ Use Cases
 
-### UC-1: Login with empty credentials
-- Fill in **any** text in username and password fields
-- Clear both fields
-- Click **Login**
-- Assert error message: `"Epic sadface: Username is required"`
-
-### UC-2: Login with missing password
-- Fill in a username
-- Fill in password
-- Clear only the password
-- Click **Login**
-- Assert error message: `"Epic sadface: Password is required"`
-
-### UC-3: Valid login
-- Fill in valid username (`standard_user`, `problem_user`, `performance_glitch_user`, `error_user`, `visual_user`)
-- Enter password: `secret_sauce`
-- Click **Login**
-- Assert dashboard title: `"Swag Labs"`
+The project covers way too many scenarios and validations. 
+For the full list of use cases and step-by-step breakdowns, check the [Use Cases Documentation](./docs/use-cases.md).
 
 ---
 
@@ -91,7 +75,6 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 │   └── LoginSteps.cs
 ├── Tests/
 │   └── LoginTests.cs
-├── specflow.json
 └── SauceDemo.Tests.csproj
 
 🖥️ SauceDemo.UI/
@@ -103,13 +86,14 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 └── SauceDemo.UI.csproj
 
 📁 Root Solution Files:
+├── docs/
+│   └── use-cases.md
 ├── .editorconfig
 ├── .gitignore
 ├── README.md
 ├── stylecop.json
 └── SauceDemo.sln
 ```
-
 ---
 
 ## 🚀 Running Tests
