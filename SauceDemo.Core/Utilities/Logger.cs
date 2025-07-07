@@ -11,9 +11,14 @@ namespace SauceDemo.Core.Utilities
     public static class Logger
     {
         /// <summary>
-        /// Gets the Serilog logger instance.
+        /// Gets the SeleniumLog Serilog logger instance.
         /// </summary>
-        public static ILogger? Log { get; private set; }
+        public static ILogger? SeleniumLog { get; private set; }
+
+        /// <summary>
+        /// Gets the NUnitLog Serilog logger instance.
+        /// </summary>
+        public static ILogger? NUnitLog { get; private set; }
 
         /// <summary>
         /// Initializes the logger with console and rolling file sinks.
@@ -21,9 +26,20 @@ namespace SauceDemo.Core.Utilities
         /// </summary>
         public static void Init()
         {
-            Log = new LoggerConfiguration()
+            var baseDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            var logDir = Path.Combine(baseDir, "logs");
+            Directory.CreateDirectory(logDir);
+
+            SeleniumLog = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("..\\..\\..\\..\\logs\\SauceDemo-.log", rollingInterval: RollingInterval.Hour)
+                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File(Path.Combine(logDir, "Selenium-.log"), rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            NUnitLog = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File(Path.Combine(logDir, "NUnit-.log"), rollingInterval: RollingInterval.Day)
                 .CreateLogger();
         }
     }
