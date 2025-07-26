@@ -1,18 +1,19 @@
-﻿// <copyright file="Hooks.cs" company="PlaceholderCompany">
+﻿// <copyright file="BaseSteps.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests.Steps.Hooks
+namespace SauceDemo.Tests.Steps.Base
 {
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
     using TechTalk.SpecFlow;
 
     /// <summary>
-    /// SpecFlow hooks to initialize and clean up the WebDriver before and after each scenario.
+    /// Provides shared setup and teardown logic for Selenium-based SpecFlow steps.
+    /// Inherits this class in any SpecFlow step definition file to enable logging and WebDriver lifecycle management.
     /// </summary>
     [Binding]
-    public static class Hooks
+    public abstract class BaseSteps
     {
         /// <summary>
         /// Initializes the logger once before any tests are run in the test suite.
@@ -20,8 +21,8 @@ namespace SauceDemo.Tests.Steps.Hooks
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
+            // Initialize the logger once before any tests are run in the test suite.
             Logger.Init();
-            Logger.SeleniumLog?.Information("=== Logger initialized...\n");
         }
 
         /// <summary>
@@ -63,7 +64,6 @@ namespace SauceDemo.Tests.Steps.Hooks
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            Logger.SeleniumLog?.Information("=== Test run complete. Logger flushing...\n");
             Serilog.Log.CloseAndFlush(); // Flush both static and custom loggers
         }
     }

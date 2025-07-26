@@ -1,6 +1,6 @@
 # SauceDemo Testing
 
-This test automation project verifies different functionalities on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver, SpecFlow, NUnit and Fluent Assertions.
+This C# test automation project verifies different functionalities on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver, SpecFlow, NUnit and Fluent Assertions.
 
 ---
 
@@ -22,40 +22,44 @@ For the full list of use cases and step-by-step breakdowns, check the [Use Cases
 | FluentAssertions      | Clean assertions                     |
 | Chrome & Edge         | Cross-browser support                |
 | CSS Selectors         | Element location strategy            |
-| ThreadLocal WebDriver | Parallel test support                |
+| ThreadLocal WebDriver | Parallel test execution              |
+| Serilog               | Structured logging with file output  |
 
 > 🔄 Both **NUnit tests** and **SpecFlow scenarios** are implemented side-by-side.
 
 ---
 
-## 🔧 Project Structure and Design
+## 🔧 Solution Structure and Design
 
 This solution is organized into **three separate projects** to follow clean architecture and separation of concerns:
 
 ### 1. `SauceDemo.Core`
 - Shared utilities and configuration
-- Base classes like `WebDriverFactory`
+- Serilog Logging (`Logger.cs`)
+- WebDriver lifecycle (`WebDriverFactory.cs`)
 - Common config (`TestConfig`, `appsettings.json`)
-- 💡 Does **not** depend on any other project.
+- 📦 No dependencies on other projects.
 
-### 2. `SauceDemo.UI`
-- Page Object Model classes (`BasePage` `LoginPage`, `DashboardPage`)
-- Encapsulates all UI-specific interactions
-- Depends **only on** `SauceDemo.Core`
+### 2. `SauceDemo.Tests`
+- All NUnit and SpecFlow tests
+- Step definitions (`Steps/`)
+- Test classes (`Tests/`)
+- 📦 Depends on both `SauceDemo.UI` and `SauceDemo.Core`
 
-### 3. `SauceDemo.Tests`
-- NUnit test classes like `LoginTests`
-- Test definitions and assertions
-- Depends on both `SauceDemo.UI` and `SauceDemo.Core`
+### 3. `SauceDemo.UI`
+- Page Object Model classes (e.g., `LoginPage`, `DashboardPage`)
+- Base page functionality (`BasePage.cs`)
+- 📦 Depends **only on** `SauceDemo.Core`
+
 
 ### 🔁 Dependency Direction
 - Core -> (no dependencies)
-- UI -> Core
 - Tests -> UI, Core
+- UI -> Core
 
 This layout supports scalability, test isolation, and reuse of logic across different test suites.
 
-## 🗂️ Project Layout
+## 🗂️ Solution Layout
 
 ```text
 🧰 SauceDemo.Core/
@@ -63,17 +67,20 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 │   ├── appsettings.json
 │   └── TestConfig.cs
 ├── Utilities/
+│   └── Logger.cs
 │   └── WebDriverFactory.cs
 └── SauceDemo.Core.csproj
 
 🧪 SauceDemo.Tests/
 ├── Features/
 │   └── Login.feature
-├── Hooks/
-│   └── Hooks.cs
 ├── Steps/
+│   ├── Base/
+│   │   └── BaseSteps.cs
 │   └── LoginSteps.cs
 ├── Tests/
+│   ├── Base/
+│   │   └── BaseTest.cs
 │   └── LoginTests.cs
 └── SauceDemo.Tests.csproj
 
@@ -88,12 +95,33 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 📁 Root Solution Files:
 ├── docs/
 │   └── use-cases.md
+├── logs/
+│   └── NUnit-<date>.log
+│   └── Selenium-<date>.log
 ├── .editorconfig
 ├── .gitignore
 ├── README.md
 ├── stylecop.json
 └── SauceDemo.sln
 ```
+---
+
+## 📋 Logging Setup
+
+Serilog is used for structured logging with daily rolling file output.
+
+- `NUnit-<date>.log`  
+  Logs activity from **NUnit-based test runs**.
+
+- `Selenium-<date>.log`  
+  Logs activity from **SpecFlow scenarios and browser interactions**.
+
+📂 Log files are saved in the `logs/` folder at the root of the solution.
+
+🧱 Two separate logger instances are initialized in [`Logger.cs`](./SauceDemo.Core/Utilities/Logger.cs):
+- `NUnitLog` for classic NUnit tests
+- `SeleniumLog` for SpecFlow scenarios
+
 ---
 
 ## 🚀 Running Tests

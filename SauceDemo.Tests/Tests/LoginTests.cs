@@ -4,13 +4,11 @@
 
 namespace SauceDemo.Tests.Tests
 {
-    using System.Diagnostics;
     using FluentAssertions;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Tests.Base;
     using SauceDemo.UI.Pages;
-    using TechTalk.SpecFlow;
 
     /// <summary>
     /// Contains automated UI tests related to login functionality for SauceDemo.

@@ -25,7 +25,6 @@ namespace SauceDemo.Tests.Tests.Base
         public static void BeforeTestRun()
         {
             Logger.Init();
-            Logger.NUnitLog?.Information("==== Logger initialized...\n");
         }
 
         /// <summary>
@@ -73,8 +72,6 @@ namespace SauceDemo.Tests.Tests.Base
         [OneTimeTearDown]
         public void GlobalTeardown()
         {
-            Logger.NUnitLog?.Information("==== Test run complete. Logger flushing... ====\n");
-
             Serilog.Log.CloseAndFlush();
         }
     }

@@ -7,6 +7,7 @@ namespace SauceDemo.Tests.Steps
     using FluentAssertions;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
+    using SauceDemo.Tests.Steps.Base;
     using SauceDemo.UI.Pages;
     using TechTalk.SpecFlow;
 
@@ -14,7 +15,7 @@ namespace SauceDemo.Tests.Steps
     /// Step definitions for login feature scenarios, implementing user actions and verifications.
     /// </summary>
     [Binding]
-    public class LoginSteps
+    public class LoginSteps : BaseSteps
     {
         private readonly LoginPage loginPage;
         private readonly DashboardPage dashboardPage;
