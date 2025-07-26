@@ -15,9 +15,9 @@ namespace SauceDemo.UI.Pages
     public class LoginPage : BasePage
     {
         // === LOCATORS ===
-        private readonly By usernameInput = By.Id("user-name");
-        private readonly By passwordInput = By.Id("password");
-        private readonly By loginButton = By.Id("login-button");
+        private readonly By usernameInput = By.CssSelector("#user-name");
+        private readonly By passwordInput = By.CssSelector("#password");
+        private readonly By loginButton = By.CssSelector("#login-button");
         private readonly By errorMessage = By.CssSelector("h3[data-test='error']");
 
         // === ACTIONS ===
