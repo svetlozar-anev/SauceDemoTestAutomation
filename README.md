@@ -1,17 +1,17 @@
-# SauceDemo Testing
+# SauceDemoTestAutomation
 
 This C# test automation project verifies different functionalities on [https://www.saucedemo.com](https://www.saucedemo.com) using Selenium WebDriver, SpecFlow, NUnit and Fluent Assertions.
 
 ---
 
-## ✅ Use Cases
+## 📌 Use Cases
 
 The project covers way too many scenarios and validations. 
 For the full list of use cases and step-by-step breakdowns, check the [Use Cases Documentation](./docs/use-cases.md).
 
 ---
 
-## 🛠️ Tech Stack
+## 🧰 Tech Stack
 
 | Tool / Library        | Purpose                              |
 |-----------------------|---------------------------------------|
@@ -62,7 +62,7 @@ This layout supports scalability, test isolation, and reuse of logic across diff
 ## 🗂️ Solution Layout
 
 ```text
-🧰 SauceDemo.Core/
+🛠️ SauceDemo.Core/
 ├── Config/
 │   ├── appsettings.json
 │   └── TestConfig.cs
@@ -129,3 +129,4 @@ Serilog is used for structured logging with daily rolling file output.
 ```bash
 # Using NUnit CLI or Visual Studio Test Explorer
 dotnet test
+```
