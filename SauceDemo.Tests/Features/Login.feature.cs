@@ -74,12 +74,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-1 Login fails with empty credentials")]
-        public void UC_1LoginFailsWithEmptyCredentials()
+        [NUnit.Framework.DescriptionAttribute("UC-001: Login fails with empty credentials")]
+        public void UC_001LoginFailsWithEmptyCredentials()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-1 Login fails with empty credentials", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-001: Login fails with empty credentials", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -116,12 +116,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-2 Login fails with missing password")]
-        public void UC_2LoginFailsWithMissingPassword()
+        [NUnit.Framework.DescriptionAttribute("UC-002: Login fails with missing password")]
+        public void UC_002LoginFailsWithMissingPassword()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-2 Login fails with missing password", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-002: Login fails with missing password", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 12
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -155,19 +155,19 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-3  Successful login with accepted credentials navigates to dashboard")]
+        [NUnit.Framework.DescriptionAttribute("UC-003: Valid login")]
         [NUnit.Framework.TestCaseAttribute("standard_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("problem_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("performance_glitch_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("error_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("visual_user", "secret_sauce", null)]
-        public void UC_3SuccessfulLoginWithAcceptedCredentialsNavigatesToDashboard(string username, string password, string[] exampleTags)
+        public void UC_003ValidLogin(string username, string password, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("username", username);
             argumentsOfScenario.Add("password", password);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-3  Successful login with accepted credentials navigates to dashboard", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-003: Valid login", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 20
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -201,12 +201,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-4 Login fails with locked out user")]
-        public void UC_4LoginFailsWithLockedOutUser()
+        [NUnit.Framework.DescriptionAttribute("UC-004: Login fails with locked out user")]
+        public void UC_004LoginFailsWithLockedOutUser()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-4 Login fails with locked out user", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-004: Login fails with locked out user", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 36
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -238,12 +238,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-5 Login fails with incorrect password")]
-        public void UC_5LoginFailsWithIncorrectPassword()
+        [NUnit.Framework.DescriptionAttribute("UC-005: Login fails with wrong password")]
+        public void UC_005LoginFailsWithWrongPassword()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-5 Login fails with incorrect password", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-005: Login fails with wrong password", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 43
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -275,12 +275,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-6 Login fails with empty username")]
-        public void UC_6LoginFailsWithEmptyUsername()
+        [NUnit.Framework.DescriptionAttribute("UC-006: Login fails with missing username")]
+        public void UC_006LoginFailsWithMissingUsername()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-6 Login fails with empty username", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-006: Login fails with missing username", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 50
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -308,12 +308,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-7 Login fails with special characters as username and password")]
-        public void UC_7LoginFailsWithSpecialCharactersAsUsernameAndPassword()
+        [NUnit.Framework.DescriptionAttribute("UC-007: Login fails with special characters in username and password")]
+        public void UC_007LoginFailsWithSpecialCharactersInUsernameAndPassword()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-7 Login fails with special characters as username and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-007: Login fails with special characters in username and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 56
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -345,12 +345,12 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-8 Login fails with whitespace-only username and password")]
-        public void UC_8LoginFailsWithWhitespace_OnlyUsernameAndPassword()
+        [NUnit.Framework.DescriptionAttribute("UC-008: Login fails with whitespace-only username and password")]
+        public void UC_008LoginFailsWithWhitespace_OnlyUsernameAndPassword()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-8 Login fails with whitespace-only username and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-008: Login fails with whitespace-only username and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 63
   this.ScenarioInitialize(scenarioInfo);
 #line hidden

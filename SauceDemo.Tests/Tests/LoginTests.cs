@@ -36,10 +36,10 @@ namespace SauceDemo.Tests.Tests
         /// shows the appropriate 'Username is required' error message.
         /// </summary>
         [Test]
-        [Description("UC-1: Login fails with empty credentials")]
-        public void Login_WithEmptyCredentials_ShowsUsernameRequiredError()
+        [Description("UC-001: Login fails with empty credentials")]
+        public void UC_001_Login_WithEmptyCredentials_ShowsUsernameRequiredError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-1: Login fails with empty credentials", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-001: Login fails with empty credentials", LogScope);
 
             loginPage?.EnterUsername("standard_user");
             loginPage?.EnterPassword("secret_sauce");
@@ -56,10 +56,10 @@ namespace SauceDemo.Tests.Tests
         /// shows the appropriate 'Password is required' error message.
         /// </summary>
         [Test]
-        [Description("UC-2: Login Login fails with missing password")]
-        public void Login_WithMissingPassword_ShowsPasswordRequiredError()
+        [Description("UC-002: Login fails with missing password")]
+        public void UC_002_Login_WithMissingPassword_ShowsPasswordRequiredError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-2: Login Login fails with missing password", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-002: Login fails with missing password", LogScope);
 
             loginPage?.EnterUsername("standard_user");
             loginPage?.EnterPassword("secret_sauce");
@@ -81,10 +81,10 @@ namespace SauceDemo.Tests.Tests
         [TestCase("performance_glitch_user", "secret_sauce")]
         [TestCase("error_user", "secret_sauce")]
         [TestCase("visual_user", "secret_sauce")]
-        [Description("UC-3: Successful login with accepted credentials navigates to dashboard")]
-        public void Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
+        [Description("UC-003: Valid login")]
+        public void UC_003_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-3: Successful login with accepted credentials navigates to dashboard with user: {Username}", LogScope, username);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-003: Valid login with user: {Username}", LogScope, username);
 
             loginPage?.Login(username, password);
             Logger.NUnitLog?.Information("[{Scope}] Login submitted", LogScope);
@@ -100,10 +100,10 @@ namespace SauceDemo.Tests.Tests
         /// Verifies that login with a locked out user shows the appropriate error message.
         /// </summary>
         [Test]
-        [Description("UC-4: Login fails with locked out user")]
-        public void Login_WithLockedOutUser_ShowsLockedOutError()
+        [Description("UC-004: Login fails with locked out user")]
+        public void UC_004_Login_WithLockedOutUser_ShowsLockedOutError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-4: Login fails with locked out user", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-004: Login fails with locked out user", LogScope);
 
             loginPage?.Login("locked_out_user", "secret_sauce");
 
@@ -114,10 +114,10 @@ namespace SauceDemo.Tests.Tests
         /// Verifies that login with incorrect password shows the appropriate error message.
         /// </summary>
         [Test]
-        [Description("UC-5: Login fails with incorrect password")]
-        public void Login_WithIncorrectPassword_ShowsNoMatchInServiceError()
+        [Description("UC-005: Login fails with wrong password")]
+        public void UC_005_Login_WithIncorrectPassword_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-5: Login fails with incorrect password", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-005: Login fails with wrong password", LogScope);
 
             loginPage?.Login("standard_user", "wrong_password");
 
@@ -128,10 +128,10 @@ namespace SauceDemo.Tests.Tests
         /// Verifies that login with empty username and valid password shows 'Username is required'.
         /// </summary>
         [Test]
-        [Description("UC-6: Login fails with empty username")]
-        public void Login_WithEmptyUsername_ShowsUsernameRequiredError()
+        [Description("UC-006 Login fails with missing username")]
+        public void UC_006_Login_WithEmptyUsername_ShowsUsernameRequiredError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-6: Login fails with empty username", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-006 Login fails with missing username", LogScope);
 
             loginPage?.EnterPassword("secret_sauce");
             loginPage?.ClickLogin();
@@ -143,10 +143,10 @@ namespace SauceDemo.Tests.Tests
         /// Verifies that login with special characters in username and password shows invalid credentials error.
         /// </summary>
         [Test]
-        [Description("UC-7: Login fails with special characters as username and password")]
-        public void Login_WithSpecialCharacters_ShowsNoMatchInServiceError()
+        [Description("UC-007: Login fails with special characters in username and password")]
+        public void UC_007_Login_WithSpecialCharacters_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-7: Login fails with special characters as username and password", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-007: Login fails with special characters in username and password", LogScope);
 
             loginPage?.Login("!@#$%^&*()", "!@#$%^&*()");
 
@@ -157,10 +157,10 @@ namespace SauceDemo.Tests.Tests
         /// Verifies that login with whitespace-only credentials fails with invalid credentials error.
         /// </summary>
         [Test]
-        [Description("UC-8: Login with whitespace-only credentials fails with invalid credentials error")]
-        public void Login_WithWhitespaceOnlyCredentials_ShowsNoMatchInServiceError()
+        [Description("UC-008: Login fails with whitespace-only username and password")]
+        public void UC_008_Login_WithWhitespaceOnlyCredentials_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-8: Login with whitespace-only credentials fails with invalid credentials error", LogScope);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-008: Login fails with whitespace-only username and password", LogScope);
 
             loginPage?.Login("    ", "    ");
 
