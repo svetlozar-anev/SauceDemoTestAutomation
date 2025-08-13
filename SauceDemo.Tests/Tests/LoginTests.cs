@@ -81,10 +81,10 @@ namespace SauceDemo.Tests.Tests
         [TestCase("performance_glitch_user", "secret_sauce")]
         [TestCase("error_user", "secret_sauce")]
         [TestCase("visual_user", "secret_sauce")]
-        [Description("UC-003: Valid login")]
+        [Description("UC-003: Login with valid credentials shows Dashboard")]
         public void UC_003_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-003: Valid login with user: {Username}", LogScope, username);
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-003: Valid login with user: {Username} shows Dashboard", LogScope, username);
 
             loginPage?.Login(username, password);
             Logger.NUnitLog?.Information("[{Scope}] Login submitted", LogScope);
