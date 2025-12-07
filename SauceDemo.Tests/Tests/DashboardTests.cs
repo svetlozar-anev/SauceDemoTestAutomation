@@ -4,7 +4,6 @@
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
-    using OpenQA.Selenium;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Tests.Base;
     using SauceDemo.UI.Pages;
