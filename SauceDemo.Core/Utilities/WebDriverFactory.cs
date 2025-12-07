@@ -6,7 +6,7 @@ namespace SauceDemo.Core.Utilities
 {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Edge;
+    using OpenQA.Selenium.Firefox;
 
     /// <summary>
     /// This is a per-thread Singleton-style factory: each thread gets its own WebDriver instance.
@@ -50,12 +50,18 @@ namespace SauceDemo.Core.Utilities
             {
                 case "chrome":
                     var chromeOptions = new ChromeOptions();
+
+                    chromeOptions.AddUserProfilePreference("credentials_enable_service", false);
+                    chromeOptions.AddUserProfilePreference("profile.password_manager_enabled", false);
+                    chromeOptions.AddArgument("--disable-notifications");
+                    chromeOptions.AddArgument("--disable-popup-blocking");
+
                     webDriver = new ChromeDriver(chromeOptions);
                     break;
 
-                case "edge":
-                    var edgeOptions = new EdgeOptions();
-                    webDriver = new EdgeDriver(edgeOptions);
+                case "firefox":
+                    var firefoxOptions = new FirefoxOptions();
+                    webDriver = new FirefoxDriver(firefoxOptions);
                     break;
 
                 default:

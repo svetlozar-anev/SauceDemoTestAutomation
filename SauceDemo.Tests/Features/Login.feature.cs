@@ -155,19 +155,19 @@ namespace SauceDemo.Tests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("UC-003: Valid login")]
+        [NUnit.Framework.DescriptionAttribute("UC-003: Login with valid credentials shows Dashboard")]
         [NUnit.Framework.TestCaseAttribute("standard_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("problem_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("performance_glitch_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("error_user", "secret_sauce", null)]
         [NUnit.Framework.TestCaseAttribute("visual_user", "secret_sauce", null)]
-        public void UC_003ValidLogin(string username, string password, string[] exampleTags)
+        public void UC_003LoginWithValidCredentialsShowsDashboard(string username, string password, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("username", username);
             argumentsOfScenario.Add("password", password);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-003: Valid login", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("UC-003: Login with valid credentials shows Dashboard", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 20
   this.ScenarioInitialize(scenarioInfo);
 #line hidden

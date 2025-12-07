@@ -17,7 +17,7 @@
     When I click the login button
     Then I should see the error message "Epic sadface: Password is required"
 
-  Scenario: UC-003: Valid login
+  Scenario: UC-003: Login with valid credentials shows Dashboard
     Given I am on the login page
     And I enter "<username>" in the username field
     And I enter "<password>" in the password field
