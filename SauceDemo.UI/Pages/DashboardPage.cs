@@ -271,7 +271,7 @@ namespace SauceDemo.UI.Pages
                     }
                 });
 
-                okButton?.Click();
+                okButton.Click();
             }
             catch (WebDriverTimeoutException)
             {

@@ -29,7 +29,7 @@ namespace SauceDemo.UI.Base
         /// <summary>
         /// Gets thread-safe WebDriver instance from the WebDriverFactory.
         /// </summary>
-        public IWebDriver Driver { get; }
+        protected IWebDriver Driver { get; }
 
         /// <summary>
         /// Gets webDriverWait instance for waiting conditions.
@@ -40,29 +40,9 @@ namespace SauceDemo.UI.Base
         /// Navigates the browser to a specific URL.
         /// </summary>
         /// <param name="url">The URL to navigate to.</param>
-        public void NavigateTo(string url)
+        protected void NavigateTo(string url)
         {
             Driver.Navigate().GoToUrl(url);
-        }
-
-        /// <summary>
-        /// Waits until the element is visible in the DOM and returns it.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
-        protected IWebElement WaitForElementVisible(By locator)
-        {
-            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
-        }
-
-        /// <summary>
-        /// Waits until the element is clickable in the DOM and returns it.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
-        protected IWebElement WaitForElementClickable(By locator)
-        {
-            return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
 
         /// <summary>
@@ -124,6 +104,26 @@ namespace SauceDemo.UI.Base
             element.SendKeys(" ");
             element.SendKeys(Keys.Backspace);
             element.SendKeys(Keys.Tab);
+        }
+
+        /// <summary>
+        /// Waits until the element is visible in the DOM and returns it.
+        /// </summary>
+        /// <param name="locator">The locator used to find the element.</param>
+        /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
+        private IWebElement WaitForElementVisible(By locator)
+        {
+            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+        }
+
+        /// <summary>
+        /// Waits until the element is clickable in the DOM and returns it.
+        /// </summary>
+        /// <param name="locator">The locator used to find the element.</param>
+        /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
+        private IWebElement WaitForElementClickable(By locator)
+        {
+            return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
     }
 }
