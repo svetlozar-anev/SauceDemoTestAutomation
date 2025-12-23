@@ -54,15 +54,15 @@ namespace SauceDemo.Tests.Tests
 
             // Assert: Each product has a name
             productNames.Should().NotBeNullOrEmpty(because: "each product should have a name");
-            productNames!.Should().OnlyContain(name => !string.IsNullOrWhiteSpace(name), because: "product names should not be empty");
+            productNames.Should().OnlyContain(name => !string.IsNullOrWhiteSpace(name), because: "product names should not be empty");
 
             // Assert: Each product has a valid price
             productPrices.Should().NotBeNullOrEmpty(because: "each product should have a price");
-            productPrices!.Should().OnlyContain(price => price.StartsWith("$"), because: "product prices should be formatted correctly");
+            productPrices.Should().OnlyContain(price => price.StartsWith("$"), because: "product prices should be formatted correctly");
 
             // Assert: Each product has an image displayed
             productImages.Should().NotBeNullOrEmpty("each product should have an image element");
-            foreach (var img in productImages!)
+            foreach (var img in productImages)
             {
                 img.GetAttribute("src").Should().NotBeNullOrEmpty("each product image should have a valid src attribute");
             }
@@ -122,7 +122,7 @@ namespace SauceDemo.Tests.Tests
             // Click the product title (or image; title is the most stable)
             dashboardPage.ClickProductTitleByIndex(index);
 
-            // Create detail page object and let it handle it's own wait
+            // Create detail page object and let it handle its own wait
             var detailPage = new ProductDetailPage();
             detailPage.IsLoaded().Should().BeTrue(because: "the detail page must load before validation");
 
