@@ -42,3 +42,4 @@ nunit-*.xml
 
 # Ignore log files
 /logs/
+.DS_Store
