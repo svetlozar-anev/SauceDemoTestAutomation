@@ -7,6 +7,7 @@ namespace SauceDemo.UI.Pages
     using System.Globalization;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
+    using SauceDemo.Core.Config;
     using SauceDemo.UI.Base;
 
     /// <summary>
@@ -26,6 +27,18 @@ namespace SauceDemo.UI.Pages
         private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
 
+        // === PAGE ACTIONS ===
+        
+        /// <summary>
+        /// Opens the dashboard page.
+        /// </summary>
+        /// <returns>The loaded <see cref="DashboardPage"/>.</returns>
+        public DashboardPage Open()
+        {
+            NavigateTo(TestConfig.BaseUrl + "/inventory.html");
+            return new DashboardPage();
+        }
+        
         /// <summary>
         /// Clicks the "Add to cart" button for the product at the given index.
         /// </summary>
@@ -40,10 +53,9 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
         // TODO: Name both methods ClickAddToCard or this one to ClickAddToCartByName for consistency
-        public void ClickAddToCart(string productName)
+        public void ClickAddToCartByName(string productName)
         {
-            var product = FindProductContainer(productName);
-            product.FindElement(By.CssSelector("button")).Click();
+            FindProductContainer(productName).FindElement(By.CssSelector("button")).Click();
         }
 
         /// <summary>

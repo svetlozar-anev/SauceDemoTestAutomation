@@ -8,6 +8,7 @@ namespace SauceDemo.UI.Base
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
+    using SauceDemo.UI.Pages;
     using SeleniumExtras.WaitHelpers;
 
     /// <summary>
@@ -32,9 +33,19 @@ namespace SauceDemo.UI.Base
         protected IWebDriver Driver { get; }
 
         /// <summary>
-        /// Gets webDriverWait instance for waiting conditions.
+        /// Gets WebDriverWait instance used for explicit waits..
         /// </summary>
         protected WebDriverWait Wait { get; }
+
+        /// <summary>
+        /// Finds an element after waiting for it to be visible.
+        /// </summary>
+        /// <param name="locator">The locator used to find the element.</param>
+        /// <returns>The found <see cref="IWebElement"/>.</returns>
+        protected IWebElement Find(By locator)
+        {
+            return WaitForElementClickable(locator);
+        }
 
         /// <summary>
         /// Navigates the browser to a specific URL.
@@ -111,7 +122,7 @@ namespace SauceDemo.UI.Base
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
-        private IWebElement WaitForElementVisible(By locator)
+        protected IWebElement WaitForElementVisible(By locator)
         {
             return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
         }
@@ -121,7 +132,7 @@ namespace SauceDemo.UI.Base
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
-        private IWebElement WaitForElementClickable(By locator)
+        protected IWebElement WaitForElementClickable(By locator)
         {
             return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }

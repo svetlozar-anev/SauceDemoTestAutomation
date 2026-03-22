@@ -27,7 +27,7 @@ namespace SauceDemo.Tests.Tests
         {
             loginPage = new LoginPage();
             dashboardPage = new DashboardPage();
-            loginPage?.Open();
+            loginPage?.OpenLoginPage();
             loginPage?.Login("standard_user", "secret_sauce");
 
             Logger.NUnitLog?.Information("[{Scope}] Logged in as standard_user for Dashboard tests", LogScope);
@@ -201,8 +201,8 @@ namespace SauceDemo.Tests.Tests
                 dashboardPage.GetButtonLabel(productName)
                     .Should().Be("Add to cart", because: $"{productName} should be un-added initially");
 
-                // Add to cart
-                dashboardPage.ClickAddToCart(productName);
+                // Add to cart by name
+                dashboardPage.ClickAddToCartByName(productName);
 
                 // Wait until button shows "Remove"
                 dashboardPage.WaitForButtonLabel(productName, "Remove");
