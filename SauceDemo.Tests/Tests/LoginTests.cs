@@ -28,7 +28,7 @@ namespace SauceDemo.Tests.Tests
         {
             loginPage = new LoginPage();
             dashboardPage = new DashboardPage();
-            loginPage?.Open();
+            loginPage?.OpenLoginPage();
         }
 
         /// <summary>

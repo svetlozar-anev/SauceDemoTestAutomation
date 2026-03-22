@@ -25,11 +25,15 @@ namespace SauceDemo.UI.Pages
         /// <summary>
         /// Loads the login page.
         /// </summary>
-        public void Open()
+        /// <returns>
+        /// An instance of <see cref="LoginPage"/> representing the loaded login page.
+        /// </returns>
+        public LoginPage OpenLoginPage()
         {
-            NavigateTo(TestConfig.BaseUrl);
+         NavigateTo(TestConfig.BaseUrl);
+         return new LoginPage();
         }
-
+        
         /// <summary>
         /// Enters the username into the input field.
         /// </summary>
@@ -91,6 +95,27 @@ namespace SauceDemo.UI.Pages
             EnterUsername(username);
             EnterPassword(password);
             ClickLogin();
+        }
+
+        /// <summary>
+        /// Logs in using the specified user's credentials and navigates to the dashboard page.
+        /// </summary>
+        /// <param name="user">The <see cref="User"/> containing the username and password to use for login.</param>
+        /// <returns>
+        /// An instance of <see cref="DashboardPage"/> representing the dashboard after a successful login.
+        /// </returns>
+        public DashboardPage LoginAs(User user)
+        {
+            EnterUsername(user.username);
+            EnterPassword(user.password);
+            ClickLogin();
+
+            return new DashboardPage();
+        }
+
+        public record User(string username, string password)
+        {
+            public static User Standard => new ("standard_user", "secret_sauce");
         }
     }
 }

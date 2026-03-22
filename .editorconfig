@@ -11,6 +11,12 @@ root = true
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1101.severity = none
 
+# Suppress trailing whitespace warning
+dotnet_diagnostic.SA1028.severity = none
+
+# Disable method / field ordering rule
+dotnet_diagnostic.SA1201.severity = none
+
 #############################################
 # Rider / Code Style - Fully Qualified Names
 #############################################
@@ -23,3 +29,10 @@ dotnet_style_qualification_for_event = true:none
 
 # Disable Rider redundant qualifier inspection
 resharper_redunqualifier_severity = none
+
+#############################################
+# Suppress specific IDE warnings
+#############################################
+
+# Suppress "Method can be made private" warning
+dotnet_diagnostic.IDE0051.severity = none
