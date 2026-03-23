@@ -1,9 +1,11 @@
 ﻿// <copyright file="DashboardTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
+
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
+    using OpenQA.Selenium;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Tests.Base;
     using SauceDemo.UI.Pages;
@@ -54,17 +56,22 @@ namespace SauceDemo.Tests.Tests
 
             // Assert: Each product has a name
             productNames.Should().NotBeNullOrEmpty(because: "each product should have a name");
-            productNames.Should().OnlyContain(name => !string.IsNullOrWhiteSpace(name), because: "product names should not be empty");
+            productNames.Should().OnlyContain(
+                name => !string.IsNullOrWhiteSpace(name),
+                because: "product names should not be empty");
 
             // Assert: Each product has a valid price
             productPrices.Should().NotBeNullOrEmpty(because: "each product should have a price");
-            productPrices.Should().OnlyContain(price => price.StartsWith("$"), because: "product prices should be formatted correctly");
+            productPrices.Should().OnlyContain(
+                price => price.StartsWith("$"),
+                because: "product prices should be formatted correctly");
 
             // Assert: Each product has an image displayed
             productImages.Should().NotBeNullOrEmpty("each product should have an image element");
             foreach (var img in productImages)
             {
-                img.GetAttribute("src").Should().NotBeNullOrEmpty("each product image should have a valid src attribute");
+                img.GetAttribute("src").Should()
+                    .NotBeNullOrEmpty("each product image should have a valid src attribute");
             }
         }
 
@@ -108,7 +115,9 @@ namespace SauceDemo.Tests.Tests
         [Description("UC-011: Clicking a product opens its detail page")]
         public void UC_011_AllProductDetailPageOpensCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-011: Clicking a product opens its detail page", LogScope);
+            Logger.NUnitLog?.Information(
+                "[{Scope}] Executing UC-011: Clicking a product opens its detail page",
+                LogScope);
 
             // Ensure dashboard is ready
             dashboardPage!.WaitForDashboardToLoad();
@@ -166,7 +175,8 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.WaitForButtonLabel(index, "Remove");
 
             // Verify that the cart badge incremented by exactly one.
-            dashboardPage.GetCartCount().Should().Be(cartBefore + 1, because: "adding one item should increment the counter");
+            dashboardPage.GetCartCount().Should()
+                .Be(cartBefore + 1, because: "adding one item should increment the counter");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-012 completed successfully", LogScope);
         }
@@ -220,6 +230,175 @@ namespace SauceDemo.Tests.Tests
             }
 
             Logger.NUnitLog?.Information("[{Scope}] UC-013 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-014: Verifies that the burger menu is visible and contains expected options.
+        /// </summary>
+        [Test]
+        [Description("UC-014: Navigation menu (burger menu) appears and functions")]
+        public void UC_014_BurgerMenu_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-014: Burger menu validation", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            dashboardPage.OpenMenu();
+
+            var options = dashboardPage.GetMenuOptions();
+
+            options.Should().Contain("All Items");
+            options.Should().Contain("About");
+            options.Should().Contain("Logout");
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-014 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-015: Verifies removing an item from the cart updates UI correctly.
+        /// </summary>
+        [Test]
+        [Description("UC-015: Removing an item from the cart via Dashboard page")]
+        public void UC_015_RemoveItemFromCart_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-015: Remove item from cart", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            int index = 0;
+
+            dashboardPage.ClickAddToCartByIndex(index);
+            dashboardPage.WaitForButtonLabel(index, "Remove");
+
+            int cartAfterAdd = dashboardPage.GetCartCount();
+
+            dashboardPage.ClickRemoveByIndex(index);
+            dashboardPage.WaitForButtonLabel(index, "Add to cart");
+
+            dashboardPage.GetCartCount()
+                .Should().Be(cartAfterAdd - 1, because: "removing item should decrement cart");
+
+            dashboardPage.GetAddToCartButtonLabel(index)
+                .Should().Be("Add to cart", because: "item should return to initial state");
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-015 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-016: Verifies that cart icon navigates to the cart page.
+        /// </summary>
+        [Test]
+        [Description("UC-016: Cart icon navigates to Cart page")]
+        public void UC_016_CartNavigation_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-016: Cart navigation", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            var product = dashboardPage.GetAllProductNames().First();
+
+            dashboardPage.ClickAddToCartByName(product);
+
+            dashboardPage.ClickCartIcon();
+
+            var cartPage = new CartPage();
+
+            cartPage.IsLoaded().Should().BeTrue();
+            cartPage.GetCartItems()
+                .Should().Contain(product);
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-016 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-017: Verifies logout functionality from dashboard.
+        /// </summary>
+        [Test]
+        [Description("UC-017: Logout from the Dashboard page")]
+        public void UC_017_Logout_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-017: Logout", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            dashboardPage.OpenMenu();
+            dashboardPage.ClickLogout();
+
+            loginPage!.IsLoaded().Should().BeTrue();
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-017 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-018: Verifies product images are valid and not broken.
+        /// </summary>
+        [Test]
+        [Description("UC-018: Product images load correctly")]
+        public void UC_018_ProductImages_AreValid()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            var images = dashboardPage.GetAllProductImages();
+
+            foreach (var img in images)
+            {
+                img.GetAttribute("src").Should().NotBeNullOrEmpty();
+
+                var result = ((IJavaScriptExecutor)Driver)
+                    .ExecuteScript("return arguments[0].naturalWidth > 0", img);
+
+                bool isLoaded = result is bool loaded && loaded;
+
+                isLoaded.Should().BeTrue("image should not be broken");
+            }
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-019: Verifies price format and currency consistency.
+        /// </summary>
+        [Test]
+        [Description("UC-019: Price format and currency consistency")]
+        public void UC_019_Prices_AreFormattedCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-019: Price format validation", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            var prices = dashboardPage.GetAllProductPrices();
+
+            prices.Should().OnlyContain(
+                price =>
+                    System.Text.RegularExpressions.Regex.IsMatch(price, @"^\$\d+\.\d{2}$"),
+                because: "prices should follow $xx.xx format");
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-019 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-020: Verifies About link navigates correctly.
+        /// </summary>
+        [Test]
+        [Description("UC-020: About link in menu navigates correctly")]
+        public void UC_020_About_LinkInMenu_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-020: About navigation", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+            dashboardPage.OpenMenu();
+
+            dashboardPage.WaitAboutToLoad();
+            dashboardPage.ClickAbout();
+
+            dashboardPage.WaitSaucelabsComToLoad();
+
+            // Assert the URL
+            Driver.Url.Should().Contain("saucelabs.com", because: "clicking About should navigate to Sauce Labs site");
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
         }
     }
 }

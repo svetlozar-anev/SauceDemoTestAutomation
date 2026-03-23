@@ -117,5 +117,11 @@ namespace SauceDemo.UI.Pages
         {
             public static User Standard => new ("standard_user", "secret_sauce");
         }
+        
+        public bool IsLoaded()
+        {
+            return Driver.Url.Contains("saucedemo.com") &&
+                   Driver.FindElements(By.Id("login-button")).Any();
+        }
     }
 }

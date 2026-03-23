@@ -28,7 +28,7 @@ namespace SauceDemo.UI.Pages
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
 
         // === PAGE ACTIONS ===
-        
+
         /// <summary>
         /// Opens the dashboard page.
         /// </summary>
@@ -38,7 +38,7 @@ namespace SauceDemo.UI.Pages
             NavigateTo(TestConfig.BaseUrl + "/inventory.html");
             return new DashboardPage();
         }
-        
+
         /// <summary>
         /// Clicks the "Add to cart" button for the product at the given index.
         /// </summary>
@@ -196,10 +196,10 @@ namespace SauceDemo.UI.Pages
 
                 // Try parse as currency
                 if (decimal.TryParse(
-                    text,
-                    NumberStyles.Currency,
-                    CultureInfo.GetCultureInfo("en-US"),
-                    out var value))
+                        text,
+                        NumberStyles.Currency,
+                        CultureInfo.GetCultureInfo("en-US"),
+                        out var value))
                 {
                     list.Add(value);
                 }
@@ -274,8 +274,8 @@ namespace SauceDemo.UI.Pages
                     try
                     {
                         return driver.FindElements(By.TagName("button"))
-                                     .FirstOrDefault(b => b.Displayed &&
-                                                          b.Text.Trim().Equals("OK", StringComparison.OrdinalIgnoreCase));
+                            .FirstOrDefault(b => b.Displayed &&
+                                                 b.Text.Trim().Equals("OK", StringComparison.OrdinalIgnoreCase));
                     }
                     catch (StaleElementReferenceException)
                     {
@@ -336,10 +336,98 @@ namespace SauceDemo.UI.Pages
         public IList<IWebElement> GetAllProductImages() =>
             Driver.FindElements(productImages);
 
+        /// <summary>
+        /// Opens Burger menu.
+        /// </summary>
+        public void OpenMenu()
+        {
+            var menuButton = Driver.FindElement(By.Id("react-burger-menu-btn"));
+            menuButton.Click();
+        }
+
+        /// <summary>
+        /// Gets Menu Options.
+        /// </summary>
+        /// <returns>List of Menu Options.</returns>
+        public IList<string> GetMenuOptions()
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+
+            var menuItems = wait.Until(d =>
+                d.FindElements(By.CssSelector(".bm-item")));
+
+            return menuItems
+                .Select(e => e.Text.Trim())
+                .Where(text => !string.IsNullOrEmpty(text))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Clicks Remove button (index based).
+        /// </summary>
+        /// <param name="index">Index.</param>
+        public void ClickRemoveByIndex(int index)
+        {
+            var buttons = Driver.FindElements(By.CssSelector(".inventory_item button"));
+            buttons[index].Click();
+        }
+
+        /// <summary>
+        /// Clicks Cart Icon.
+        /// </summary>
+        public void ClickCartIcon()
+        {
+            Driver.FindElement(By.CssSelector(".shopping_cart_link")).Click();
+        }
+
+        /// <summary>
+        /// Clicks Logout.
+        /// </summary>
+        public void ClickLogout()
+        {
+            Driver.FindElement(By.Id("logout_sidebar_link")).Click();
+        }
+
+        /// <summary>
+        /// Waits until the "About" menu option is visible.
+        /// </summary>
+        /// <returns>The <see cref="WebDriverWait"/> used for waiting.</returns>
+        public WebDriverWait WaitAboutToLoad()
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+            wait.Until(d => GetMenuOptions().Contains("About"));
+            return wait;
+        }
+
+        /// <summary>
+        /// Waits until the Sauce Labs page has loaded in the browser.
+        /// </summary>
+        /// <returns>The <see cref="WebDriverWait"/> used for waiting.</returns>
+        public WebDriverWait WaitSaucelabsComToLoad()
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+            wait.Until(d => d.Url.Contains("saucelabs.com"));
+            return wait;
+        }
+
+        /// <summary>
+        /// Locator for the "About" link in the sidebar menu.
+        /// </summary>
+        private readonly By aboutLink = By.Id("about_sidebar_link");
+
+        /// <summary>
+        /// Clicks the "About" link in the sidebar menu.
+        /// </summary>
+        public void ClickAbout()
+        {
+            var element = Wait.Until(d => d.FindElement(aboutLink));
+            element.Click();
+        }
+
         private IWebElement FindProductContainer(string productName)
         {
             return Driver.FindElements(productCards)
-                         .First(e => e.Text.Contains(productName, StringComparison.OrdinalIgnoreCase));
+                .First(e => e.Text.Contains(productName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

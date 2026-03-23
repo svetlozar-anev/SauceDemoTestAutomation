@@ -5,6 +5,7 @@
 namespace SauceDemo.Tests.Tests.Base
 {
     using System.Diagnostics;
+    using OpenQA.Selenium;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
     using TechTalk.SpecFlow;
@@ -74,5 +75,7 @@ namespace SauceDemo.Tests.Tests.Base
         {
             Serilog.Log.CloseAndFlush();
         }
+        
+        protected IWebDriver Driver => WebDriverFactory.Driver;
     }
 }
