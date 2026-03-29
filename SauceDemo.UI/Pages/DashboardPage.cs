@@ -9,13 +9,17 @@ namespace SauceDemo.UI.Pages
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.Core.Config;
     using SauceDemo.UI.Base;
-
+    
     /// <summary>
     /// Page Object Model for the Dashboard page ("Swag Labs").
     /// Validates successful login by checking for known elements or title.
     /// </summary>
     public class DashboardPage : BasePage
     {
+        // === CONSTANTS ===
+        private const string InventoryUrlFragment = "inventory.html";
+        private const string InventoryItems = "inventory_item";
+        
         // === LOCATORS ===
         private readonly By appLogo = By.CssSelector(".app_logo");
         private readonly By productCards = By.CssSelector(".inventory_item");
@@ -26,6 +30,8 @@ namespace SauceDemo.UI.Pages
 
         private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
+        
+        private readonly By productButton = By.CssSelector("button");
 
         // === PAGE ACTIONS ===
 
@@ -49,16 +55,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Clicks the "Add to cart" button for the specified product by its name.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        // TODO: Name both methods ClickAddToCard or this one to ClickAddToCartByName for consistency
-        public void ClickAddToCartByName(string productName)
-        {
-            FindProductContainer(productName).FindElement(By.CssSelector("button")).Click();
-        }
-
-        /// <summary>
         /// Retrieves the label text of the "Add to cart" button for the product at the given index.
         /// </summary>
         /// <param name="index">Zero-based index of the product.</param>
@@ -66,18 +62,6 @@ namespace SauceDemo.UI.Pages
         public string GetAddToCartButtonLabel(int index)
         {
             return Driver.FindElements(addToCartButtons)[index].Text.Trim();
-        }
-
-        /// <summary>
-        /// Retrieves the label text of the "Add to cart" or "Remove" button
-        /// for the specified product.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        /// <returns>The trimmed text of the button, typically "Add to cart" or "Remove".</returns>
-        public string GetButtonLabel(string productName)
-        {
-            var product = FindProductContainer(productName);
-            return product.FindElement(By.CssSelector("button")).Text.Trim();
         }
 
         /// <summary>
@@ -110,12 +94,9 @@ namespace SauceDemo.UI.Pages
                 try
                 {
                     var freshButtons = Driver.FindElements(addToCartButtons);
-                    if (index >= freshButtons.Count)
-                    {
-                        return false;
-                    }
-
-                    return freshButtons[index].Text.Trim().Equals(expected, StringComparison.OrdinalIgnoreCase);
+                    
+                    return index < freshButtons.Count &&
+                           freshButtons[index].Text.Trim().Equals(expected, StringComparison.OrdinalIgnoreCase);
                 }
                 catch
                 {
@@ -226,6 +207,7 @@ namespace SauceDemo.UI.Pages
         /// </param>
         public void SelectSortOption(string visibleText)
         {
+            // todo:
             var dropdown = Driver.FindElement(sortDropdown);
             var select = new SelectElement(dropdown);
             select.SelectByText(visibleText);
@@ -351,15 +333,12 @@ namespace SauceDemo.UI.Pages
         /// <returns>List of Menu Options.</returns>
         public IList<string> GetMenuOptions()
         {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-
-            var menuItems = wait.Until(d =>
-                d.FindElements(By.CssSelector(".bm-item")));
-
-            return menuItems
-                .Select(e => e.Text.Trim())
-                .Where(text => !string.IsNullOrEmpty(text))
-                .ToList();
+               Wait.Until(d =>
+                   d.FindElements(By.CssSelector(".bm-item.menu-item")).Count >= 4);
+           
+               return Driver.FindElements(By.CssSelector(".bm-item.menu-item"))
+                            .Select(e => e.Text.Trim())
+                            .ToList();
         }
 
         /// <summary>
@@ -385,7 +364,15 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClickLogout()
         {
-            Driver.FindElement(By.Id("logout_sidebar_link")).Click();
+            var locator = By.Id("logout_sidebar_link");
+
+            var element = Wait.Until(d =>
+            {
+                var el = d.FindElement(locator);
+                return el.Displayed && el.Enabled ? el : null;
+            });
+
+            element.Click();
         }
 
         /// <summary>
@@ -403,13 +390,59 @@ namespace SauceDemo.UI.Pages
         /// Waits until the Sauce Labs page has loaded in the browser.
         /// </summary>
         /// <returns>The <see cref="WebDriverWait"/> used for waiting.</returns>
-        public WebDriverWait WaitSaucelabsComToLoad()
+        public WebDriverWait WaitSauceDemoComToLoad()
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-            wait.Until(d => d.Url.Contains("saucelabs.com"));
+            wait.Until(d => d.Url.Contains("https://www.saucedemo.com"));
             return wait;
         }
 
+        /// <summary>
+        /// Waits for images to load.
+        /// </summary>
+        public void WaitForImagesToLoad()
+        {
+            Wait.Until(driver =>
+            {
+                var images = driver.FindElements(By.CssSelector(".inventory_item_img img"));
+
+                return images.All(img =>
+                {
+                    var result = ((IJavaScriptExecutor)driver)
+                        .ExecuteScript("return arguments[0].complete && arguments[0].naturalWidth > 0", img);
+
+                    return result is bool loaded && loaded;
+                });
+            });
+        }
+
+        /// <summary>
+        /// Clicks the "Add to cart" button for the specified product by its name.
+        /// </summary>
+        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
+        public void ClickAddToCartByName(string productName)
+        {
+            GetProductButton(productName).Click();
+        }
+        
+        /// <summary>
+        /// Retrieves the label text of the "Add to cart" or "Remove" button
+        /// for the specified product.
+        /// </summary>
+        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
+        /// <returns>The trimmed text of the button, typically "Add to cart" or "Remove".</returns>
+        public string GetButtonLabel(string productName)
+        {
+            return GetProductButton(productName).Text.Trim();
+        }
+        
+        // === PRIVATE HELPERS ===
+        private IWebElement GetProductButton(string productName)
+        {
+            return FindProductContainer(productName)
+                .FindElement(productButton);
+        }
+        
         /// <summary>
         /// Locator for the "About" link in the sidebar menu.
         /// </summary>
@@ -422,6 +455,20 @@ namespace SauceDemo.UI.Pages
         {
             var element = Wait.Until(d => d.FindElement(aboutLink));
             element.Click();
+        }
+        
+        /// <summary>
+        /// Refreshes the dashboard page and waits until it is fully loaded.
+        /// </summary>
+        public void Refresh()
+        {
+            RefreshPage(IsDashboardLoaded);
+        }
+        
+        private bool IsDashboardLoaded()
+        {
+            return Driver.Url.Contains(InventoryUrlFragment) &&
+                   Driver.FindElements(By.ClassName(InventoryItems)).Any();
         }
 
         private IWebElement FindProductContainer(string productName)
