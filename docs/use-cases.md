@@ -116,55 +116,55 @@ This document details the main test automation use cases covered by the SauceDem
 - Click “About”
 - Verify navigation to Sauce Labs About page
 
-### UC-XXX: Cart badge resets after logout and login
+### UC-021: Cart badge resets after logout and login
 - Add items to cart
 - Logout from Dashboard page
 - Login again with valid credentials
 - Verify cart badge shows zero items
 
-### UC-XXX: Adding items to cart persists on page refresh
+### UC-022: Adding items to cart persists on page refresh
 - Add one or more items to cart
 - Refresh the Dashboard page
 - Verify cart count and “Remove” buttons persist correctly
 
-### UC-XXX: Sorting products updates display order correctly with multiple sorts
+### UC-023: Sorting products updates display order correctly with multiple sorts
 - Sort by Name (A to Z), verify order
 - Sort by Price (high to low), verify order
 - Sort by Name (Z to A), verify order
 - Sort by Price (low to high), verify order
 
-### UC-XXX: Prevent adding same item multiple times (idempotency)
+### UC-024: Prevent adding same item multiple times (idempotency)
 - Click “Add to cart” for an item multiple times
 - Verify cart count increments only once per unique item
 - Button text remains “Remove” after first click
 
-### UC-XXX: Clicking logo navigates to Dashboard
+### UC-025: Clicking logo navigates to Dashboard
 - From any page (e.g., product detail or cart)
 - Click the Sauce Labs logo
 - Verify navigation back to `/inventory.html`
 
-### UC-XXX: Responsive layout check for Dashboard page
+### UC-026: Responsive layout check for Dashboard page
 - Resize browser window to mobile size
 - Verify product grid adjusts correctly
 - Verify burger menu functions properly on small screen
 
-### UC-XXX: Error handling for product loading failure
+### UC-027: Error handling for product loading failure
 - Simulate failure to load products (mock/fail API)
 - Verify appropriate error message or fallback UI is shown
 
-### UC-XXX: Cart icon updates when removing items from Cart page
+### UC-028: Cart icon updates when removing items from Cart page
 - Add multiple items to cart
 - Go to Cart page
 - Remove an item
 - Verify cart icon badge updates on Dashboard
 
-### UC-XXX: Cart contents persist across sessions
+### UC-029: Cart contents persist across sessions
 - Add items to cart
 - Logout and close browser
 - Reopen browser and login
 - Verify cart contains previously added items
 
-### UC-XXX: Performance check on Dashboard load
+### UC-030: Performance check on Dashboard load
 - Measure load time for Dashboard page
 - Assert load time is within acceptable limits (e.g., < 2 seconds)
 
