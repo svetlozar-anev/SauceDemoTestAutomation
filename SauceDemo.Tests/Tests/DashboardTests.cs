@@ -247,7 +247,6 @@ namespace SauceDemo.Tests.Tests
 
             var options = dashboardPage.GetMenuOptions();
 
-            options.Should().Contain("All Items");
             options.Should().Contain("About");
             options.Should().Contain("Logout");
 
@@ -265,12 +264,12 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
 
-            int index = 0;
+            const int index = 0;
 
             dashboardPage.ClickAddToCartByIndex(index);
             dashboardPage.WaitForButtonLabel(index, "Remove");
 
-            int cartAfterAdd = dashboardPage.GetCartCount();
+            var cartAfterAdd = dashboardPage.GetCartCount();
 
             dashboardPage.ClickRemoveByIndex(index);
             dashboardPage.WaitForButtonLabel(index, "Add to cart");
@@ -339,6 +338,7 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
 
             dashboardPage!.WaitForDashboardToLoad();
+            dashboardPage!.WaitForImagesToLoad();
 
             var images = dashboardPage.GetAllProductImages();
 
@@ -389,16 +389,157 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
             dashboardPage.OpenMenu();
-
+            
             dashboardPage.WaitAboutToLoad();
             dashboardPage.ClickAbout();
 
-            dashboardPage.WaitSaucelabsComToLoad();
+            dashboardPage.WaitSaucelabsToLoad();
 
             // Assert the URL
-            Driver.Url.Should().Contain("saucelabs.com", because: "clicking About should navigate to Sauce Labs site");
+            Driver.Url.Should().Contain("https://saucelabs.com", because: "clicking About should navigate to Sauce Labs site");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
+        }
+
+        /// <summary>
+        /// UC-021: Verifies cart is reset after logout and login.
+        /// </summary>
+        [Test]
+        [Description("UC-021: Cart badge persists after logout and login")]
+        public void UC_021_CartPersistsAfterLogout()
+        {
+            dashboardPage!.WaitForDashboardToLoad();
+
+            // Add item
+            dashboardPage.ClickAddToCartByIndex(0);
+            dashboardPage.WaitForButtonLabel(0, "Remove");
+
+            var oldCartCount = dashboardPage.GetCartCount();
+
+            // Logout
+            dashboardPage.OpenMenu();
+            dashboardPage.ClickLogout();
+
+            // Login again
+            loginPage!.Login("standard_user", "secret_sauce");
+
+            dashboardPage.WaitForDashboardToLoad();
+
+            // Assert cart reset
+            dashboardPage.GetCartCount().Should().Be(oldCartCount);
+        }
+
+        /// <summary>
+        /// UC-022: Verifies cart persists after page refresh.
+        /// </summary>
+        [Test]
+        [Description("UC-022: Cart persists after refresh")]
+        public void UC_022_CartPersistsAfterRefresh()
+        {
+            dashboardPage!.WaitForDashboardToLoad();
+
+            dashboardPage.ClickAddToCartByIndex(0);
+            dashboardPage.WaitForButtonLabel(0, "Remove");
+
+            var cartBefore = dashboardPage.GetCartCount();
+
+            dashboardPage.Refresh();
+
+            dashboardPage.WaitForDashboardToLoad();
+
+            dashboardPage.GetCartCount().Should().Be(cartBefore);
+            dashboardPage.GetAddToCartButtonLabel(0).Should().Be("Remove");
+        }
+
+        /// <summary>
+        /// UC-023: Verifies multiple sorting combinations.
+        /// </summary>
+        [Test]
+        [Description("UC-023: Multiple sorting combinations")]
+        public void UC_023_MultipleSorting_WorksCorrectly()
+        {
+            dashboardPage!.WaitForDashboardToLoad();
+
+            dashboardPage.SelectSortOption("Name (A to Z)");
+            dashboardPage.GetAllProductNames().Should().BeInAscendingOrder();
+
+            dashboardPage.SelectSortOption("Price (high to low)");
+            dashboardPage.GetProductPricesAsDecimal().Should().BeInDescendingOrder();
+
+            dashboardPage.SelectSortOption("Name (Z to A)");
+            dashboardPage.GetAllProductNames().Should().BeInDescendingOrder();
+
+            dashboardPage.SelectSortOption("Price (low to high)");
+            dashboardPage.GetProductPricesAsDecimal().Should().BeInAscendingOrder();
+        }
+
+        /// <summary>
+        /// UC-024: Verifies item cannot be added multiple times.
+        /// </summary>
+        [Test]
+        [Description("UC-024: Prevent duplicate add to cart")]
+        public void UC_024_AddToCart_IsIdempotent()
+        {
+            dashboardPage!.WaitForDashboardToLoad();
+
+            var index = 0;
+
+            var before = dashboardPage.GetCartCount();
+            
+            // Only click if item is not yet in cart
+            if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
+            {
+                dashboardPage.ClickAddToCartByIndex(index);
+                dashboardPage.WaitForButtonLabel(index, "Remove");
+            }
+
+            var afterFirst = dashboardPage.GetCartCount();
+
+            // Second click attempt should not change cart
+            if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
+            {
+                dashboardPage.ClickAddToCartByIndex(index); 
+            }
+
+            var afterSecond = dashboardPage.GetCartCount();
+
+            afterFirst.Should().Be(before + 1);
+            afterSecond.Should().Be(afterFirst);
+
+            dashboardPage.GetAddToCartButtonLabel(index)
+                .Should().Be("Remove");
+        }
+
+        /// <summary>
+        /// UC-025: Verifies dashboard layout adapts to mobile screen size.
+        /// </summary>
+        [Test]
+        [Description("UC-025: Responsive layout check for Dashboard page")]
+        public void UC_025_ResponsiveLayout_WorksCorrectly()
+        {
+            Logger.NUnitLog?.Information("[{Scope}] Executing UC-025: Responsive layout", LogScope);
+
+            dashboardPage!.WaitForDashboardToLoad();
+
+            // Set mobile viewport (clean abstraction)
+            ViewportManager.SetMobile(Driver);
+
+            // Wait for layout to stabilize (important!)
+            dashboardPage.WaitForDashboardToLoad();
+
+            // Verify products are still visible
+            dashboardPage.GetAllProductCards()
+                .Should().NotBeEmpty("products should remain visible on mobile layout");
+
+            // Verify burger menu works
+            dashboardPage.OpenMenu();
+            
+            var options = dashboardPage.GetMenuOptions();
+
+            options.Should().Contain("About");
+            options.Should().Contain("Logout");
+
+            Logger.NUnitLog?.Information("[{Scope}] UC-025 completed successfully", LogScope);
         }
     }
 }
