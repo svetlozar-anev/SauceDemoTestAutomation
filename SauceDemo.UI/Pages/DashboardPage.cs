@@ -160,6 +160,26 @@ namespace SauceDemo.UI.Pages
         {
             return Driver.FindElements(productNames)[index].Text.Trim();
         }
+        
+        private readonly By menuLocator = By.Id("react-burger-menu-btn");
+        
+        public bool IsMenuVisible(int timeoutSeconds = 5)
+        {
+            try
+            {
+                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+
+                return wait.Until(_ =>
+                {
+                    var elements = Driver.FindElements(menuLocator);
+                    return elements.Count > 0 && elements[0].Displayed;
+                });
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Clicks a product image by its index in the product list.

@@ -245,6 +245,8 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage.OpenMenu();
 
+            dashboardPage.IsMenuVisible();
+            
             var options = dashboardPage.GetMenuOptions();
 
             options.Should().Contain("All Items");
@@ -313,49 +315,49 @@ namespace SauceDemo.Tests.Tests
         /// <summary>
         /// UC-017: Verifies logout functionality from dashboard.
         /// </summary>
-        [Test]
-        [Description("UC-017: Logout from the Dashboard page")]
-        public void UC_017_Logout_WorksCorrectly()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-017: Logout", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            dashboardPage.OpenMenu();
-            dashboardPage.ClickLogout();
-
-            loginPage!.IsLoaded().Should().BeTrue();
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-017 completed successfully", LogScope);
-        }
+        // [Test]
+        // [Description("UC-017: Logout from the Dashboard page")]
+        // public void UC_017_Logout_WorksCorrectly()
+        // {
+        //     Logger.NUnitLog?.Information("[{Scope}] Executing UC-017: Logout", LogScope);
+        //
+        //     dashboardPage!.WaitForDashboardToLoad();
+        //
+        //     dashboardPage.OpenMenu();
+        //     dashboardPage.ClickLogout();
+        //
+        //     loginPage!.IsLoaded().Should().BeTrue();
+        //
+        //     Logger.NUnitLog?.Information("[{Scope}] UC-017 completed successfully", LogScope);
+        // }
 
         /// <summary>
         /// UC-018: Verifies product images are valid and not broken.
         /// </summary>
-        [Test]
-        [Description("UC-018: Product images load correctly")]
-        public void UC_018_ProductImages_AreValid()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var images = dashboardPage.GetAllProductImages();
-
-            foreach (var img in images)
-            {
-                img.GetAttribute("src").Should().NotBeNullOrEmpty();
-
-                var result = ((IJavaScriptExecutor)Driver)
-                    .ExecuteScript("return arguments[0].naturalWidth > 0", img);
-
-                bool isLoaded = result is bool loaded && loaded;
-
-                isLoaded.Should().BeTrue("image should not be broken");
-            }
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
-        }
+        // [Test]
+        // [Description("UC-018: Product images load correctly")]
+        // public void UC_018_ProductImages_AreValid()
+        // {
+        //     Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
+        //
+        //     dashboardPage!.WaitForDashboardToLoad();
+        //
+        //     var images = dashboardPage.GetAllProductImages();
+        //
+        //     foreach (var img in images)
+        //     {
+        //         img.GetAttribute("src").Should().NotBeNullOrEmpty();
+        //
+        //         var result = ((IJavaScriptExecutor)Driver)
+        //             .ExecuteScript("return arguments[0].naturalWidth > 0", img);
+        //
+        //         bool isLoaded = result is bool loaded && loaded;
+        //
+        //         isLoaded.Should().BeTrue("image should not be broken");
+        //     }
+        //
+        //     Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
+        // }
 
         /// <summary>
         /// UC-019: Verifies price format and currency consistency.

@@ -43,3 +43,28 @@ Feature: Dashboard Functionality
         When I add the first three products to the cart
         Then each button should change to "Remove"
         And the cart badge should reflect the total items added
+        
+    Scenario: UC-014: Navigation menu (burger menu) appears and functions
+        Given I am logged in as a standard user
+        And I am on the dashboard page
+        When the user clicks the burger menu icon
+        Then the navigation menu should be displayed
+        And the menu should contain the following options:
+        | All Items |
+        | About     |
+        | Logout    |
+        
+#   Scenario: UC-015: Removing an item from the cart via Dashboard page
+#       Given I am logged in as a standard user
+#       And I am on the dashboard page
+#       When I add the first product to the cart
+#       And I remove the same product from the cart
+#       Then the cart badge should decrement to 0
+#     And the product button should change to "Add to cart"        
+
+#   Scenario: UC-016: Cart icon navigates to Cart page
+#        Given I am logged in as a standard user
+#        And I am on the dashboard page
+        
+        
+   
