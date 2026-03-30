@@ -5,8 +5,10 @@
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
+    using SauceDemo.Core.TestData;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Tests.Base;
+    using SauceDemo.UI.Base;
     using SauceDemo.UI.Pages;
 
     /// <summary>
@@ -41,8 +43,8 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-001: Login fails with empty credentials", LogScope);
 
-            loginPage?.EnterUsername("standard_user");
-            loginPage?.EnterPassword("secret_sauce");
+            loginPage?.EnterUsername(Users.Standard);
+            loginPage?.EnterPassword(Users.Password);
             loginPage?.ClearUsername();
             loginPage?.ClearPassword();
 
@@ -76,11 +78,11 @@ namespace SauceDemo.Tests.Tests
         /// <param name="username">The username to be used for login.</param>
         /// <param name="password">The password to be used for login.</param>
         [Test]
-        [TestCase("standard_user", "secret_sauce")]
-        [TestCase("problem_user", "secret_sauce")]
-        [TestCase("performance_glitch_user", "secret_sauce")]
-        [TestCase("error_user", "secret_sauce")]
-        [TestCase("visual_user", "secret_sauce")]
+        [TestCase(Users.Standard, Users.Password)]
+        [TestCase(Users.Problem, Users.Password)]
+        [TestCase(Users.PerformanceGlitch, Users.Password)]
+        [TestCase(Users.Error, Users.Password)]
+        [TestCase(Users.Visual, Users.Password)]
         [Description("UC-003: Login with valid credentials shows Dashboard")]
         public void UC_003_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
@@ -105,7 +107,7 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-004: Login fails with locked out user", LogScope);
 
-            loginPage?.Login("locked_out_user", "secret_sauce");
+            loginPage?.Login(Users.LockedOut, Users.Password);
 
             loginPage?.GetErrorMessage().Should().Be("Epic sadface: Sorry, this user has been locked out.");
         }
@@ -119,7 +121,7 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-005: Login fails with wrong password", LogScope);
 
-            loginPage?.Login("standard_user", "wrong_password");
+            loginPage?.Login(Users.Standard, Users.WrongPassword);
 
             loginPage?.GetErrorMessage().Should().Be("Epic sadface: Username and password do not match any user in this service");
         }

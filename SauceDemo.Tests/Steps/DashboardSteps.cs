@@ -5,10 +5,11 @@
 namespace SauceDemo.Tests.Steps
 {
     using FluentAssertions;
+    using SauceDemo.Core.TestData;
     using SauceDemo.Tests.Steps.Base;
     using SauceDemo.UI.Pages;
     using TechTalk.SpecFlow;
-    
+
     /// <summary>
     /// Step definitions for dashboard feature scenarios.
     /// </summary>
@@ -41,7 +42,7 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I am logged in as a standard user")]
         public void GivenIAmLoggedInAsAStandardUser()
         {
-            loginPage.OpenLoginPage().LoginAs(LoginPage.User.Standard);
+            loginPage.OpenLoginPage().LoginAs(Users.Standard, Users.Password);
         }
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace SauceDemo.Tests.Steps
         /// <summary>
         /// Selects a sort option from the product dropdown.
         /// </summary>
+        /// <param name="option">Selects string option.</param>
         [When(@"I sort products by ""(.*)""")]
         public void WhenISortProductsBy(string option)
         {
@@ -99,6 +101,21 @@ namespace SauceDemo.Tests.Steps
             dashboardPage.ClickAddToCartByIndex(0);
             dashboardPage.WaitForButtonLabel(0, "Remove");
         }
+        
+        /// <summary>
+        /// Removes the first product of the cart to appear and waits for the button to update.
+        /// </summary>
+        [When("I remove the same product from the cart")]
+        public void WhenIRemoveTheFirstProductToTheCart()
+        {
+           dashboardPage.WaitForDashboardToLoad();
+           
+           initialCartCount = dashboardPage.GetCartCount();
+           
+           dashboardPage.ClickRemoveByIndex(0);
+           
+           dashboardPage.WaitForButtonLabel(0, "Add");
+        }
 
         /// <summary>
         /// Adds the first three products to the cart and waits for each button to update.
@@ -116,6 +133,16 @@ namespace SauceDemo.Tests.Steps
                 dashboardPage.ClickAddToCartByName(product);
                 dashboardPage.WaitForButtonLabel(product, "Remove");
             }
+        }
+
+        /// <summary>
+        /// We click on the react burger menu button.
+        /// </summary>
+        [When("the user clicks the burger menu icon")]
+        public void WhenTheUserClicksTheBurgerMenuIcon()
+        {
+            dashboardPage.WaitForDashboardToLoad();
+            dashboardPage.OpenMenu();
         }
 
         // ========================
@@ -228,6 +255,7 @@ namespace SauceDemo.Tests.Steps
         /// <summary>
         /// Verifies that the add-to-cart button updated its label.
         /// </summary>
+        /// <param name="expected">The menu options table - All Items, About, Logout.</param>
         [Then(@"the button should change to ""(.*)""")]
         public void ThenTheButtonShouldChangeTo(string expected)
         {
@@ -266,6 +294,47 @@ namespace SauceDemo.Tests.Steps
         {
             dashboardPage.GetCartCount()
                 .Should().Be(initialCartCount + selectedProducts!.Count);
+        }
+
+        /// <summary>
+        /// Verifies the Dashboard page navigation menu is Displayed.
+        /// </summary>
+        [Then("the navigation menu should be displayed")]
+        public void ThenTheNavigationMenuShouldBeDisplayed()
+        {
+            dashboardPage.IsMenuVisible().Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Verifies the menu contains table of options.
+        /// </summary>
+        /// <param name="table">The menu options table - All Items, About, Logout.</param>
+        [Then(@"the menu should contain the following options:")]
+        public void ThenAndTheMenuShouldContainTheOptions(Table table)
+        {
+            var actualOptions = dashboardPage.GetMenuOptions();
+
+            var selectedOptions = table.Rows.Select(r => r[0].ToString()).ToList();
+
+            actualOptions.Should().Contain(selectedOptions);
+        }
+
+        /// <summary>
+        /// Verifies that the cart badge returns 0 as car count.
+        /// </summary>
+        [Then("Then the cart badge should decrement to 0")]
+        public void ThenTheCartBadgeShouldDecrementTo0()
+        {
+            dashboardPage.WaitForButtonLabel(0, "Add to cart");
+        }
+
+        /// <summary>
+        /// Verify that the Button label on Index 0 is "Add to cart".
+        /// </summary>
+        [Then("And the product button should change to \"Add to cart\"")]
+        public void ThenAndTheProductButtonShouldChangeToAddToCart()
+        {
+            dashboardPage.WaitForButtonLabel(0, "Add to cart");
         }
     }
 }

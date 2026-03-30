@@ -116,87 +116,82 @@ This document details the main test automation use cases covered by the SauceDem
 - Click “About”
 - Verify navigation to Sauce Labs About page
 
-### UC-XXX: Cart badge resets after logout and login
+### UC-021: Adding items to cart persists on Dashboard logout
 - Add items to cart
 - Logout from Dashboard page
 - Login again with valid credentials
-- Verify cart badge shows zero items
+- Verify cart badge shows same number of items
 
-### UC-XXX: Adding items to cart persists on page refresh
+### UC-022: Adding items to cart persists on page refresh
 - Add one or more items to cart
 - Refresh the Dashboard page
 - Verify cart count and “Remove” buttons persist correctly
 
-### UC-XXX: Sorting products updates display order correctly with multiple sorts
+### UC-023: Sorting products updates display order correctly with multiple sorts
 - Sort by Name (A to Z), verify order
 - Sort by Price (high to low), verify order
 - Sort by Name (Z to A), verify order
 - Sort by Price (low to high), verify order
 
-### UC-XXX: Prevent adding same item multiple times (idempotency)
+### UC-024: Prevent adding same item multiple times (idempotency)
 - Click “Add to cart” for an item multiple times
 - Verify cart count increments only once per unique item
 - Button text remains “Remove” after first click
 
-### UC-XXX: Clicking logo navigates to Dashboard
-- From any page (e.g., product detail or cart)
-- Click the Sauce Labs logo
-- Verify navigation back to `/inventory.html`
-
-### UC-XXX: Responsive layout check for Dashboard page
+### UC-025: Responsive layout check for Dashboard page
 - Resize browser window to mobile size
 - Verify product grid adjusts correctly
 - Verify burger menu functions properly on small screen
 
-### UC-XXX: Error handling for product loading failure
+### UC-026: Error handling for product loading failure
 - Simulate failure to load products (mock/fail API)
 - Verify appropriate error message or fallback UI is shown
 
-### UC-XXX: Cart icon updates when removing items from Cart page
+### UC-027: Cart icon updates when removing items from Cart page
 - Add multiple items to cart
 - Go to Cart page
 - Remove an item
 - Verify cart icon badge updates on Dashboard
 
-### UC-XXX: Cart contents persist across sessions
+### UC-028: Cart contents persist across sessions
 - Add items to cart
 - Logout and close browser
 - Reopen browser and login
 - Verify cart contains previously added items
 
-### UC-XXX: Performance check on Dashboard load
+### UC-029: Performance check on Dashboard load
 - Measure load time for Dashboard page
 - Assert load time is within acceptable limits (e.g., < 2 seconds)
 
-### UC-XXX: Keyboard navigation works for all interactive elements
+### UC-030: Keyboard navigation works for all interactive elements
 - Log in with valid credentials
 - Use **Tab** to move through product cards (Add to cart / Remove), burger menu, cart icon, and sort dropdown
 - Verify a visible focus indicator on each element
 - Press **Enter** or **Space** on focused buttons/links and assert correct actions trigger
 
-### UC-XXX: Screen reader-friendly attributes
+### UC-031: Screen reader-friendly attributes
 - Log in with valid credentials
 - Verify product images have meaningful `alt` text
 - Verify buttons/controls expose useful labels (e.g., `aria-label`)
 - Confirm page landmark roles (e.g., `<main>`, `<nav>`) exist where applicable
 
-### UC-XXX: Sorting preserves cart state
+### UC-032: Sorting preserves cart state
 - Log in and add **two** specific products to the cart
 - Apply a sort order (e.g., **Price (low to high)**)
 - Verify cart count and “Remove” state persist
 - Change sort again and re-verify persistence
 
-### UC-XXX: Cart state after logout/login (no leakage)
+### UC-033: Cart state after logout/login (no leakage)
 - Log in and add **one** item to the cart
 - Log out via burger menu
 - Log in again as the **same** user → assert cart count is **0** (or expected app behavior)
 - Log in as a **different** user → assert no cart leakage
 
-### UC-XXX: Product name overflow handling
+### UC-034: Product name overflow handling
 - Log in and inspect all product titles
 - If a title is long, verify it wraps or truncates (ellipsis) without breaking layout
 
-### UC-XXX: Price edge cases render correctly
+### UC-035: Price edge cases render correctly
 - Log in and verify all prices are > $0.00
 - (If test data allows) validate formatting and sorting for extreme values (e.g., $0.00, > $10,000)
 
