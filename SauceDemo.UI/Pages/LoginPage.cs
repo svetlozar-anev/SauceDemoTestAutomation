@@ -104,20 +104,19 @@ namespace SauceDemo.UI.Pages
         /// <returns>
         /// An instance of <see cref="DashboardPage"/> representing the dashboard after a successful login.
         /// </returns>
-        public DashboardPage LoginAs(User user)
+        public DashboardPage LoginAs(string username, string password)
         {
-            EnterUsername(user.username);
-            EnterPassword(user.password);
+            EnterUsername(username);
+            EnterPassword(password);
             ClickLogin();
 
             return new DashboardPage();
         }
 
-        public record User(string username, string password)
-        {
-            public static User Standard => new ("standard_user", "secret_sauce");
-        }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool IsLoaded()
         {
             return Driver.Url.Contains("saucedemo.com") &&

@@ -141,6 +141,26 @@ namespace SauceDemo.UI.Pages
         {
             return Driver.FindElements(productNames)[index].Text.Trim();
         }
+        
+        private readonly By menuLocator = By.Id("react-burger-menu-btn");
+        
+        public bool IsMenuVisible(int timeoutSeconds = 5)
+        {
+            try
+            {
+                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
+
+                return wait.Until(_ =>
+                {
+                    var elements = Driver.FindElements(menuLocator);
+                    return elements.Count > 0 && elements[0].Displayed;
+                });
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Clicks a product image by its index in the product list.
@@ -315,7 +335,7 @@ namespace SauceDemo.UI.Pages
         /// Gets all product image elements.
         /// </summary>
         /// <returns>List of all product images.</returns>
-        public IList<IWebElement> GetAllProductImages() =>
+        public IReadOnlyCollection<IWebElement> GetAllProductImages() =>
             Driver.FindElements(productImages);
 
         /// <summary>
@@ -325,6 +345,29 @@ namespace SauceDemo.UI.Pages
         {
             var menuButton = Driver.FindElement(By.Id("react-burger-menu-btn"));
             menuButton.Click();
+        }
+        
+        public IReadOnlyCollection<IWebElement> GetAllProductImagesLoaded()
+        {
+            var images = GetAllProductImages();
+
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+
+            foreach (var img in images)
+            {
+                    wait.Until(driver =>
+                    {
+                        var js = (IJavaScriptExecutor)driver;
+
+                        var result = js.ExecuteScript(
+                            "return arguments[0].complete && arguments[0].naturalWidth > 0",
+                            img);
+
+                        return result as bool? == true;
+                    });
+            }
+
+            return images;
         }
 
         /// <summary>
@@ -364,15 +407,12 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClickLogout()
         {
-            var locator = By.Id("logout_sidebar_link");
-
-            var element = Wait.Until(d =>
-            {
-                var el = d.FindElement(locator);
-                return el.Displayed && el.Enabled ? el : null;
-            });
-
-            element.Click();
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+            
+            var logoutButton = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(
+                By.Id("logout_sidebar_link")));
+            
+            Driver.FindElement(By.Id("logout_sidebar_link")).Click();
         }
 
         /// <summary>

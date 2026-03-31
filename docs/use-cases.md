@@ -116,11 +116,15 @@ This document details the main test automation use cases covered by the SauceDem
 - Click “About”
 - Verify navigation to Sauce Labs About page
 
+<<<<<<< tests-26-35
+### UC-021: Adding items to cart persists on Dashboard logout
+=======
 ### UC-021: Cart badge resets after logout and login
+>>>>>>> main
 - Add items to cart
 - Logout from Dashboard page
 - Login again with valid credentials
-- Verify cart badge shows zero items
+- Verify cart badge shows same number of items
 
 ### UC-022: Adding items to cart persists on page refresh
 - Add one or more items to cart
@@ -138,65 +142,85 @@ This document details the main test automation use cases covered by the SauceDem
 - Verify cart count increments only once per unique item
 - Button text remains “Remove” after first click
 
+<<<<<<< tests-26-35
+### UC-025: Responsive layout check for Dashboard page
+=======
 ### UC-025: Clicking logo navigates to Dashboard
 - From any page (e.g., product detail or cart)
 - Click the Sauce Labs logo
 - Verify navigation back to `/inventory.html`
 
 ### UC-026: Responsive layout check for Dashboard page
+>>>>>>> main
 - Resize browser window to mobile size
 - Verify product grid adjusts correctly
 - Verify burger menu functions properly on small screen
 
+<<<<<<< tests-26-35
+### UC-026: Error handling for product loading failure
+- Simulate failure to load products (mock/fail API)
+- Verify appropriate error message or fallback UI is shown
+
+### UC-027: Cart icon updates when removing items from Cart page
+=======
 ### UC-027: Error handling for product loading failure
 - Simulate failure to load products (mock/fail API)
 - Verify appropriate error message or fallback UI is shown
 
 ### UC-028: Cart icon updates when removing items from Cart page
+>>>>>>> main
 - Add multiple items to cart
 - Go to Cart page
 - Remove an item
 - Verify cart icon badge updates on Dashboard
 
+<<<<<<< tests-26-35
+### UC-028: Cart contents persist across sessions
+=======
 ### UC-029: Cart contents persist across sessions
+>>>>>>> main
 - Add items to cart
 - Logout and close browser
 - Reopen browser and login
 - Verify cart contains previously added items
 
+<<<<<<< tests-26-35
+### UC-029: Performance check on Dashboard load
+=======
 ### UC-030: Performance check on Dashboard load
+>>>>>>> main
 - Measure load time for Dashboard page
 - Assert load time is within acceptable limits (e.g., < 2 seconds)
 
-### UC-XXX: Keyboard navigation works for all interactive elements
+### UC-030: Keyboard navigation works for all interactive elements
 - Log in with valid credentials
 - Use **Tab** to move through product cards (Add to cart / Remove), burger menu, cart icon, and sort dropdown
 - Verify a visible focus indicator on each element
 - Press **Enter** or **Space** on focused buttons/links and assert correct actions trigger
 
-### UC-XXX: Screen reader-friendly attributes
+### UC-031: Screen reader-friendly attributes
 - Log in with valid credentials
 - Verify product images have meaningful `alt` text
 - Verify buttons/controls expose useful labels (e.g., `aria-label`)
 - Confirm page landmark roles (e.g., `<main>`, `<nav>`) exist where applicable
 
-### UC-XXX: Sorting preserves cart state
+### UC-032: Sorting preserves cart state
 - Log in and add **two** specific products to the cart
 - Apply a sort order (e.g., **Price (low to high)**)
 - Verify cart count and “Remove” state persist
 - Change sort again and re-verify persistence
 
-### UC-XXX: Cart state after logout/login (no leakage)
+### UC-033: Cart state after logout/login (no leakage)
 - Log in and add **one** item to the cart
 - Log out via burger menu
 - Log in again as the **same** user → assert cart count is **0** (or expected app behavior)
 - Log in as a **different** user → assert no cart leakage
 
-### UC-XXX: Product name overflow handling
+### UC-034: Product name overflow handling
 - Log in and inspect all product titles
 - If a title is long, verify it wraps or truncates (ellipsis) without breaking layout
 
-### UC-XXX: Price edge cases render correctly
+### UC-035: Price edge cases render correctly
 - Log in and verify all prices are > $0.00
 - (If test data allows) validate formatting and sorting for extreme values (e.g., $0.00, > $10,000)
 
