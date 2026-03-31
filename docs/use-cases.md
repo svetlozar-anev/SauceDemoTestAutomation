@@ -116,7 +116,11 @@ This document details the main test automation use cases covered by the SauceDem
 - Click “About”
 - Verify navigation to Sauce Labs About page
 
+<<<<<<< tests-26-35
 ### UC-021: Adding items to cart persists on Dashboard logout
+=======
+### UC-021: Cart badge resets after logout and login
+>>>>>>> main
 - Add items to cart
 - Logout from Dashboard page
 - Login again with valid credentials
@@ -138,28 +142,53 @@ This document details the main test automation use cases covered by the SauceDem
 - Verify cart count increments only once per unique item
 - Button text remains “Remove” after first click
 
+<<<<<<< tests-26-35
 ### UC-025: Responsive layout check for Dashboard page
+=======
+### UC-025: Clicking logo navigates to Dashboard
+- From any page (e.g., product detail or cart)
+- Click the Sauce Labs logo
+- Verify navigation back to `/inventory.html`
+
+### UC-026: Responsive layout check for Dashboard page
+>>>>>>> main
 - Resize browser window to mobile size
 - Verify product grid adjusts correctly
 - Verify burger menu functions properly on small screen
 
+<<<<<<< tests-26-35
 ### UC-026: Error handling for product loading failure
 - Simulate failure to load products (mock/fail API)
 - Verify appropriate error message or fallback UI is shown
 
 ### UC-027: Cart icon updates when removing items from Cart page
+=======
+### UC-027: Error handling for product loading failure
+- Simulate failure to load products (mock/fail API)
+- Verify appropriate error message or fallback UI is shown
+
+### UC-028: Cart icon updates when removing items from Cart page
+>>>>>>> main
 - Add multiple items to cart
 - Go to Cart page
 - Remove an item
 - Verify cart icon badge updates on Dashboard
 
+<<<<<<< tests-26-35
 ### UC-028: Cart contents persist across sessions
+=======
+### UC-029: Cart contents persist across sessions
+>>>>>>> main
 - Add items to cart
 - Logout and close browser
 - Reopen browser and login
 - Verify cart contains previously added items
 
+<<<<<<< tests-26-35
 ### UC-029: Performance check on Dashboard load
+=======
+### UC-030: Performance check on Dashboard load
+>>>>>>> main
 - Measure load time for Dashboard page
 - Assert load time is within acceptable limits (e.g., < 2 seconds)
 

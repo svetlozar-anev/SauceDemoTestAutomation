@@ -136,5 +136,15 @@ namespace SauceDemo.UI.Base
         {
             return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
+
+        /// <summary>
+        /// Refreshes the page and waits until the specified condition is met.
+        /// </summary>
+        /// <param name="condition">The condition to wait for after refresh.</param>
+        protected void RefreshPage(Func<bool> condition)
+        {
+            Driver.Navigate().Refresh();
+            Wait.Until(_ => condition());
+        }
     }
 }
