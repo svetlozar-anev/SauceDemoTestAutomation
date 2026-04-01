@@ -15,61 +15,40 @@ namespace SauceDemo.UI.Base
     /// Abstract base class for all page objects.
     /// Provides shared WebDriver instance and common UI interaction helpers.
     /// </summary>
+    #pragma warning disable SA1600 // ElementsMustBeDocumented
     public abstract class BasePage
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BasePage"/> class.
-        /// Initializes the BasePage with the thread-safe WebDriver and default WebDriverWait.
-        /// </summary>
         protected BasePage()
         {
             Driver = WebDriverFactory.Driver;
             Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(TestConfig.WebDriverWaitSeconds));
         }
-
-        /// <summary>
-        /// Gets thread-safe WebDriver instance from the WebDriverFactory.
-        /// </summary>
+        
         protected IWebDriver Driver { get; }
 
-        /// <summary>
-        /// Gets WebDriverWait instance used for explicit waits..
-        /// </summary>
         protected WebDriverWait Wait { get; }
-
-        /// <summary>
-        /// Finds an element after waiting for it to be visible.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The found <see cref="IWebElement"/>.</returns>
-        protected IWebElement Find(By locator)
+        
+        protected IWebElement Find(By by)
         {
-            return WaitForElementClickable(locator);
+            return Wait.Until(d => d.FindElement(by));
         }
 
-        /// <summary>
-        /// Navigates the browser to a specific URL.
-        /// </summary>
-        /// <param name="url">The URL to navigate to.</param>
+        protected IReadOnlyCollection<IWebElement> FindAll(By by)
+        {
+            return Wait.Until(d => d.FindElements(by));
+        }
+        
         protected void NavigateTo(string url)
         {
             Driver.Navigate().GoToUrl(url);
         }
-
-        /// <summary>
-        /// Clicks on an element after waiting until it’s clickable.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        protected void Click(By locator)
+        
+        protected void Click(By by)
         {
-            WaitForElementClickable(locator).Click();
+            var element = Wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(by));
+            element.Click();
         }
-
-        /// <summary>
-        /// Clears a field and types the specified text after waiting for visibility.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <param name="text">The text to type into the element.</param>
+        
         protected void TypeText(By locator, string text)
         {
             var element = WaitForElementVisible(locator);
@@ -77,21 +56,11 @@ namespace SauceDemo.UI.Base
             element.SendKeys(text);
         }
 
-        /// <summary>
-        /// Gets the text from a visible element.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The text content of the visible element.</returns>
         protected string GetElementText(By locator)
         {
             return WaitForElementVisible(locator).Text;
         }
 
-        /// <summary>
-        /// Checks if an element is displayed on the page.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>True if the element is displayed; otherwise, false.</returns>
         protected bool IsElementDisplayed(By locator)
         {
             try
@@ -104,10 +73,6 @@ namespace SauceDemo.UI.Base
             }
         }
 
-        /// <summary>
-        /// Clears Fields with a little 'hack' added to make tests pass.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
         protected void ClearField(By locator)
         {
             var element = WaitForElementVisible(locator);
@@ -117,34 +82,21 @@ namespace SauceDemo.UI.Base
             element.SendKeys(Keys.Tab);
         }
 
-        /// <summary>
-        /// Waits until the element is visible in the DOM and returns it.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The visible <see cref="IWebElement"/> found by the locator.</returns>
-        protected IWebElement WaitForElementVisible(By locator)
-        {
-            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
-        }
-
-        /// <summary>
-        /// Waits until the element is clickable in the DOM and returns it.
-        /// </summary>
-        /// <param name="locator">The locator used to find the element.</param>
-        /// <returns>The clickable <see cref="IWebElement"/> found by the locator.</returns>
         protected IWebElement WaitForElementClickable(By locator)
         {
             return Wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         }
 
-        /// <summary>
-        /// Refreshes the page and waits until the specified condition is met.
-        /// </summary>
-        /// <param name="condition">The condition to wait for after refresh.</param>
         protected void RefreshPage(Func<bool> condition)
         {
             Driver.Navigate().Refresh();
             Wait.Until(_ => condition());
         }
+
+        private IWebElement WaitForElementVisible(By locator)
+        {
+            return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
+        }
     }
+    #pragma warning restore SA1600 // ElementsMustBeDocumented
 }

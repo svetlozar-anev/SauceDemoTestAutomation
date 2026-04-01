@@ -2,8 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+// TODO: move Users to some other folder, refactor this.
 namespace SauceDemo.Core.TestData
 {
+    #pragma warning disable SA1600 // ElementsMustBeDocumented
     public static class Users
     {
         // Standard login user
@@ -20,4 +22,5 @@ namespace SauceDemo.Core.TestData
         public const string Password = "secret_sauce";
         public const string WrongPassword = "wrong_password";
     }
+    #pragma warning disable SA1600 // ElementsMustBeDocumented
 }

@@ -142,7 +142,7 @@ namespace SauceDemo.Tests.Steps
         public void WhenTheUserClicksTheBurgerMenuIcon()
         {
             dashboardPage.WaitForDashboardToLoad();
-            dashboardPage.OpenMenu();
+            dashboardPage.Menu.Open();
         }
 
         // ========================
@@ -302,7 +302,7 @@ namespace SauceDemo.Tests.Steps
         [Then("the navigation menu should be displayed")]
         public void ThenTheNavigationMenuShouldBeDisplayed()
         {
-            dashboardPage.IsMenuVisible().Should().BeTrue();
+            dashboardPage.Menu.IsMenuVisible().Should().BeTrue();
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"the menu should contain the following options:")]
         public void ThenAndTheMenuShouldContainTheOptions(Table table)
         {
-            var actualOptions = dashboardPage.GetMenuOptions();
+            var actualOptions = dashboardPage.Menu.GetOptions();
 
             var selectedOptions = table.Rows.Select(r => r[0].ToString()).ToList();
 

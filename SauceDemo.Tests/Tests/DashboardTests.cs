@@ -243,11 +243,11 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
 
-            dashboardPage.OpenMenu();
+            dashboardPage.Menu.Open();
 
-            dashboardPage.IsMenuVisible();
+            dashboardPage.Menu.IsMenuVisible();
             
-            var options = dashboardPage.GetMenuOptions();
+            var options = dashboardPage.Menu.GetOptions();
 
             options.Should().Contain("About");
             options.Should().Contain("Logout");
@@ -322,8 +322,8 @@ namespace SauceDemo.Tests.Tests
         
             dashboardPage!.WaitForDashboardToLoad();
         
-            dashboardPage.OpenMenu();
-            dashboardPage.ClickLogout();
+            dashboardPage.Menu.Open();
+            dashboardPage.Menu.Logout();
         
             loginPage!.IsLoaded().Should().BeTrue();
         
@@ -382,10 +382,10 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-020: About navigation", LogScope);
 
             dashboardPage!.WaitForDashboardToLoad();
-            dashboardPage.OpenMenu();
+            dashboardPage.Menu.Open();
             
-            dashboardPage.WaitAboutToLoad();
-            dashboardPage.ClickAbout();
+            dashboardPage.Menu.WaitAboutToLoad();
+            dashboardPage.Menu.ClickAbout();
 
             dashboardPage.WaitSaucelabsToLoad();
 
@@ -411,8 +411,8 @@ namespace SauceDemo.Tests.Tests
             var oldCartCount = dashboardPage.GetCartCount();
 
             // Logout
-            dashboardPage.OpenMenu();
-            dashboardPage.ClickLogout();
+            dashboardPage.Menu.Open();
+            dashboardPage.Menu.Logout();
 
             // Login again
             loginPage!.Login("standard_user", "secret_sauce");
@@ -526,9 +526,9 @@ namespace SauceDemo.Tests.Tests
                 .Should().NotBeEmpty("products should remain visible on mobile layout");
 
             // Verify burger menu works
-            dashboardPage.OpenMenu();
+            dashboardPage.Menu.Open();
             
-            var options = dashboardPage.GetMenuOptions();
+            var options = dashboardPage.Menu.GetOptions();
 
             options.Should().Contain("About");
             options.Should().Contain("Logout");

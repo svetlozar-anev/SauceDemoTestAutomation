@@ -10,11 +10,6 @@
       "systemUsingDirectivesFirst": true,
       "usingDirectivesPlacement": "outsideNamespace",
       "blankLinesBetweenUsingGroups": "omit"
-    },
-    "documentationRules": {
-      "documentExposedElements": false,
-      "documentInternalElements": false,
-      "documentPrivateElements": false
     }
   }
 } 
