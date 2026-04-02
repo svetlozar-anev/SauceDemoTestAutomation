@@ -74,7 +74,7 @@ namespace SauceDemo.Tests.Steps
         [When(@"I sort products by ""(.*)""")]
         public void WhenISortProductsBy(string option)
         {
-            dashboardPage.SelectSortOption(option);
+            dashboardPage.Products.SelectSortOption(option);
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace SauceDemo.Tests.Steps
         public void WhenIClickTheFirstProduct()
         {
             dashboardPage.WaitForDashboardToLoad();
-            selectedProductName = dashboardPage.GetProductNameByIndex(0);
-            dashboardPage.ClickProductTitleByIndex(0);
+            selectedProductName = dashboardPage.Products.GetNameByIndex(0);
+            dashboardPage.Products.ClickTitleByIndex(0);
         }
 
         /// <summary>
@@ -101,20 +101,20 @@ namespace SauceDemo.Tests.Steps
             dashboardPage.ClickAddToCartByIndex(0);
             dashboardPage.WaitForButtonLabel(0, "Remove");
         }
-        
+
         /// <summary>
         /// Removes the first product of the cart to appear and waits for the button to update.
         /// </summary>
         [When("I remove the same product from the cart")]
         public void WhenIRemoveTheFirstProductToTheCart()
         {
-           dashboardPage.WaitForDashboardToLoad();
-           
-           initialCartCount = dashboardPage.GetCartCount();
-           
-           dashboardPage.ClickRemoveByIndex(0);
-           
-           dashboardPage.WaitForButtonLabel(0, "Add");
+            dashboardPage.WaitForDashboardToLoad();
+
+            initialCartCount = dashboardPage.GetCartCount();
+
+            dashboardPage.ClickRemoveByIndex(0);
+
+            dashboardPage.WaitForButtonLabel(0, "Add");
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace SauceDemo.Tests.Steps
         public void WhenIAddTheFirstThreeProductsToTheCart()
         {
             dashboardPage.WaitForDashboardToLoad();
-
-            selectedProducts = dashboardPage.GetAllProductNames().Take(3).ToList();
+            
+            selectedProducts = dashboardPage.Products.GetAllNames().Take(3).ToList();
             initialCartCount = dashboardPage.GetCartCount();
 
             foreach (var product in selectedProducts)
@@ -155,7 +155,7 @@ namespace SauceDemo.Tests.Steps
         [Then("all product names are visible and not empty")]
         public void ThenAllProductNamesAreVisibleAndNotEmpty()
         {
-            var names = dashboardPage.GetAllProductNames();
+            var names = dashboardPage.Products.GetAllNames();
             names.Should().NotBeNullOrEmpty();
             names.Should().OnlyContain(name => !string.IsNullOrWhiteSpace(name));
         }
@@ -166,7 +166,7 @@ namespace SauceDemo.Tests.Steps
         [Then("all product prices are displayed and formatted correctly")]
         public void ThenAllProductPricesAreDisplayedAndFormattedCorrectly()
         {
-            var prices = dashboardPage.GetAllProductPrices();
+            var prices = dashboardPage.Products.GetAllPrices();
 
             prices.Should().NotBeNullOrEmpty();
             prices.Should().OnlyContain(p => p.StartsWith("$"));
@@ -178,7 +178,7 @@ namespace SauceDemo.Tests.Steps
         [Then("all product images are visible")]
         public void ThenAllProductImagesAreVisible()
         {
-            var images = dashboardPage.GetAllProductImages();
+            var images = dashboardPage.Products.GetAllImages();
 
             images.Should().NotBeNullOrEmpty();
 
@@ -194,7 +194,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by name ascending")]
         public void ThenProductsAreSortedByNameAscending()
         {
-            dashboardPage.GetAllProductNames()
+            dashboardPage.Products.GetAllNames()
                 .Should().BeInAscendingOrder();
         }
 
@@ -204,7 +204,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by name descending")]
         public void ThenProductsAreSortedByNameDescending()
         {
-            dashboardPage.GetAllProductNames()
+            dashboardPage.Products.GetAllNames()
                 .Should().BeInDescendingOrder();
         }
 
@@ -214,7 +214,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by price ascending")]
         public void ThenProductsAreSortedByPriceAscending()
         {
-            dashboardPage.GetProductPricesAsDecimal()
+            dashboardPage.Products.GetPricesAsDecimal()
                 .Should().BeInAscendingOrder();
         }
 
@@ -224,7 +224,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by price descending")]
         public void ThenProductsAreSortedByPriceDescending()
         {
-            dashboardPage.GetProductPricesAsDecimal()
+            dashboardPage.Products.GetPricesAsDecimal()
                 .Should().BeInDescendingOrder();
         }
 

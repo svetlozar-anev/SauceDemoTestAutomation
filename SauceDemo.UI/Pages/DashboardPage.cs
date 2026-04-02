@@ -22,16 +22,16 @@ namespace SauceDemo.UI.Pages
 
         // === LOCATORS ===
         private readonly By appLogo = By.CssSelector(".app_logo");
-        private readonly By productCards = By.CssSelector(".inventory_item");
-        private readonly By productNames = By.CssSelector(".inventory_item_name");
-        private readonly By productPrices = By.CssSelector(".inventory_item_price");
-        private readonly By productImages = By.CssSelector(".inventory_item_img img");
-        private readonly By sortDropdown = By.CssSelector(".product_sort_container");
+        // private readonly By productCards = By.CssSelector(".inventory_item");
+        // private readonly By productNames = By.CssSelector(".inventory_item_name");
+        // private readonly By productPrices = By.CssSelector(".inventory_item_price");
+        // private readonly By productImages = By.CssSelector(".inventory_item_img img");
+       // private readonly By sortDropdown = By.CssSelector(".product_sort_container");
 
         private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
 
-        private readonly By productButton = By.CssSelector("button");
+        private readonly By productButton = By.CssSelector("button"); 
 
         // === PAGE ACTIONS ===
 
@@ -44,6 +44,16 @@ namespace SauceDemo.UI.Pages
             NavigateTo(TestConfig.BaseUrl + "/inventory.html");
             return new DashboardPage();
         }
+        
+        /// <summary>
+        /// Gets the dashboard side menu component.
+        /// </summary>
+        public DashboardMenu Menu { get; } = new DashboardMenu();
+        
+        /// <summary>
+        /// Gets the dashboard products menu component.
+        /// </summary>
+        public DashboardProducts Products { get; } = new DashboardProducts();
 
         /// <summary>
         /// Clicks the "Add to cart" button for the product at the given index.
@@ -132,92 +142,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Gets the product name (title text) at the specified index.
-        /// Useful for validating detail page content.
-        /// </summary>
-        /// <param name="index">Zero-based index.</param>
-        /// <returns>Product name as shown on the dashboard.</returns>
-        public string GetProductNameByIndex(int index)
-        {
-            return FindAll(productNames).ToList()[index].Text.Trim();
-        }
-        
-        /// <summary>
-        /// Gets the dashboard side menu component.
-        /// </summary>
-        public DashboardMenu Menu { get; } = new DashboardMenu();
-
-        /// <summary>
-        /// Clicks a product image by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product image to click.</param>
-        public void ClickProductImageByIndex(int index)
-        {
-            var elements = FindAll(productImages).ToList();
-            elements[index].Click();
-        }
-
-        /// <summary>
-        /// Clicks a product title by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product to click.</param>
-        public void ClickProductTitleByIndex(int index)
-        {
-            var elements = FindAll(productNames).ToList();
-            elements[index].Click();
-        }
-
-        /// <summary>
-        /// Returns product prices as decimals (USD-aware).
-        /// </summary>
-        /// <returns>Returns list of decimal values.</returns>
-        public List<decimal> GetProductPricesAsDecimal()
-        {
-            var elements = FindAll(productPrices);
-            var list = new List<decimal>(elements.Count);
-
-            foreach (var element in elements)
-            {
-                var text = element.Text.Trim() ?? string.Empty;
-
-                // Try parse as currency
-                if (decimal.TryParse(
-                        text,
-                        NumberStyles.Currency,
-                        CultureInfo.GetCultureInfo("en-US"),
-                        out var value))
-                {
-                    list.Add(value);
-                }
-                else
-                {
-                    // push a negative value so test fails clearly (or throw)
-                    throw new FormatException($"Unable to parse product price: '{text}'");
-                }
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// Selects a sort option from the product sort dropdown.
-        /// </summary>
-        /// /// <param name="visibleText">
-        /// The exact visible text of the dropdown option to select.
-        /// Valid options include:
-        /// - "Name (A to Z)"
-        /// - "Name (Z to A)"
-        /// - "Price (low to high)"
-        /// - "Price (high to low)".
-        /// </param>
-        public void SelectSortOption(string visibleText)
-        {
-            var dropdown = Find(sortDropdown);
-            var select = new SelectElement(dropdown);
-            select.SelectByText(visibleText);
-        }
-
-        /// <summary>
         /// Waits until the dashboard page is fully loaded.
         /// Checks that the logo is visible, product cards exist, and each card has a name, price, and image.
         /// </summary>
@@ -296,56 +220,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Gets all product cards.
-        /// </summary>
-        /// <returns>List of product card IWebElement objects.</returns>
-        public IList<IWebElement> GetAllProductCards() => FindAll(productCards).ToList();
-        
-        /// <summary>
-        /// Gets all product names.
-        /// </summary>
-        /// <returns>List of all product names.</returns>
-        public IList<string> GetAllProductNames() =>
-            FindAll(productNames).Select(e => e.Text).ToList();
-
-        /// <summary>
-        /// Gets all product prices.
-        /// </summary>
-        /// <returns>List of all product prices.</returns>
-        public IList<string> GetAllProductPrices() =>
-            FindAll(productPrices).Select(e => e.Text).ToList();
-
-        /// <summary>
-        /// Gets all product image elements.
-        /// </summary>
-        /// <returns>List of all product images.</returns>
-        public IReadOnlyCollection<IWebElement> GetAllProductImages() =>
-            FindAll(productImages);
-
-        public IReadOnlyCollection<IWebElement> GetAllProductImagesLoaded()
-        {
-            var images = GetAllProductImages();
-
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-
-            foreach (var img in images)
-            {
-                wait.Until(driver =>
-                {
-                    var js = (IJavaScriptExecutor)driver;
-
-                    var result = js.ExecuteScript(
-                        "return arguments[0].complete && arguments[0].naturalWidth > 0",
-                        img);
-
-                    return result as bool? == true;
-                });
-            }
-
-            return images;
-        }
-
-        /// <summary>
         /// Clicks Remove button (index based).
         /// </summary>
         /// <param name="index">Index.</param>
@@ -373,26 +247,7 @@ namespace SauceDemo.UI.Pages
             wait.Until(d => d.Url.Contains("https://saucelabs.com"));
             return wait;
         }
-
-        /// <summary>
-        /// Waits for images to load.
-        /// </summary>
-        public void WaitForImagesToLoad()
-        {
-            Wait.Until(driver =>
-            {
-                var images = FindAll(By.CssSelector(".inventory_item_img img"));
-
-                return images.All(img =>
-                {
-                    var result = ((IJavaScriptExecutor)driver)
-                        .ExecuteScript("return arguments[0].complete && arguments[0].naturalWidth > 0", img);
-
-                    return result is bool loaded && loaded;
-                });
-            });
-        }
-
+        
         /// <summary>
         /// Clicks the "Add to cart" button for the specified product by its name.
         /// </summary>
@@ -433,10 +288,10 @@ namespace SauceDemo.UI.Pages
             return Driver.Url.Contains(InventoryUrlFragment) &&
                    FindAll(By.ClassName(InventoryItems)).Any();
         }
-
+        
         private IWebElement FindProductContainer(string productName)
         {
-            return Driver.FindElements(productCards)
+            return Driver.FindElements(By.CssSelector(".inventory_item"))
                 .First(e => e.Text.Contains(productName, StringComparison.OrdinalIgnoreCase));
         }
     }
