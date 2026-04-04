@@ -39,6 +39,15 @@ namespace SauceDemo.Tests.Tests.Base
         {
             Logger.Init();
         }
+        
+        /// <summary>
+        /// Ensures all pending logs are flushed after the test suite completes.
+        /// </summary>
+        [OneTimeTearDown]
+        public static void OneTimeTearDown()
+        {
+            Serilog.Log.CloseAndFlush();
+        }
 
         /// <summary>
         /// Initializes the WebDriver and page objects before each test.
@@ -81,15 +90,6 @@ namespace SauceDemo.Tests.Tests.Base
 
             WebDriverFactory.QuitDriver();
             ResetPages();
-        }
-
-        /// <summary>
-        /// Ensures all pending logs are flushed after the test suite completes.
-        /// </summary>
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            Serilog.Log.CloseAndFlush();
         }
         
         /// <summary>
