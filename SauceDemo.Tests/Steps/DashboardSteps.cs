@@ -16,21 +16,9 @@ namespace SauceDemo.Tests.Steps
     [Binding]
     public class DashboardSteps : BaseSteps
     {
-        private readonly LoginPage loginPage;
-        private readonly DashboardPage dashboardPage;
-
         private string? selectedProductName;
         private int initialCartCount;
         private List<string>? selectedProducts;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DashboardSteps"/> class.
-        /// </summary>
-        public DashboardSteps()
-        {
-            loginPage = new LoginPage();
-            dashboardPage = new DashboardPage();
-        }
 
         // ========================
         // GIVEN
@@ -42,7 +30,8 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I am logged in as a standard user")]
         public void GivenIAmLoggedInAsAStandardUser()
         {
-            loginPage.OpenLoginPage().LoginAs(Users.Standard, Users.Password);
+            LoginPage?.Open();
+            LoginPage?.Login(Users.Standard, Users.Password);
         }
 
         /// <summary>
@@ -51,7 +40,7 @@ namespace SauceDemo.Tests.Steps
         [Given("I am on the dashboard page")]
         public void GivenIAmOnTheDashboardPage()
         {
-            dashboardPage.Open();
+            DashboardPage?.Open();
         }
 
         // ========================
@@ -64,7 +53,7 @@ namespace SauceDemo.Tests.Steps
         [When("the dashboard finishes loading")]
         public void WhenTheDashboardFinishesLoading()
         {
-            dashboardPage.WaitForDashboardToLoad();
+            DashboardPage?.WaitForDashboardToLoad();
         }
 
         /// <summary>
@@ -74,7 +63,7 @@ namespace SauceDemo.Tests.Steps
         [When(@"I sort products by ""(.*)""")]
         public void WhenISortProductsBy(string option)
         {
-            dashboardPage.Products.SelectSortOption(option);
+            DashboardPage?.Products.SelectSortOption(option);
         }
 
         /// <summary>
@@ -83,9 +72,9 @@ namespace SauceDemo.Tests.Steps
         [When(@"I click the first product")]
         public void WhenIClickTheFirstProduct()
         {
-            dashboardPage.WaitForDashboardToLoad();
-            selectedProductName = dashboardPage.Products.GetNameByIndex(0);
-            dashboardPage.Products.ClickTitleByIndex(0);
+            DashboardPage?.WaitForDashboardToLoad();
+            selectedProductName = DashboardPage?.Products.GetNameByIndex(0);
+            DashboardPage?.Products.ClickTitleByIndex(0);
         }
 
         /// <summary>
@@ -94,12 +83,12 @@ namespace SauceDemo.Tests.Steps
         [When(@"I add the first product to the cart")]
         public void WhenIAddTheFirstProductToTheCart()
         {
-            dashboardPage.WaitForDashboardToLoad();
+            DashboardPage?.WaitForDashboardToLoad();
 
-            initialCartCount = dashboardPage.GetCartCount();
+            initialCartCount = DashboardPage.GetCartCount();
 
-            dashboardPage.ClickAddToCartByIndex(0);
-            dashboardPage.WaitForButtonLabel(0, "Remove");
+            DashboardPage?.ClickAddToCartByIndex(0);
+            DashboardPage?.WaitForButtonLabel(0, "Remove");
         }
 
         /// <summary>
@@ -108,13 +97,13 @@ namespace SauceDemo.Tests.Steps
         [When("I remove the same product from the cart")]
         public void WhenIRemoveTheFirstProductToTheCart()
         {
-            dashboardPage.WaitForDashboardToLoad();
+            DashboardPage?.WaitForDashboardToLoad();
 
-            initialCartCount = dashboardPage.GetCartCount();
+            initialCartCount = DashboardPage.GetCartCount();
 
-            dashboardPage.ClickRemoveByIndex(0);
+            DashboardPage?.ClickRemoveByIndex(0);
 
-            dashboardPage.WaitForButtonLabel(0, "Add");
+            DashboardPage?.WaitForButtonLabel(0, "Add");
         }
 
         /// <summary>
@@ -123,15 +112,15 @@ namespace SauceDemo.Tests.Steps
         [When("I add the first three products to the cart")]
         public void WhenIAddTheFirstThreeProductsToTheCart()
         {
-            dashboardPage.WaitForDashboardToLoad();
+            DashboardPage?.WaitForDashboardToLoad();
             
-            selectedProducts = dashboardPage.Products.GetAllNames().Take(3).ToList();
-            initialCartCount = dashboardPage.GetCartCount();
+            selectedProducts = DashboardPage?.Products.GetAllNames().Take(3).ToList();
+            initialCartCount = DashboardPage.GetCartCount();
 
             foreach (var product in selectedProducts)
             {
-                dashboardPage.ClickAddToCartByName(product);
-                dashboardPage.WaitForButtonLabel(product, "Remove");
+                DashboardPage?.ClickAddToCartByName(product);
+                DashboardPage?.WaitForButtonLabel(product, "Remove");
             }
         }
 
@@ -141,21 +130,21 @@ namespace SauceDemo.Tests.Steps
         [When("the user clicks the burger menu icon")]
         public void WhenTheUserClicksTheBurgerMenuIcon()
         {
-            dashboardPage.WaitForDashboardToLoad();
-            dashboardPage.Menu.Open();
+            DashboardPage?.WaitForDashboardToLoad();
+            DashboardPage?.Menu.Open();
         }
 
         // ========================
         // THEN
         // ========================
 
-        /// <summary>
+        /// <summary>d
         /// Verifies that all product names are present and non-empty.
         /// </summary>
         [Then("all product names are visible and not empty")]
         public void ThenAllProductNamesAreVisibleAndNotEmpty()
         {
-            var names = dashboardPage.Products.GetAllNames();
+            var names = DashboardPage?.Products.GetAllNames();
             names.Should().NotBeNullOrEmpty();
             names.Should().OnlyContain(name => !string.IsNullOrWhiteSpace(name));
         }
@@ -166,7 +155,7 @@ namespace SauceDemo.Tests.Steps
         [Then("all product prices are displayed and formatted correctly")]
         public void ThenAllProductPricesAreDisplayedAndFormattedCorrectly()
         {
-            var prices = dashboardPage.Products.GetAllPrices();
+            var prices = DashboardPage?.Products.GetAllPrices();
 
             prices.Should().NotBeNullOrEmpty();
             prices.Should().OnlyContain(p => p.StartsWith("$"));
@@ -178,7 +167,7 @@ namespace SauceDemo.Tests.Steps
         [Then("all product images are visible")]
         public void ThenAllProductImagesAreVisible()
         {
-            var images = dashboardPage.Products.GetAllImages();
+            var images = DashboardPage?.Products.GetAllImages();
 
             images.Should().NotBeNullOrEmpty();
 
@@ -194,7 +183,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by name ascending")]
         public void ThenProductsAreSortedByNameAscending()
         {
-            dashboardPage.Products.GetAllNames()
+            DashboardPage?.Products.GetAllNames()
                 .Should().BeInAscendingOrder();
         }
 
@@ -204,7 +193,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by name descending")]
         public void ThenProductsAreSortedByNameDescending()
         {
-            dashboardPage.Products.GetAllNames()
+            DashboardPage?.Products.GetAllNames()
                 .Should().BeInDescendingOrder();
         }
 
@@ -214,7 +203,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by price ascending")]
         public void ThenProductsAreSortedByPriceAscending()
         {
-            dashboardPage.Products.GetPricesAsDecimal()
+            DashboardPage?.Products.GetPricesAsDecimal()
                 .Should().BeInAscendingOrder();
         }
 
@@ -224,7 +213,7 @@ namespace SauceDemo.Tests.Steps
         [Then("products are sorted by price descending")]
         public void ThenProductsAreSortedByPriceDescending()
         {
-            dashboardPage.Products.GetPricesAsDecimal()
+            DashboardPage?.Products.GetPricesAsDecimal()
                 .Should().BeInDescendingOrder();
         }
 
@@ -234,10 +223,8 @@ namespace SauceDemo.Tests.Steps
         [Then("the product detail page should display the correct product")]
         public void ThenTheProductDetailPageShouldDisplayTheCorrectProduct()
         {
-            var detailPage = new ProductDetailPage();
-
-            detailPage.IsLoaded().Should().BeTrue();
-            detailPage.GetTitle().Should().Be(selectedProductName);
+            DetailPage.IsLoaded().Should().BeTrue();
+            DetailPage.GetTitle().Should().Be(selectedProductName);
         }
 
         /// <summary>
@@ -246,10 +233,9 @@ namespace SauceDemo.Tests.Steps
         [Then("I return to the dashboard page")]
         public void ThenIReturnToTheDashboardPage()
         {
-            var detailPage = new ProductDetailPage();
-            detailPage.ReturnToDashboard();
+            DetailPage.ReturnToDashboard();
 
-            dashboardPage.WaitForDashboardToLoad();
+            DashboardPage?.WaitForDashboardToLoad();
         }
 
         /// <summary>
@@ -259,7 +245,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"the button should change to ""(.*)""")]
         public void ThenTheButtonShouldChangeTo(string expected)
         {
-            dashboardPage.GetAddToCartButtonLabel(0)
+            DashboardPage?.GetAddToCartButtonLabel(0)
                 .Should().Be(expected);
         }
 
@@ -269,7 +255,7 @@ namespace SauceDemo.Tests.Steps
         [Then("the cart badge should increment by 1")]
         public void ThenTheCartBadgeShouldIncrementBy1()
         {
-            dashboardPage.GetCartCount()
+            DashboardPage?.GetCartCount()
                 .Should().Be(initialCartCount + 1);
         }
 
@@ -281,7 +267,7 @@ namespace SauceDemo.Tests.Steps
         {
             foreach (var product in selectedProducts!)
             {
-                dashboardPage.GetButtonLabel(product)
+                DashboardPage?.GetButtonLabel(product)
                     .Should().Be("Remove");
             }
         }
@@ -292,7 +278,7 @@ namespace SauceDemo.Tests.Steps
         [Then("the cart badge should reflect the total items added")]
         public void ThenTheCartBadgeShouldReflectTheTotalItemsAdded()
         {
-            dashboardPage.GetCartCount()
+            DashboardPage?.GetCartCount()
                 .Should().Be(initialCartCount + selectedProducts!.Count);
         }
 
@@ -302,7 +288,7 @@ namespace SauceDemo.Tests.Steps
         [Then("the navigation menu should be displayed")]
         public void ThenTheNavigationMenuShouldBeDisplayed()
         {
-            dashboardPage.Menu.IsMenuVisible().Should().BeTrue();
+            DashboardPage?.Menu.IsMenuVisible().Should().BeTrue();
         }
 
         /// <summary>
@@ -312,7 +298,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"the menu should contain the following options:")]
         public void ThenAndTheMenuShouldContainTheOptions(Table table)
         {
-            var actualOptions = dashboardPage.Menu.GetOptions();
+            var actualOptions = DashboardPage?.Menu.GetOptions();
 
             var selectedOptions = table.Rows.Select(r => r[0].ToString()).ToList();
 
@@ -325,7 +311,7 @@ namespace SauceDemo.Tests.Steps
         [Then("Then the cart badge should decrement to 0")]
         public void ThenTheCartBadgeShouldDecrementTo0()
         {
-            dashboardPage.WaitForButtonLabel(0, "Add to cart");
+            DashboardPage?.WaitForButtonLabel(0, "Add to cart");
         }
 
         /// <summary>
@@ -334,7 +320,7 @@ namespace SauceDemo.Tests.Steps
         [Then("And the product button should change to \"Add to cart\"")]
         public void ThenAndTheProductButtonShouldChangeToAddToCart()
         {
-            dashboardPage.WaitForButtonLabel(0, "Add to cart");
+            DashboardPage?.WaitForButtonLabel(0, "Add to cart");
         }
     }
 }

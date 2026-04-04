@@ -13,6 +13,11 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class ProductDetailPage : BasePage
     {
+        public ProductDetailPage(IWebDriver driver) 
+            : base(driver)
+        {
+        }
+
         private readonly By title = By.CssSelector(".inventory_details_name");
         private readonly By description = By.CssSelector(".inventory_details_desc");
         private readonly By price = By.CssSelector(".inventory_details_price");

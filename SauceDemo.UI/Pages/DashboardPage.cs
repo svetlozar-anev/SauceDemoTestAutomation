@@ -2,12 +2,14 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+
 namespace SauceDemo.UI.Pages
 {
     using System.Globalization;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.Core.Config;
+    using SauceDemo.Core.Utilities;
     using SauceDemo.UI.Base;
 
     /// <summary>
@@ -16,22 +18,26 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class DashboardPage : BasePage
     {
+        public DashboardPage(IWebDriver driver) : base(driver)
+        {
+            Menu = new DashboardMenu(driver);
+            Products = new DashboardProducts(driver);
+        }
+
+        public DashboardMenu Menu { get; }
+        public DashboardProducts Products { get; }
+
         // === CONSTANTS ===
         private const string InventoryUrlFragment = "inventory.html";
         private const string InventoryItems = "inventory_item";
 
         // === LOCATORS ===
         private readonly By appLogo = By.CssSelector(".app_logo");
-        // private readonly By productCards = By.CssSelector(".inventory_item");
-        // private readonly By productNames = By.CssSelector(".inventory_item_name");
-        // private readonly By productPrices = By.CssSelector(".inventory_item_price");
-        // private readonly By productImages = By.CssSelector(".inventory_item_img img");
-       // private readonly By sortDropdown = By.CssSelector(".product_sort_container");
 
         private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
 
-        private readonly By productButton = By.CssSelector("button"); 
+        private readonly By productButton = By.CssSelector("button");
 
         // === PAGE ACTIONS ===
 
@@ -42,18 +48,8 @@ namespace SauceDemo.UI.Pages
         public DashboardPage Open()
         {
             NavigateTo(TestConfig.BaseUrl + "/inventory.html");
-            return new DashboardPage();
+            return new DashboardPage(WebDriverFactory.Driver);
         }
-        
-        /// <summary>
-        /// Gets the dashboard side menu component.
-        /// </summary>
-        public DashboardMenu Menu { get; } = new DashboardMenu();
-        
-        /// <summary>
-        /// Gets the dashboard products menu component.
-        /// </summary>
-        public DashboardProducts Products { get; } = new DashboardProducts();
 
         /// <summary>
         /// Clicks the "Add to cart" button for the product at the given index.
@@ -247,7 +243,7 @@ namespace SauceDemo.UI.Pages
             wait.Until(d => d.Url.Contains("https://saucelabs.com"));
             return wait;
         }
-        
+
         /// <summary>
         /// Clicks the "Add to cart" button for the specified product by its name.
         /// </summary>
@@ -267,7 +263,7 @@ namespace SauceDemo.UI.Pages
         {
             return GetProductButton(productName).Text.Trim();
         }
-        
+
         /// <summary>
         /// Refreshes the dashboard page and waits until it is fully loaded.
         /// </summary>
@@ -288,7 +284,7 @@ namespace SauceDemo.UI.Pages
             return Driver.Url.Contains(InventoryUrlFragment) &&
                    FindAll(By.ClassName(InventoryItems)).Any();
         }
-        
+
         private IWebElement FindProductContainer(string productName)
         {
             return Driver.FindElements(By.CssSelector(".inventory_item"))

@@ -2,13 +2,15 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using OpenQA.Selenium.DevTools.V141.Emulation;
+
 namespace SauceDemo.Tests.Tests.Base
 {
     using System.Diagnostics;
     using OpenQA.Selenium;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
-    using TechTalk.SpecFlow;
+    using SauceDemo.UI.Pages;
 
     /// <summary>
     /// Provides common setup and teardown logic for NUnit-based UI tests.
@@ -18,12 +20,22 @@ namespace SauceDemo.Tests.Tests.Base
     {
         private Stopwatch? stopwatch;
 
+        // === PAGE PROPERTIES ===
+#pragma warning disable SA1516 // Elements should be separated by blank line
+#pragma warning disable SA1600 // ElementsMustBeDocumented
+        protected LoginPage LoginPage { get; private set; } = null!;
+        protected DashboardPage DashboardPage { get; private set; } = null!;
+        protected CartPage CartPage { get; private set; } = null!;
+        protected ProductDetailPage DetailPage { get; private set; } = null!;
+#pragma warning disable SA1516 // Elements should be separated by blank line
+#pragma warning disable SA1600 // Elements must be documented        
+
         /// <summary>
         /// Initializes the logging infrastructure before the entire test run begins.
         /// This method is executed only once.
         /// </summary>
-        [BeforeTestRun]
-        public static void BeforeTestRun()
+        [OneTimeSetUp]
+        public static void OneTimeSetup()
         {
             Logger.Init();
         }
@@ -37,7 +49,10 @@ namespace SauceDemo.Tests.Tests.Base
             stopwatch = Stopwatch.StartNew();
             Logger.NUnitLog?.Information("=== SETUP for test: {TestName} ===", TestContext.CurrentContext.Test.Name);
 
+            WebDriverFactory.QuitDriver();
             WebDriverFactory.InitDriver(TestConfig.Browser);
+
+            InitializePages();
         }
 
         /// <summary>
@@ -47,7 +62,7 @@ namespace SauceDemo.Tests.Tests.Base
         public void TearDown()
         {
             stopwatch?.Stop();
-            var duration = stopwatch?.ElapsedMilliseconds;
+            var duration = stopwatch?.ElapsedMilliseconds ?? 0;
             var testName = TestContext.CurrentContext.Test.Name;
             var result = TestContext.CurrentContext.Result.Outcome.Status;
 
@@ -65,17 +80,38 @@ namespace SauceDemo.Tests.Tests.Base
             }
 
             WebDriverFactory.QuitDriver();
+            ResetPages();
         }
 
         /// <summary>
         /// Ensures all pending logs are flushed after the test suite completes.
         /// </summary>
         [OneTimeTearDown]
-        public void GlobalTeardown()
+        public void OneTimeTearDown()
         {
             Serilog.Log.CloseAndFlush();
         }
         
+        /// <summary>
+        /// Initializes all page objects with the current WebDriver instance.
+        /// </summary>
+        private void InitializePages()
+        {
+            LoginPage = new LoginPage(Driver);
+            DashboardPage = new DashboardPage(Driver);
+            CartPage = new CartPage(Driver);
+        }
+
+        /// <summary>
+        /// Resets page object references after teardown.
+        /// </summary>
+        private void ResetPages()
+        {
+            LoginPage = null!;
+            DashboardPage = null!;
+            CartPage = null!;
+        }
+
         protected IWebDriver Driver => WebDriverFactory.Driver;
     }
 }

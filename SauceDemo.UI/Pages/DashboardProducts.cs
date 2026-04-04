@@ -14,6 +14,11 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class DashboardProducts : BasePage
     {
+        public DashboardProducts(IWebDriver driver) 
+            : base(driver)
+        {
+        }
+
         // === LOCATORS ===
         private readonly By productCards = By.CssSelector(".inventory_item");
         private readonly By productNames = By.CssSelector(".inventory_item_name");
@@ -23,7 +28,7 @@ namespace SauceDemo.UI.Pages
         private readonly By sortDropdown = By.CssSelector(".product_sort_container");
 
         // === PRODUCT ACTIONS ===
-        
+
         /// <summary>
         /// Gets the product name (title text) at the specified index.
         /// Useful for validating detail page content.

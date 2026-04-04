@@ -17,26 +17,13 @@ namespace SauceDemo.Tests.Steps
     [Binding]
     public class LoginSteps : BaseSteps
     {
-        private readonly LoginPage loginPage;
-        private readonly DashboardPage dashboardPage;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoginSteps"/> class.
-        /// Instantiates page objects used in the login scenarios.
-        /// </summary>
-        public LoginSteps()
-        {
-            loginPage = new LoginPage();
-            dashboardPage = new DashboardPage();
-        }
-
         /// <summary>
         /// Navigates the browser to the login page URL specified in configuration.
         /// </summary>
         [Given(@"I am on the login page")]
         public void GivenIAmOnTheLoginPage()
         {
-            WebDriverFactory.Driver.Navigate().GoToUrl(TestConfig.BaseUrl);
+            LoginPage.Open();
         }
 
         /// <summary>
@@ -47,7 +34,7 @@ namespace SauceDemo.Tests.Steps
         public void GivenIEnterInTheUsernameField(string username)
         {
             Logger.SeleniumLog?.Information("Entering username: {Username}", username);
-            loginPage.EnterUsername(username);
+            LoginPage.EnterUsername(username);
         }
 
         /// <summary>
@@ -58,7 +45,7 @@ namespace SauceDemo.Tests.Steps
         public void GivenIEnterInThePasswordField(string password)
         {
             Logger.SeleniumLog?.Information("Entering password: [PROTECTED]");
-            loginPage.EnterPassword(password);
+            LoginPage.EnterPassword(password);
         }
 
         /// <summary>
@@ -67,7 +54,7 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I clear the username field")]
         public void GivenIClearTheUsernameField()
         {
-            loginPage.ClearUsername();
+            LoginPage.ClearUsername();
         }
 
         /// <summary>
@@ -76,7 +63,7 @@ namespace SauceDemo.Tests.Steps
         [Given(@"I clear the password field")]
         public void GivenIClearThePasswordField()
         {
-            loginPage.ClearPassword();
+            LoginPage.ClearPassword();
         }
 
         /// <summary>
@@ -86,7 +73,7 @@ namespace SauceDemo.Tests.Steps
         public void WhenIClickTheLoginButton()
         {
             Logger.SeleniumLog?.Information("Clicking the login button");
-            loginPage.ClickLogin();
+            LoginPage.ClickLogin();
         }
 
         /// <summary>
@@ -97,7 +84,7 @@ namespace SauceDemo.Tests.Steps
         public void ThenIShouldSeeTheErrorMessage(string expectedMessage)
         {
             Logger.SeleniumLog?.Information("Verifying error message: {ExpectedMessage}", expectedMessage);
-            loginPage.GetErrorMessage().Should().Be(expectedMessage);
+            LoginPage.GetErrorMessage().Should().Be(expectedMessage);
         }
 
         /// <summary>
@@ -107,7 +94,7 @@ namespace SauceDemo.Tests.Steps
         public void ThenIShouldBeRedirectedToTheDashboard()
         {
             Logger.SeleniumLog?.Information("Verifying redirection to dashboard");
-            dashboardPage.IsAtDashboard().Should().BeTrue();
+            DashboardPage.IsAtDashboard().Should().BeTrue();
         }
 
         /// <summary>
@@ -117,7 +104,7 @@ namespace SauceDemo.Tests.Steps
         [Then(@"the page title should be ""(.*)""")]
         public void ThenThePageTitleShouldBe(string title)
         {
-            dashboardPage.GetPageTitle().Should().Be(title);
+            DashboardPage.GetPageTitle().Should().Be(title);
         }
     }
 }

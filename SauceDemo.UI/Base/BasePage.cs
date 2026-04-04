@@ -18,12 +18,12 @@ namespace SauceDemo.UI.Base
     #pragma warning disable SA1600 // ElementsMustBeDocumented
     public abstract class BasePage
     {
-        protected BasePage()
+        protected BasePage(IWebDriver driver)
         {
-            Driver = WebDriverFactory.Driver;
+            Driver = driver ?? throw new ArgumentNullException(nameof(driver));
             Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(TestConfig.WebDriverWaitSeconds));
         }
-        
+
         protected IWebDriver Driver { get; }
 
         protected WebDriverWait Wait { get; }

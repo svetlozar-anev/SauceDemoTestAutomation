@@ -27,9 +27,9 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void TestSetUp()
         {
-            loginPage = new LoginPage();
-            dashboardPage = new DashboardPage();
-            loginPage?.OpenLoginPage();
+            loginPage = new LoginPage(WebDriverFactory.Driver);
+            dashboardPage = new DashboardPage(WebDriverFactory.Driver);
+            loginPage?.Open();
             loginPage?.Login("standard_user", "secret_sauce");
 
             Logger.NUnitLog?.Information("[{Scope}] Logged in as standard_user for Dashboard tests", LogScope);
@@ -134,7 +134,7 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.Products.ClickTitleByIndex(index);
 
             // Create detail page object and let it handle its own wait
-            var detailPage = new ProductDetailPage();
+            var detailPage = new ProductDetailPage(WebDriverFactory.Driver);
             detailPage.IsLoaded().Should().BeTrue(because: "the detail page must load before validation");
 
             // Validate content
@@ -304,7 +304,7 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage.ClickCartIcon();
 
-            var cartPage = new CartPage();
+            var cartPage = new CartPage(WebDriverFactory.Driver);
 
             cartPage.IsLoaded().Should().BeTrue();
             cartPage.GetCartItems()

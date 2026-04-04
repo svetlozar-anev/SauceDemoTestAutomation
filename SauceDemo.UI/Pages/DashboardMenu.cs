@@ -7,19 +7,24 @@ namespace SauceDemo.UI.Pages
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.UI.Base;
-
+    
     /// <summary>
     /// Represents the dashboard side menu (burger menu) in the SauceDemo application.
     /// Provides methods to open the menu and perform actions such as logging out.
     /// </summary>
     public class DashboardMenu : BasePage
     {
+        public DashboardMenu(IWebDriver driver) 
+            : base(driver)
+        {
+        }
+
         // === LOCATORS ===
         private readonly By menuButton = By.Id("react-burger-menu-btn");
         private readonly By logoutLink = By.Id("logout_sidebar_link");
         private readonly By menuItems = By.CssSelector(".bm-item.menu-item");
         private readonly By aboutLink = By.Id("about_sidebar_link");
-        
+
         /// <summary>
         /// Opens the dashboard side menu by clicking the burger menu button
         /// and waits until the menu items are loaded and visible.
@@ -29,7 +34,7 @@ namespace SauceDemo.UI.Pages
             Click(menuButton);
             Wait.Until(d => d.FindElements(menuItems).Count > 0);
         }
-        
+
         /// <summary>
         /// Checks if the dashboard menu (burger menu) is currently visible on the page.
         /// </summary>
@@ -42,7 +47,7 @@ namespace SauceDemo.UI.Pages
                 var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
                 return wait.Until(_ =>
                 {
-                    var elements = Driver.FindElements(menuButton);   // reuse the existing menuButton locator
+                    var elements = Driver.FindElements(menuButton); // reuse the existing menuButton locator
                     return elements.Count > 0 && elements[0].Displayed;
                 });
             }
@@ -51,7 +56,7 @@ namespace SauceDemo.UI.Pages
                 return false;
             }
         }
-        
+
         /// <summary>
         ///  Gets all the menu options in the dashboard menu.
         /// </summary>
@@ -60,12 +65,12 @@ namespace SauceDemo.UI.Pages
         {
             Wait.Until(d =>
                 d.FindElements(menuItems).Count >= 4);
-           
+
             return Driver.FindElements(menuItems)
                 .Select(e => e.Text.Trim())
                 .ToList();
         }
-        
+
         /// <summary>
         /// Waits until the "About" menu option is visible.
         /// </summary>
@@ -92,10 +97,10 @@ namespace SauceDemo.UI.Pages
         public void Logout()
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-            
+
             var logoutButton = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(
                 By.Id("logout_sidebar_link")));
-            
+
             Driver.FindElement(By.Id("logout_sidebar_link")).Click();
         }
     }
