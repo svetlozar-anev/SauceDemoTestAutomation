@@ -2,14 +2,12 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests
+namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
     using SauceDemo.Core.TestData;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Base;
-    using SauceDemo.UI.Base;
-    using SauceDemo.UI.Pages;
 
     /// <summary>
     /// Contains automated UI tests related to login functionality for SauceDemo.

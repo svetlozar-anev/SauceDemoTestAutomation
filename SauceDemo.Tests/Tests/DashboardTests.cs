@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.Tests
+namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
     using SauceDemo.Core.Utilities;
