@@ -14,18 +14,23 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class LoginPage : BasePage
     {
-        public LoginPage(IWebDriver driver) : base(driver)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginPage"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver instance to be used by this page object.</param>
+        public LoginPage(IWebDriver driver) 
+            : base(driver)
         {
         }
 
         // === LOCATORS ===
         private readonly By usernameInput = By.CssSelector("#user-name");
         private readonly By passwordInput = By.CssSelector("#password");
-        private readonly By loginButton   = By.CssSelector("#login-button");
-        private readonly By errorMessage  = By.CssSelector("h3[data-test='error']");
+        private readonly By loginButton = By.CssSelector("#login-button");
+        private readonly By errorMessage = By.CssSelector("h3[data-test='error']");
 
         // === ACTIONS ===
-
+        
         /// <summary>
         /// Navigates to the SauceDemo login page and waits until the page is fully loaded.
         /// </summary>

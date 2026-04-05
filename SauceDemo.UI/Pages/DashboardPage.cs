@@ -2,7 +2,6 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-
 namespace SauceDemo.UI.Pages
 {
     using System.Globalization;
@@ -18,13 +17,21 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class DashboardPage : BasePage
     {
-        public DashboardPage(IWebDriver driver) : base(driver)
+        public DashboardPage(IWebDriver driver) 
+            : base(driver)
         {
             Menu = new DashboardMenu(driver);
             Products = new DashboardProducts(driver);
         }
 
+        /// <summary>
+        /// Gets the navigation menu component of the dashboard.
+        /// </summary>
         public DashboardMenu Menu { get; }
+        
+        /// <summary>
+        /// Gets the products section component of the dashboard.
+        /// </summary>
         public DashboardProducts Products { get; }
 
         // === CONSTANTS ===
