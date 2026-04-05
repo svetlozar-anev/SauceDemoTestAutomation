@@ -1,13 +1,12 @@
-﻿// <copyright file="DashboardTests.cs" company="PlaceholderCompany">
+// <copyright file="DashboardTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
-    using OpenQA.Selenium;
     using SauceDemo.Core.Utilities;
-    using SauceDemo.Tests.Tests.Base;
+    using SauceDemo.Tests.Base;
     using SauceDemo.UI.Pages;
 
     /// <summary>
@@ -27,9 +26,9 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void TestSetUp()
         {
-            loginPage = new LoginPage();
-            dashboardPage = new DashboardPage();
-            loginPage?.OpenLoginPage();
+            loginPage = new LoginPage(WebDriverFactory.Driver);
+            dashboardPage = new DashboardPage(WebDriverFactory.Driver);
+            loginPage?.Open();
             loginPage?.Login("standard_user", "secret_sauce");
 
             Logger.NUnitLog?.Information("[{Scope}] Logged in as standard_user for Dashboard tests", LogScope);
@@ -44,10 +43,11 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-009: All product items are displayed", LogScope);
 
-            var productCards = dashboardPage?.GetAllProductCards();
-            var productNames = dashboardPage?.GetAllProductNames();
-            var productPrices = dashboardPage?.GetAllProductPrices();
-            var productImages = dashboardPage?.GetAllProductImages();
+            var productCards = dashboardPage?.Products.GetAllCards();
+            var productNames = dashboardPage?.Products.GetAllNames();
+
+            var productPrices = dashboardPage?.Products.GetAllPrices();
+            var productImages = dashboardPage?.Products.GetAllImages();
 
             Logger.NUnitLog?.Information("[{Scope}] Found {Count} product cards", LogScope, productCards?.Count ?? 0);
 
@@ -85,23 +85,23 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-010: Product sort dropdown is functional", LogScope);
 
             // Sort by Name (A to Z)
-            dashboardPage?.SelectSortOption("Name (A to Z)");
-            var namesAsc = dashboardPage?.GetAllProductNames();
+            dashboardPage?.Products.SelectSortOption("Name (A to Z)");
+            var namesAsc = dashboardPage?.Products.GetAllNames();
             namesAsc.Should().BeInAscendingOrder(because: "products should be sorted by name A to Z");
 
             // Sort by Name (Z to A)
-            dashboardPage?.SelectSortOption("Name (Z to A)");
-            var namesDesc = dashboardPage?.GetAllProductNames();
+            dashboardPage?.Products.SelectSortOption("Name (Z to A)");
+            var namesDesc = dashboardPage?.Products.GetAllNames();
             namesDesc.Should().BeInDescendingOrder(because: "products should be sorted by name Z to A");
 
             // Sort by Price (low to high)
-            dashboardPage?.SelectSortOption("Price (low to high)");
-            var pricesAsc = dashboardPage?.GetProductPricesAsDecimal();
+            dashboardPage?.Products.SelectSortOption("Price (low to high)");
+            var pricesAsc = dashboardPage?.Products.GetPricesAsDecimal();
             pricesAsc.Should().BeInAscendingOrder(because: "products should be sorted by price low to high");
 
             // Sort by Price (high to low)
-            dashboardPage?.SelectSortOption("Price (high to low)");
-            var pricesDesc = dashboardPage?.GetProductPricesAsDecimal();
+            dashboardPage?.Products.SelectSortOption("Price (high to low)");
+            var pricesDesc = dashboardPage?.Products.GetPricesAsDecimal();
             pricesDesc.Should().BeInDescendingOrder(because: "products should be sorted by price high to low");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-010 completed successfully", LogScope);
@@ -125,14 +125,14 @@ namespace SauceDemo.Tests.Tests
             // Pick the first product (reliable, stable)
             int index = 0;
 
-            string expectedName = dashboardPage.GetProductNameByIndex(index);
+            string expectedName = dashboardPage.Products.GetNameByIndex(index);
             Logger.NUnitLog?.Information("[{Scope}] Clicking product: {Name}", LogScope, expectedName);
 
             // Click the product title (or image; title is the most stable)
-            dashboardPage.ClickProductTitleByIndex(index);
+            dashboardPage.Products.ClickTitleByIndex(index);
 
             // Create detail page object and let it handle its own wait
-            var detailPage = new ProductDetailPage();
+            var detailPage = new ProductDetailPage(WebDriverFactory.Driver);
             detailPage.IsLoaded().Should().BeTrue(because: "the detail page must load before validation");
 
             // Validate content
@@ -196,7 +196,7 @@ namespace SauceDemo.Tests.Tests
             dashboardPage!.DismissPasswordPopupIfPresent();
 
             // Pick the first 3 product names from the UI
-            var productsToAdd = dashboardPage.GetAllProductNames().Take(3).ToList();
+            var productsToAdd = dashboardPage.Products.GetAllNames().Take(3).ToList();
 
             if (productsToAdd.Count < 3)
             {
@@ -215,7 +215,7 @@ namespace SauceDemo.Tests.Tests
                 dashboardPage.ClickAddToCartByName(productName);
 
                 // Wait until button shows "Remove"
-                dashboardPage.WaitForButtonLabel(productName, "Remove");
+                //  dashboardPage.WaitForButtonLabel(productName);
 
                 // Confirm button updated
                 dashboardPage.GetButtonLabel(productName)
@@ -243,11 +243,11 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
 
-            dashboardPage.OpenMenu();
+            dashboardPage.Menu.Open();
 
-            dashboardPage.IsMenuVisible();
-            
-            var options = dashboardPage.GetMenuOptions();
+            dashboardPage.Menu.IsMenuVisible();
+
+            var options = dashboardPage.Menu.GetOptions();
 
             options.Should().Contain("About");
             options.Should().Contain("Logout");
@@ -296,13 +296,13 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
 
-            var product = dashboardPage.GetAllProductNames().First();
+            var product = dashboardPage.Products.GetAllNames().First();
 
             dashboardPage.ClickAddToCartByName(product);
 
             dashboardPage.ClickCartIcon();
 
-            var cartPage = new CartPage();
+            var cartPage = new CartPage(WebDriverFactory.Driver);
 
             cartPage.IsLoaded().Should().BeTrue();
             cartPage.GetCartItems()
@@ -319,14 +319,14 @@ namespace SauceDemo.Tests.Tests
         public void UC_017_Logout_WorksCorrectly()
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-017: Logout", LogScope);
-        
+
             dashboardPage!.WaitForDashboardToLoad();
-        
-            dashboardPage.OpenMenu();
-            dashboardPage.ClickLogout();
-        
+
+            dashboardPage.Menu.Open();
+            dashboardPage.Menu.Logout();
+
             loginPage!.IsLoaded().Should().BeTrue();
-        
+
             Logger.NUnitLog?.Information("[{Scope}] UC-017 completed successfully", LogScope);
         }
 
@@ -338,16 +338,16 @@ namespace SauceDemo.Tests.Tests
         public void UC_018_ProductImages_AreValid()
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
-        
+
             dashboardPage!.WaitForDashboardToLoad();
-        
-            var images = dashboardPage.GetAllProductImagesLoaded();
-        
+
+            var images = dashboardPage.Products.GetAllImagesLoaded();
+
             foreach (var img in images)
             {
                 img.GetAttribute("src").Should().NotBeNullOrEmpty();
             }
-        
+
             Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
         }
 
@@ -362,7 +362,7 @@ namespace SauceDemo.Tests.Tests
 
             dashboardPage!.WaitForDashboardToLoad();
 
-            var prices = dashboardPage.GetAllProductPrices();
+            var prices = dashboardPage.Products.GetAllPrices();
 
             prices.Should().OnlyContain(
                 price =>
@@ -382,15 +382,16 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-020: About navigation", LogScope);
 
             dashboardPage!.WaitForDashboardToLoad();
-            dashboardPage.OpenMenu();
-            
-            dashboardPage.WaitAboutToLoad();
-            dashboardPage.ClickAbout();
+            dashboardPage.Menu.Open();
+
+            dashboardPage.Menu.WaitAboutToLoad();
+            dashboardPage.Menu.ClickAbout();
 
             dashboardPage.WaitSaucelabsToLoad();
 
             // Assert the URL
-            Driver.Url.Should().Contain("https://saucelabs.com", because: "clicking About should navigate to Sauce Labs site");
+            Driver.Url.Should().Contain("https://saucelabs.com",
+                because: "clicking About should navigate to Sauce Labs site");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
         }
@@ -411,8 +412,8 @@ namespace SauceDemo.Tests.Tests
             var oldCartCount = dashboardPage.GetCartCount();
 
             // Logout
-            dashboardPage.OpenMenu();
-            dashboardPage.ClickLogout();
+            dashboardPage.Menu.Open();
+            dashboardPage.Menu.Logout();
 
             // Login again
             loginPage!.Login("standard_user", "secret_sauce");
@@ -454,17 +455,17 @@ namespace SauceDemo.Tests.Tests
         {
             dashboardPage!.WaitForDashboardToLoad();
 
-            dashboardPage.SelectSortOption("Name (A to Z)");
-            dashboardPage.GetAllProductNames().Should().BeInAscendingOrder();
+            dashboardPage.Products.SelectSortOption("Name (A to Z)");
+            dashboardPage.Products.GetAllNames().Should().BeInAscendingOrder();
 
-            dashboardPage.SelectSortOption("Price (high to low)");
-            dashboardPage.GetProductPricesAsDecimal().Should().BeInDescendingOrder();
+            dashboardPage.Products.SelectSortOption("Price (high to low)");
+            dashboardPage.Products.GetPricesAsDecimal().Should().BeInDescendingOrder();
 
-            dashboardPage.SelectSortOption("Name (Z to A)");
-            dashboardPage.GetAllProductNames().Should().BeInDescendingOrder();
+            dashboardPage.Products.SelectSortOption("Name (Z to A)");
+            dashboardPage.Products.GetAllNames().Should().BeInDescendingOrder();
 
-            dashboardPage.SelectSortOption("Price (low to high)");
-            dashboardPage.GetProductPricesAsDecimal().Should().BeInAscendingOrder();
+            dashboardPage.Products.SelectSortOption("Price (low to high)");
+            dashboardPage.Products.GetPricesAsDecimal().Should().BeInAscendingOrder();
         }
 
         /// <summary>
@@ -479,7 +480,7 @@ namespace SauceDemo.Tests.Tests
             var index = 0;
 
             var before = dashboardPage.GetCartCount();
-            
+
             // Only click if item is not yet in cart
             if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
             {
@@ -492,7 +493,7 @@ namespace SauceDemo.Tests.Tests
             // Second click attempt should not change cart
             if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
             {
-                dashboardPage.ClickAddToCartByIndex(index); 
+                dashboardPage.ClickAddToCartByIndex(index);
             }
 
             var afterSecond = dashboardPage.GetCartCount();
@@ -522,13 +523,12 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.WaitForDashboardToLoad();
 
             // Verify products are still visible
-            dashboardPage.GetAllProductCards()
-                .Should().NotBeEmpty("products should remain visible on mobile layout");
+            dashboardPage.Products.GetAllCards().Should().NotBeEmpty("products should remain visible on mobile layout");
 
             // Verify burger menu works
-            dashboardPage.OpenMenu();
-            
-            var options = dashboardPage.GetMenuOptions();
+            dashboardPage.Menu.Open();
+
+            var options = dashboardPage.Menu.GetOptions();
 
             options.Should().Contain("About");
             options.Should().Contain("Logout");

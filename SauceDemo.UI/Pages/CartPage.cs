@@ -14,6 +14,11 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class CartPage : BasePage
     {
+        public CartPage(IWebDriver driver) 
+            : base(driver)
+        {
+        }
+
         /// <summary>
         /// Verifies that the cart page is loaded by checking the URL and presence of cart items.
         /// </summary>

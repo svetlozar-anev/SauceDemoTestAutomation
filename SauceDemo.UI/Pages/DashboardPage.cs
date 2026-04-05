@@ -8,29 +8,42 @@ namespace SauceDemo.UI.Pages
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.Core.Config;
+    using SauceDemo.Core.Utilities;
     using SauceDemo.UI.Base;
-    
+
     /// <summary>
     /// Page Object Model for the Dashboard page ("Swag Labs").
     /// Validates successful login by checking for known elements or title.
     /// </summary>
     public class DashboardPage : BasePage
     {
+        public DashboardPage(IWebDriver driver) 
+            : base(driver)
+        {
+            Menu = new DashboardMenu(driver);
+            Products = new DashboardProducts(driver);
+        }
+
+        /// <summary>
+        /// Gets the navigation menu component of the dashboard.
+        /// </summary>
+        public DashboardMenu Menu { get; }
+        
+        /// <summary>
+        /// Gets the products section component of the dashboard.
+        /// </summary>
+        public DashboardProducts Products { get; }
+
         // === CONSTANTS ===
         private const string InventoryUrlFragment = "inventory.html";
         private const string InventoryItems = "inventory_item";
-        
+
         // === LOCATORS ===
         private readonly By appLogo = By.CssSelector(".app_logo");
-        private readonly By productCards = By.CssSelector(".inventory_item");
-        private readonly By productNames = By.CssSelector(".inventory_item_name");
-        private readonly By productPrices = By.CssSelector(".inventory_item_price");
-        private readonly By productImages = By.CssSelector(".inventory_item_img img");
-        private readonly By sortDropdown = By.CssSelector(".product_sort_container");
 
         private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
-        
+
         private readonly By productButton = By.CssSelector("button");
 
         // === PAGE ACTIONS ===
@@ -42,7 +55,7 @@ namespace SauceDemo.UI.Pages
         public DashboardPage Open()
         {
             NavigateTo(TestConfig.BaseUrl + "/inventory.html");
-            return new DashboardPage();
+            return new DashboardPage(WebDriverFactory.Driver);
         }
 
         /// <summary>
@@ -51,7 +64,7 @@ namespace SauceDemo.UI.Pages
         /// <param name="index">Zero-based index of the product whose button will be clicked.</param>
         public void ClickAddToCartByIndex(int index)
         {
-            Driver.FindElements(addToCartButtons)[index].Click();
+            FindAll(this.addToCartButtons).ToList()[index].Click();
         }
 
         /// <summary>
@@ -61,7 +74,7 @@ namespace SauceDemo.UI.Pages
         /// <returns>The trimmed button label.</returns>
         public string GetAddToCartButtonLabel(int index)
         {
-            return Driver.FindElements(addToCartButtons)[index].Text.Trim();
+            return FindAll(this.addToCartButtons).ToList()[index].Text.Trim();
         }
 
         /// <summary>
@@ -72,7 +85,7 @@ namespace SauceDemo.UI.Pages
         /// </returns>
         public int GetCartCount()
         {
-            var badges = Driver.FindElements(cartBadge);
+            var badges = FindAll(cartBadge).ToList();
             return badges.Count == 0
                 ? 0
                 : int.Parse(badges[0].Text.Trim());
@@ -93,8 +106,8 @@ namespace SauceDemo.UI.Pages
             {
                 try
                 {
-                    var freshButtons = Driver.FindElements(addToCartButtons);
-                    
+                    var freshButtons = FindAll(addToCartButtons).ToList();
+
                     return index < freshButtons.Count &&
                            freshButtons[index].Text.Trim().Equals(expected, StringComparison.OrdinalIgnoreCase);
                 }
@@ -132,108 +145,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Gets the product name (title text) at the specified index.
-        /// Useful for validating detail page content.
-        /// </summary>
-        /// <param name="index">Zero-based index.</param>
-        /// <returns>Product name as shown on the dashboard.</returns>
-        public string GetProductNameByIndex(int index)
-        {
-            return Driver.FindElements(productNames)[index].Text.Trim();
-        }
-        
-        private readonly By menuLocator = By.Id("react-burger-menu-btn");
-        
-        public bool IsMenuVisible(int timeoutSeconds = 5)
-        {
-            try
-            {
-                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-
-                return wait.Until(_ =>
-                {
-                    var elements = Driver.FindElements(menuLocator);
-                    return elements.Count > 0 && elements[0].Displayed;
-                });
-            }
-            catch (WebDriverTimeoutException)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Clicks a product image by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product image to click.</param>
-        public void ClickProductImageByIndex(int index)
-        {
-            var elements = Driver.FindElements(productImages);
-            elements[index].Click();
-        }
-
-        /// <summary>
-        /// Clicks a product title by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product to click.</param>
-        public void ClickProductTitleByIndex(int index)
-        {
-            var elements = Driver.FindElements(productNames);
-            elements[index].Click();
-        }
-
-        /// <summary>
-        /// Returns product prices as decimals (USD-aware).
-        /// </summary>
-        /// <returns>Returns list of decimal values.</returns>
-        public List<decimal> GetProductPricesAsDecimal()
-        {
-            var elements = Driver.FindElements(productPrices);
-            var list = new List<decimal>(elements.Count);
-
-            foreach (var element in elements)
-            {
-                var text = element.Text.Trim() ?? string.Empty;
-
-                // Try parse as currency
-                if (decimal.TryParse(
-                        text,
-                        NumberStyles.Currency,
-                        CultureInfo.GetCultureInfo("en-US"),
-                        out var value))
-                {
-                    list.Add(value);
-                }
-                else
-                {
-                    // push a negative value so test fails clearly (or throw)
-                    throw new FormatException($"Unable to parse product price: '{text}'");
-                }
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// Selects a sort option from the product sort dropdown.
-        /// </summary>
-        /// /// <param name="visibleText">
-        /// The exact visible text of the dropdown option to select.
-        /// Valid options include:
-        /// - "Name (A to Z)"
-        /// - "Name (Z to A)"
-        /// - "Price (low to high)"
-        /// - "Price (high to low)".
-        /// </param>
-        public void SelectSortOption(string visibleText)
-        {
-            // todo:
-            var dropdown = Driver.FindElement(sortDropdown);
-            var select = new SelectElement(dropdown);
-            select.SelectByText(visibleText);
-        }
-
-        /// <summary>
         /// Waits until the dashboard page is fully loaded.
         /// Checks that the logo is visible, product cards exist, and each card has a name, price, and image.
         /// </summary>
@@ -246,8 +157,8 @@ namespace SauceDemo.UI.Pages
             {
                 try
                 {
-                    return driver.FindElement(appLogo).Displayed &&
-                           driver.FindElements(productCards).Count > 0;
+                    return Find(appLogo).Displayed &&
+                           FindAll(appLogo).Count > 0;
                 }
                 catch (NoSuchElementException)
                 {
@@ -312,86 +223,13 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Gets all product cards.
-        /// </summary>
-        /// <returns>List of product card IWebElement objects.</returns>
-        public IList<IWebElement> GetAllProductCards() => Driver.FindElements(productCards);
-
-        /// <summary>
-        /// Gets all product names.
-        /// </summary>
-        /// <returns>List of all product names.</returns>
-        public IList<string> GetAllProductNames() =>
-            Driver.FindElements(productNames).Select(e => e.Text).ToList();
-
-        /// <summary>
-        /// Gets all product prices.
-        /// </summary>
-        /// <returns>List of all product prices.</returns>
-        public IList<string> GetAllProductPrices() =>
-            Driver.FindElements(productPrices).Select(e => e.Text).ToList();
-
-        /// <summary>
-        /// Gets all product image elements.
-        /// </summary>
-        /// <returns>List of all product images.</returns>
-        public IReadOnlyCollection<IWebElement> GetAllProductImages() =>
-            Driver.FindElements(productImages);
-
-        /// <summary>
-        /// Opens Burger menu.
-        /// </summary>
-        public void OpenMenu()
-        {
-            var menuButton = Driver.FindElement(By.Id("react-burger-menu-btn"));
-            menuButton.Click();
-        }
-        
-        public IReadOnlyCollection<IWebElement> GetAllProductImagesLoaded()
-        {
-            var images = GetAllProductImages();
-
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-
-            foreach (var img in images)
-            {
-                    wait.Until(driver =>
-                    {
-                        var js = (IJavaScriptExecutor)driver;
-
-                        var result = js.ExecuteScript(
-                            "return arguments[0].complete && arguments[0].naturalWidth > 0",
-                            img);
-
-                        return result as bool? == true;
-                    });
-            }
-
-            return images;
-        }
-
-        /// <summary>
-        /// Gets Menu Options.
-        /// </summary>
-        /// <returns>List of Menu Options.</returns>
-        public IList<string> GetMenuOptions()
-        {
-               Wait.Until(d =>
-                   d.FindElements(By.CssSelector(".bm-item.menu-item")).Count >= 4);
-           
-               return Driver.FindElements(By.CssSelector(".bm-item.menu-item"))
-                            .Select(e => e.Text.Trim())
-                            .ToList();
-        }
-
-        /// <summary>
         /// Clicks Remove button (index based).
         /// </summary>
         /// <param name="index">Index.</param>
         public void ClickRemoveByIndex(int index)
         {
-            var buttons = Driver.FindElements(By.CssSelector(".inventory_item button"));
-            buttons[index].Click();
+            var buttons = FindAll(By.CssSelector(".inventory_item button"));
+            buttons.ToList()[index].Click();
         }
 
         /// <summary>
@@ -399,31 +237,7 @@ namespace SauceDemo.UI.Pages
         /// </summary>
         public void ClickCartIcon()
         {
-            Driver.FindElement(By.CssSelector(".shopping_cart_link")).Click();
-        }
-
-        /// <summary>
-        /// Clicks Logout.
-        /// </summary>
-        public void ClickLogout()
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-            
-            var logoutButton = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(
-                By.Id("logout_sidebar_link")));
-            
-            Driver.FindElement(By.Id("logout_sidebar_link")).Click();
-        }
-
-        /// <summary>
-        /// Waits until the "About" menu option is visible.
-        /// </summary>
-        /// <returns>The <see cref="WebDriverWait"/> used for waiting.</returns>
-        public WebDriverWait WaitAboutToLoad()
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-            wait.Until(d => GetMenuOptions().Contains("About"));
-            return wait;
+            Click(By.CssSelector(".shopping_cart_link"));
         }
 
         /// <summary>
@@ -438,25 +252,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Waits for images to load.
-        /// </summary>
-        public void WaitForImagesToLoad()
-        {
-            Wait.Until(driver =>
-            {
-                var images = driver.FindElements(By.CssSelector(".inventory_item_img img"));
-
-                return images.All(img =>
-                {
-                    var result = ((IJavaScriptExecutor)driver)
-                        .ExecuteScript("return arguments[0].complete && arguments[0].naturalWidth > 0", img);
-
-                    return result is bool loaded && loaded;
-                });
-            });
-        }
-
-        /// <summary>
         /// Clicks the "Add to cart" button for the specified product by its name.
         /// </summary>
         /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
@@ -464,7 +259,7 @@ namespace SauceDemo.UI.Pages
         {
             GetProductButton(productName).Click();
         }
-        
+
         /// <summary>
         /// Retrieves the label text of the "Add to cart" or "Remove" button
         /// for the specified product.
@@ -475,28 +270,7 @@ namespace SauceDemo.UI.Pages
         {
             return GetProductButton(productName).Text.Trim();
         }
-        
-        // === PRIVATE HELPERS ===
-        private IWebElement GetProductButton(string productName)
-        {
-            return FindProductContainer(productName)
-                .FindElement(productButton);
-        }
-        
-        /// <summary>
-        /// Locator for the "About" link in the sidebar menu.
-        /// </summary>
-        private readonly By aboutLink = By.Id("about_sidebar_link");
 
-        /// <summary>
-        /// Clicks the "About" link in the sidebar menu.
-        /// </summary>
-        public void ClickAbout()
-        {
-            var element = Wait.Until(d => d.FindElement(aboutLink));
-            element.Click();
-        }
-        
         /// <summary>
         /// Refreshes the dashboard page and waits until it is fully loaded.
         /// </summary>
@@ -504,16 +278,23 @@ namespace SauceDemo.UI.Pages
         {
             RefreshPage(IsDashboardLoaded);
         }
-        
+
+        // === PRIVATE HELPERS ===
+        private IWebElement GetProductButton(string productName)
+        {
+            return FindProductContainer(productName)
+                .FindElement(productButton);
+        }
+
         private bool IsDashboardLoaded()
         {
             return Driver.Url.Contains(InventoryUrlFragment) &&
-                   Driver.FindElements(By.ClassName(InventoryItems)).Any();
+                   FindAll(By.ClassName(InventoryItems)).Any();
         }
 
         private IWebElement FindProductContainer(string productName)
         {
-            return Driver.FindElements(productCards)
+            return Driver.FindElements(By.CssSelector(".inventory_item"))
                 .First(e => e.Text.Contains(productName, StringComparison.OrdinalIgnoreCase));
         }
     }
