@@ -43,11 +43,7 @@ namespace SauceDemo.UI.Pages
 
         // === LOCATORS ===
         private readonly By appLogo = By.CssSelector(".app_logo");
-
-        private readonly By addToCartButtons = By.CssSelector(".inventory_item button");
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
-
-        private readonly By productButton = By.CssSelector("button");
 
         // === PAGE ACTIONS ===
 
@@ -62,25 +58,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Clicks the "Add to cart" button for the product at the given index.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product whose button will be clicked.</param>
-        public void ClickAddToCartByIndex(int index)
-        {
-            FindAll(this.addToCartButtons).ToList()[index].Click();
-        }
-
-        /// <summary>
-        /// Retrieves the label text of the "Add to cart" button for the product at the given index.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product.</param>
-        /// <returns>The trimmed button label.</returns>
-        public string GetAddToCartButtonLabel(int index)
-        {
-            return FindAll(this.addToCartButtons).ToList()[index].Text.Trim();
-        }
-
-        /// <summary>
         /// Gets the current numerical value of the cart badge.
         /// </summary>
         /// <returns>
@@ -92,59 +69,6 @@ namespace SauceDemo.UI.Pages
             return badges.Count == 0
                 ? 0
                 : int.Parse(badges[0].Text.Trim());
-        }
-
-        /// <summary>
-        /// Waits until the "Add to cart" button for the product at the specified index
-        /// displays the expected label.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product.</param>
-        /// <param name="expected">Expected button label.</param>
-        /// <param name="timeoutSeconds">Number of seconds to wait before timing out.</param>
-        public void WaitForButtonLabel(int index, string expected, int timeoutSeconds = 5)
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-
-            wait.Until(_ =>
-            {
-                try
-                {
-                    var freshButtons = FindAll(addToCartButtons).ToList();
-
-                    return index < freshButtons.Count &&
-                           freshButtons[index].Text.Trim().Equals(expected, StringComparison.OrdinalIgnoreCase);
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
-
-        /// <summary>
-        /// Waits until the "Add to cart" button for the specified product
-        /// displays the expected label, e.g., "Add to cart" or "Remove".
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        /// <param name="expected">Expected button label.</param>
-        /// <param name="timeoutSeconds">Number of seconds to wait before timing out.</param>
-        public void WaitForButtonLabel(string productName, string expected, int timeoutSeconds = 5)
-        {
-            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-
-            wait.Until(_ =>
-            {
-                try
-                {
-                    var product = FindProductContainer(productName);
-                    var label = product.FindElement(By.CssSelector("button")).Text.Trim();
-                    return label.Equals(expected, StringComparison.OrdinalIgnoreCase);
-                }
-                catch
-                {
-                    return false;
-                }
-            });
         }
 
         /// <summary>
@@ -173,40 +97,7 @@ namespace SauceDemo.UI.Pages
                 }
             });
         }
-
-        /// <summary>
-        /// Checks if a popup with an OK button is visible and clicks it if found.
-        /// </summary>
-        /// <param name="timeoutSeconds">Maximum wait time in seconds (default 5).</param>
-        public void DismissPasswordPopupIfPresent(int timeoutSeconds = 5)
-        {
-            try
-            {
-                var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
-
-                // Wait until a visible button with text "OK" exists, or timeout
-                var okButton = wait.Until(driver =>
-                {
-                    try
-                    {
-                        return driver.FindElements(By.TagName("button"))
-                            .FirstOrDefault(b => b.Displayed &&
-                                                 b.Text.Trim().Equals("OK", StringComparison.OrdinalIgnoreCase));
-                    }
-                    catch (StaleElementReferenceException)
-                    {
-                        return null;
-                    }
-                });
-
-                okButton.Click();
-            }
-            catch (WebDriverTimeoutException)
-            {
-                // Nothing to do if popup doesn't appear
-            }
-        }
-
+        
         /// <summary>
         /// Checks if the user is on the Swag Labs dashboard by verifying the logo is visible.
         /// </summary>
@@ -223,16 +114,6 @@ namespace SauceDemo.UI.Pages
         public string GetPageTitle()
         {
             return Driver.Title;
-        }
-
-        /// <summary>
-        /// Clicks Remove button (index based).
-        /// </summary>
-        /// <param name="index">Index.</param>
-        public void ClickRemoveByIndex(int index)
-        {
-            var buttons = FindAll(By.CssSelector(".inventory_item button"));
-            buttons.ToList()[index].Click();
         }
 
         /// <summary>
@@ -255,26 +136,6 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Clicks the "Add to cart" button for the specified product by its name.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        public void ClickAddToCartByName(string productName)
-        {
-            GetProductButton(productName).Click();
-        }
-
-        /// <summary>
-        /// Retrieves the label text of the "Add to cart" or "Remove" button
-        /// for the specified product.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        /// <returns>The trimmed text of the button, typically "Add to cart" or "Remove".</returns>
-        public string GetButtonLabel(string productName)
-        {
-            return GetProductButton(productName).Text.Trim();
-        }
-
-        /// <summary>
         /// Refreshes the dashboard page and waits until it is fully loaded.
         /// </summary>
         public void Refresh()
@@ -283,22 +144,10 @@ namespace SauceDemo.UI.Pages
         }
 
         // === PRIVATE HELPERS ===
-        private IWebElement GetProductButton(string productName)
-        {
-            return FindProductContainer(productName)
-                .FindElement(productButton);
-        }
-
         private bool IsDashboardLoaded()
         {
             return Driver.Url.Contains(InventoryUrlFragment) &&
                    FindAll(By.ClassName(InventoryItems)).Any();
-        }
-
-        private IWebElement FindProductContainer(string productName)
-        {
-            return Driver.FindElements(By.CssSelector(".inventory_item"))
-                .First(e => e.Text.Contains(productName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

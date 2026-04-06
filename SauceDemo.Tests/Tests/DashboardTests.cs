@@ -165,14 +165,14 @@ namespace SauceDemo.Tests.Tests
             int index = 0;
 
             // Before clicking, the button label must be "Add to cart"
-            dashboardPage.GetAddToCartButtonLabel(index)
+            dashboardPage.Products.GetAddToCartButtonLabel(index)
                 .Should().Be("Add to cart", because: "items should initially be un-added");
 
             int cartBefore = dashboardPage.GetCartCount();
 
             // Action: click the button and wait for the label to change.
-            dashboardPage.ClickAddToCartByIndex(index);
-            dashboardPage.WaitForButtonLabel(index, "Remove");
+            dashboardPage.Products.ClickAddToCartByIndex(index);
+            dashboardPage.Products.WaitForButtonLabel(index, "Remove");
 
             // Verify that the cart badge incremented by exactly one.
             dashboardPage.GetCartCount().Should()
@@ -193,7 +193,6 @@ namespace SauceDemo.Tests.Tests
 
             // Ensure the dashboard is fully loaded
             dashboardPage!.WaitForDashboardToLoad();
-            dashboardPage!.DismissPasswordPopupIfPresent();
 
             // Pick the first 3 product names from the UI
             var productsToAdd = dashboardPage.Products.GetAllNames().Take(3).ToList();
@@ -208,17 +207,17 @@ namespace SauceDemo.Tests.Tests
             foreach (var productName in productsToAdd)
             {
                 // Ensure the button starts as "Add to cart"
-                dashboardPage.GetButtonLabel(productName)
+                dashboardPage.Products.GetButtonLabel(productName)
                     .Should().Be("Add to cart", because: $"{productName} should be un-added initially");
 
                 // Add to cart by name
-                dashboardPage.ClickAddToCartByName(productName);
+                dashboardPage.Products.ClickAddToCartByName(productName);
 
                 // Wait until button shows "Remove"
                 //  dashboardPage.WaitForButtonLabel(productName);
 
                 // Confirm button updated
-                dashboardPage.GetButtonLabel(productName)
+                dashboardPage.Products.GetButtonLabel(productName)
                     .Should().Be("Remove", because: $"{productName} must show 'Remove' after adding");
 
                 // Increment expected cart count
@@ -268,18 +267,18 @@ namespace SauceDemo.Tests.Tests
 
             const int index = 0;
 
-            dashboardPage.ClickAddToCartByIndex(index);
-            dashboardPage.WaitForButtonLabel(index, "Remove");
+            dashboardPage.Products.ClickAddToCartByIndex(index);
+            dashboardPage.Products.WaitForButtonLabel(index, "Remove");
 
             var cartAfterAdd = dashboardPage.GetCartCount();
 
-            dashboardPage.ClickRemoveByIndex(index);
-            dashboardPage.WaitForButtonLabel(index, "Add to cart");
+            dashboardPage.Products.ClickRemoveByIndex(index);
+            dashboardPage.Products.WaitForButtonLabel(index, "Add to cart");
 
             dashboardPage.GetCartCount()
                 .Should().Be(cartAfterAdd - 1, because: "removing item should decrement cart");
 
-            dashboardPage.GetAddToCartButtonLabel(index)
+            dashboardPage.Products.GetAddToCartButtonLabel(index)
                 .Should().Be("Add to cart", because: "item should return to initial state");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-015 completed successfully", LogScope);
@@ -298,7 +297,7 @@ namespace SauceDemo.Tests.Tests
 
             var product = dashboardPage.Products.GetAllNames().First();
 
-            dashboardPage.ClickAddToCartByName(product);
+            dashboardPage.Products.ClickAddToCartByName(product);
 
             dashboardPage.ClickCartIcon();
 
@@ -405,8 +404,8 @@ namespace SauceDemo.Tests.Tests
             dashboardPage!.WaitForDashboardToLoad();
 
             // Add item
-            dashboardPage.ClickAddToCartByIndex(0);
-            dashboardPage.WaitForButtonLabel(0, "Remove");
+            dashboardPage.Products.ClickAddToCartByIndex(0);
+            dashboardPage.Products.WaitForButtonLabel(0, "Remove");
 
             var oldCartCount = dashboardPage.GetCartCount();
 
@@ -432,8 +431,8 @@ namespace SauceDemo.Tests.Tests
         {
             dashboardPage!.WaitForDashboardToLoad();
 
-            dashboardPage.ClickAddToCartByIndex(0);
-            dashboardPage.WaitForButtonLabel(0, "Remove");
+            dashboardPage.Products.ClickAddToCartByIndex(0);
+            dashboardPage.Products.WaitForButtonLabel(0, "Remove");
 
             var cartBefore = dashboardPage.GetCartCount();
 
@@ -442,7 +441,7 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.WaitForDashboardToLoad();
 
             dashboardPage.GetCartCount().Should().Be(cartBefore);
-            dashboardPage.GetAddToCartButtonLabel(0).Should().Be("Remove");
+            dashboardPage.Products.GetAddToCartButtonLabel(0).Should().Be("Remove");
         }
 
         /// <summary>
@@ -481,18 +480,18 @@ namespace SauceDemo.Tests.Tests
             var before = dashboardPage.GetCartCount();
 
             // Only click if item is not yet in cart
-            if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
+            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
             {
-                dashboardPage.ClickAddToCartByIndex(index);
-                dashboardPage.WaitForButtonLabel(index, "Remove");
+                dashboardPage.Products.ClickAddToCartByIndex(index);
+                dashboardPage.Products.WaitForButtonLabel(index, "Remove");
             }
 
             var afterFirst = dashboardPage.GetCartCount();
 
             // Second click attempt should not change cart
-            if (dashboardPage.GetAddToCartButtonLabel(index) == "Add to cart")
+            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
             {
-                dashboardPage.ClickAddToCartByIndex(index);
+                dashboardPage.Products.ClickAddToCartByIndex(index);
             }
 
             var afterSecond = dashboardPage.GetCartCount();
@@ -500,7 +499,7 @@ namespace SauceDemo.Tests.Tests
             afterFirst.Should().Be(before + 1);
             afterSecond.Should().Be(afterFirst);
 
-            dashboardPage.GetAddToCartButtonLabel(index)
+            dashboardPage.Products.GetAddToCartButtonLabel(index)
                 .Should().Be("Remove");
         }
 
