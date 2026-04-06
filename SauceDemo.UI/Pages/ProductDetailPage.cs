@@ -13,6 +13,10 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class ProductDetailPage : BasePage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductDetailPage"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver.</param>
         public ProductDetailPage(IWebDriver driver) 
             : base(driver)
         {

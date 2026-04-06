@@ -11,11 +11,6 @@ namespace SauceDemo.Core.Utilities
     public static class Logger
     {
         /// <summary>
-        /// Gets the SeleniumLog Serilog logger instance.
-        /// </summary>
-        public static ILogger? SeleniumLog { get; private set; }
-
-        /// <summary>
         /// Gets the NUnitLog Serilog logger instance.
         /// </summary>
         public static ILogger? NUnitLog { get; private set; }
@@ -29,12 +24,6 @@ namespace SauceDemo.Core.Utilities
             var baseDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
             var logDir = Path.Combine(baseDir, "logs");
             Directory.CreateDirectory(logDir);
-
-            SeleniumLog = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-                .WriteTo.File(Path.Combine(logDir, "Selenium-.log"), rollingInterval: RollingInterval.Day)
-                .CreateLogger();
 
             NUnitLog = new LoggerConfiguration()
                 .MinimumLevel.Debug()

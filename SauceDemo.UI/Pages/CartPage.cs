@@ -14,6 +14,10 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class CartPage : BasePage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartPage"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver.</param>
         public CartPage(IWebDriver driver) 
             : base(driver)
         {

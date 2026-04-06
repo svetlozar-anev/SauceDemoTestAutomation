@@ -14,6 +14,10 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class DashboardProducts : BasePage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardProducts"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver.</param>
         public DashboardProducts(IWebDriver driver) 
             : base(driver)
         {

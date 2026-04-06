@@ -14,6 +14,10 @@ namespace SauceDemo.UI.Pages
     /// </summary>
     public class DashboardMenu : BasePage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardMenu"/> class.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance used to interact with the page.</param>
         public DashboardMenu(IWebDriver driver) 
             : base(driver)
         {

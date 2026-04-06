@@ -13,10 +13,13 @@ namespace SauceDemo.UI.Pages
 
     /// <summary>
     /// Page Object Model for the Dashboard page ("Swag Labs").
-    /// Validates successful login by checking for known elements or title.
     /// </summary>
     public class DashboardPage : BasePage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardPage"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver.</param>
         public DashboardPage(IWebDriver driver) 
             : base(driver)
         {

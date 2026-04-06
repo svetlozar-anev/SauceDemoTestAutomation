@@ -390,8 +390,7 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.WaitSaucelabsToLoad();
 
             // Assert the URL
-            Driver.Url.Should().Contain("https://saucelabs.com",
-                because: "clicking About should navigate to Sauce Labs site");
+            Driver.Url.Should().Contain("https://saucelabs.com", because: "clicking About should navigate to Sauce Labs site");
 
             Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
         }
