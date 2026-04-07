@@ -8,6 +8,7 @@ namespace SauceDemo.Tests.Base
     using OpenQA.Selenium;
     using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
+    using SauceDemo.UI.Components;
     using SauceDemo.UI.Pages;
 
     /// <summary>
@@ -21,10 +22,14 @@ namespace SauceDemo.Tests.Base
         // === PAGE PROPERTIES ===
 #pragma warning disable SA1516 // Elements should be separated by blank line
 #pragma warning disable SA1600 // ElementsMustBeDocumented
-        protected LoginPage LoginPage { get; private set; } = null!;
-        protected DashboardPage DashboardPage { get; private set; } = null!;
-        protected CartPage CartPage { get; private set; } = null!;
-        protected ProductDetailPage DetailPage { get; private set; } = null!;
+        protected CartComponent CartComponent { get; private set; } = null!;
+        protected DashboardComponent DashboardComponent { get; private set; } = null!;
+        protected DashboardMenu DashboardMenu { get; private set; } = null!;
+        protected DashboardProducts DashboardProducts { get; private set; } = null!;
+        protected HeaderComponent HeaderComponent { get; private set; } = null!;
+        protected LoginComponent LoginComponent { get; private set; } = null!;
+        protected ProductDetailComponent ProductDetailComponent { get; private set; } = null!;
+        protected SauceLabsComponent SauceLabsComponent { get; private set; } = null!;
 #pragma warning disable SA1516 // Elements should be separated by blank line
 #pragma warning disable SA1600 // Elements must be documented        
 
@@ -95,9 +100,14 @@ namespace SauceDemo.Tests.Base
         /// </summary>
         private void InitializePages()
         {
-            LoginPage = new LoginPage(Driver);
-            DashboardPage = new DashboardPage(Driver);
-            CartPage = new CartPage(Driver);
+            CartComponent = new CartComponent(WebDriverFactory.Driver);
+            DashboardComponent = new DashboardComponent(Driver);
+            DashboardMenu = new DashboardMenu(WebDriverFactory.Driver);
+            DashboardProducts = new DashboardProducts(WebDriverFactory.Driver);
+            HeaderComponent = new HeaderComponent(WebDriverFactory.Driver);
+            LoginComponent = new LoginComponent(Driver);
+            ProductDetailComponent = new ProductDetailComponent(WebDriverFactory.Driver);
+            SauceLabsComponent = new SauceLabsComponent(WebDriverFactory.Driver);
         }
 
         /// <summary>
@@ -105,9 +115,14 @@ namespace SauceDemo.Tests.Base
         /// </summary>
         private void ResetPages()
         {
-            LoginPage = null!;
-            DashboardPage = null!;
-            CartPage = null!;
+            CartComponent = null!;
+            DashboardComponent = null!;
+            DashboardMenu = null!;
+            DashboardProducts = null!;
+            HeaderComponent = null!;
+            LoginComponent = null!;
+            ProductDetailComponent = null!;
+            SauceLabsComponent = null!;
         }
 
         protected IWebDriver Driver => WebDriverFactory.Driver;

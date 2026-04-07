@@ -1,7 +1,7 @@
-// <copyright file="CartPage.cs" company="PlaceholderCompany">
+// <copyright file="CartComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-namespace SauceDemo.UI.Pages
+namespace SauceDemo.UI.Components
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -12,13 +12,13 @@ namespace SauceDemo.UI.Pages
     /// Page Object Model for the Cart Page of saucedemo.com
     /// Contains locators and methods for interacting with login elements.
     /// </summary>
-    public class CartPage : BasePage
+    public class CartComponent : BaseComponent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CartPage"/> class.
+        /// Initializes a new instance of the <see cref="CartComponent"/> class.
         /// </summary>
         /// <param name="driver">The Selenium WebDriver.</param>
-        public CartPage(IWebDriver driver) 
+        public CartComponent(IWebDriver driver) 
             : base(driver)
         {
         }

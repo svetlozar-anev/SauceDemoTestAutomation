@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.UI.Pages
+namespace SauceDemo.UI.Components
 {
     using System.Globalization;
     using OpenQA.Selenium;
@@ -12,7 +12,7 @@ namespace SauceDemo.UI.Pages
     /// <summary>
     /// Component for interacting with products on the dashboard page.
     /// </summary>
-    public class DashboardProducts : BasePage
+    public class DashboardProducts : BaseComponent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardProducts"/> class.
@@ -70,7 +70,7 @@ namespace SauceDemo.UI.Pages
         /// Clicks the "Add to cart" button for the product at the given index.
         /// </summary>
         /// <param name="index">Zero-based index of the product whose button will be clicked.</param>
-        public void ClickAddToCartByIndex(int index)
+        public void AddItemToCart(int index)
         {
             FindAll(addToCartButtons).ToList()[index].Click();
         }
@@ -244,6 +244,16 @@ namespace SauceDemo.UI.Pages
         public string GetButtonLabel(string productName)
         {
             return GetProductButton(productName).Text.Trim();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public bool IsItemInCart(int index)
+        {
+            return GetAddToCartButtonLabel(index) == "Remove";
         }
         
         // === PRIVATE HELPERS ===

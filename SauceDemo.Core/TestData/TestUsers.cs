@@ -1,12 +1,11 @@
-// <copyright file="Users.cs" company="PlaceholderCompany">
+// <copyright file="TestUsers.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-// TODO: move Users to some other folder, refactor this.
 namespace SauceDemo.Core.TestData
 {
-    #pragma warning disable SA1600 // ElementsMustBeDocumented
-    public static class Users
+#pragma warning disable SA1600 // ElementsMustBeDocumented
+    public static class TestUsers
     {
         // Standard login user
         public const string Standard = "standard_user";
@@ -22,5 +21,5 @@ namespace SauceDemo.Core.TestData
         public const string Password = "secret_sauce";
         public const string WrongPassword = "wrong_password";
     }
-    #pragma warning disable SA1600 // ElementsMustBeDocumented
+#pragma warning restore SA1600 // ElementsMustBeDocumented
 }

@@ -24,7 +24,7 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void TestSetUp()
         {
-            LoginPage?.Open();
+            this.LoginComponent?.Open();
         }
 
         /// <summary>
@@ -37,14 +37,14 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-001: Login fails with empty credentials", LogScope);
 
-            LoginPage?.EnterUsername(Users.Standard);
-            LoginPage?.EnterPassword(Users.Password);
-            LoginPage?.ClearUsername();
-            LoginPage?.ClearPassword();
+            this.LoginComponent?.EnterUsername(TestUsers.Standard);
+            this.LoginComponent?.EnterPassword(TestUsers.Password);
+            this.LoginComponent?.ClearUsername();
+            this.LoginComponent?.ClearPassword();
 
-            LoginPage?.ClickLogin();
+            this.LoginComponent?.ClickLogin();
 
-            LoginPage?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
+            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
         }
 
         /// <summary>
@@ -57,13 +57,13 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-002: Login fails with missing password", LogScope);
 
-            LoginPage?.EnterUsername("standard_user");
-            LoginPage?.EnterPassword("secret_sauce");
-            LoginPage?.ClearPassword();
+            this.LoginComponent?.EnterUsername("standard_user");
+            this.LoginComponent?.EnterPassword("secret_sauce");
+            this.LoginComponent?.ClearPassword();
 
-            LoginPage?.ClickLogin();
+            this.LoginComponent?.ClickLogin();
 
-            LoginPage?.GetErrorMessage().Should().Be("Epic sadface: Password is required");
+            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Password is required");
         }
 
         /// <summary>
@@ -72,25 +72,25 @@ namespace SauceDemo.Tests.Tests
         /// <param name="username">The username to be used for login.</param>
         /// <param name="password">The password to be used for login.</param>
         [Test]
-        [TestCase(Users.Standard, Users.Password)]
-        [TestCase(Users.Problem, Users.Password)]
-        [TestCase(Users.PerformanceGlitch, Users.Password)]
-        [TestCase(Users.Error, Users.Password)]
-        [TestCase(Users.Visual, Users.Password)]
+        [TestCase(TestUsers.Standard, TestUsers.Password)]
+        [TestCase(TestUsers.Problem, TestUsers.Password)]
+        [TestCase(TestUsers.PerformanceGlitch, TestUsers.Password)]
+        [TestCase(TestUsers.Error, TestUsers.Password)]
+        [TestCase(TestUsers.Visual, TestUsers.Password)]
         [Description("UC-003: Login with valid credentials shows Dashboard")]
         public void UC_003_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
             Logger.NUnitLog?.Information(
                 "[{Scope}] Executing UC-003: Valid login with user: {Username} shows Dashboard", LogScope, username);
 
-            LoginPage?.Login(username, password);
+            this.LoginComponent?.Login(username, password);
             Logger.NUnitLog?.Information("[{Scope}] Login submitted", LogScope);
 
-            var isAtDashboard = DashboardPage?.IsAtDashboard() ?? false;
+            var isAtDashboard = this.DashboardComponent?.IsAtDashboard() ?? false;
             Logger.NUnitLog?.Information("[{Scope}] Is at dashboard: {Result}", LogScope, isAtDashboard);
 
             isAtDashboard.Should().BeTrue("the user should be redirected to the dashboard");
-            DashboardPage?.GetPageTitle().Should().Be("Swag Labs");
+            this.DashboardComponent?.GetPageTitle().Should().Be("Swag Labs");
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-004: Login fails with locked out user", LogScope);
 
-            LoginPage?.Login(Users.LockedOut, Users.Password);
+            this.LoginComponent?.Login(TestUsers.LockedOut, TestUsers.Password);
 
-            LoginPage?.GetErrorMessage().Should().Be("Epic sadface: Sorry, this user has been locked out.");
+            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Sorry, this user has been locked out.");
         }
 
         /// <summary>
@@ -116,9 +116,9 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-005: Login fails with wrong password", LogScope);
 
-            LoginPage?.Login(Users.Standard, Users.WrongPassword);
+            this.LoginComponent?.Login(TestUsers.Standard, TestUsers.WrongPassword);
 
-            LoginPage?.GetErrorMessage().Should()
+            this.LoginComponent?.GetErrorMessage().Should()
                 .Be("Epic sadface: Username and password do not match any user in this service");
         }
 
@@ -131,10 +131,10 @@ namespace SauceDemo.Tests.Tests
         {
             Logger.NUnitLog?.Information("[{Scope}] Executing UC-006 Login fails with missing username", LogScope);
 
-            LoginPage?.EnterPassword("secret_sauce");
-            LoginPage?.ClickLogin();
+            this.LoginComponent?.EnterPassword("secret_sauce");
+            this.LoginComponent?.ClickLogin();
 
-            LoginPage?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
+            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
         }
 
         /// <summary>
@@ -147,9 +147,9 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information(
                 "[{Scope}] Executing UC-007: Login fails with special characters in username and password", LogScope);
 
-            LoginPage?.Login("!@#$%^&*()", "!@#$%^&*()");
+            this.LoginComponent?.Login("!@#$%^&*()", "!@#$%^&*()");
 
-            LoginPage?.GetErrorMessage().Should()
+            this.LoginComponent?.GetErrorMessage().Should()
                 .Be("Epic sadface: Username and password do not match any user in this service");
         }
 
@@ -163,9 +163,9 @@ namespace SauceDemo.Tests.Tests
             Logger.NUnitLog?.Information(
                 "[{Scope}] Executing UC-008: Login fails with whitespace-only username and password", LogScope);
 
-            LoginPage?.Login("    ", "    ");
+            this.LoginComponent?.Login("    ", "    ");
 
-            LoginPage?.GetErrorMessage().Should()
+            this.LoginComponent?.GetErrorMessage().Should()
                 .Be("Epic sadface: Username and password do not match any user in this service");
         }
     }

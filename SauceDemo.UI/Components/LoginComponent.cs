@@ -1,8 +1,8 @@
-﻿// <copyright file="LoginPage.cs" company="PlaceholderCompany">
+﻿// <copyright file="LoginComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.UI.Pages
+namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
     using SauceDemo.Core.Config;
@@ -12,13 +12,13 @@ namespace SauceDemo.UI.Pages
     /// Page Object Model for the Login Page of saucedemo.com.
     /// Provides methods for interacting with login form elements and performing authentication.
     /// </summary>
-    public class LoginPage : BasePage
+    public class LoginComponent : BaseComponent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginPage"/> class.
+        /// Initializes a new instance of the <see cref="LoginComponent"/> class.
         /// </summary>
         /// <param name="driver">The Selenium WebDriver instance to be used by this page object.</param>
-        public LoginPage(IWebDriver driver) 
+        public LoginComponent(IWebDriver driver) 
             : base(driver)
         {
         }
@@ -99,16 +99,16 @@ namespace SauceDemo.UI.Pages
         }
 
         /// <summary>
-        /// Performs login using the provided credentials and returns the DashboardPage.
+        /// Performs login using the provided credentials and returns the DashboardComponent.
         /// This is the most commonly used method for happy-path scenarios.
         /// </summary>
         /// <param name="username">The username to use for login.</param>
         /// <param name="password">The password to use for login.</param>
-        /// <returns>The <see cref="DashboardPage"/> after successful login.</returns>
-        public DashboardPage LoginAs(string username, string password)
+        /// <returns>The <see cref="DashboardComponent"/> after successful login.</returns>
+        public DashboardComponent LoginAs(string username, string password)
         {
             Login(username, password);
-            return new DashboardPage(Driver);
+            return new DashboardComponent(Driver);
         }
 
         /// <summary>
