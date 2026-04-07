@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SauceDemo.UI.Pages
+namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
@@ -12,8 +12,12 @@ namespace SauceDemo.UI.Pages
     /// Represents the dashboard side menu (burger menu) in the SauceDemo application.
     /// Provides methods to open the menu and perform actions such as logging out.
     /// </summary>
-    public class DashboardMenu : BasePage
+    public class DashboardMenu : BaseComponent
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardMenu"/> class.
+        /// </summary>
+        /// <param name="driver">The WebDriver instance used to interact with the page.</param>
         public DashboardMenu(IWebDriver driver) 
             : base(driver)
         {

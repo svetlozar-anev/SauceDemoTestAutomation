@@ -1,4 +1,4 @@
-﻿// <copyright file="BasePage.cs" company="PlaceholderCompany">
+﻿// <copyright file="BaseComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -16,9 +16,9 @@ namespace SauceDemo.UI.Base
     /// Provides shared WebDriver instance and common UI interaction helpers.
     /// </summary>
     #pragma warning disable SA1600 // ElementsMustBeDocumented
-    public abstract class BasePage
+    public abstract class BaseComponent
     {
-        protected BasePage(IWebDriver driver)
+        protected BaseComponent(IWebDriver driver)
         {
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));
             Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(TestConfig.WebDriverWaitSeconds));
@@ -27,7 +27,22 @@ namespace SauceDemo.UI.Base
         protected IWebDriver Driver { get; }
 
         protected WebDriverWait Wait { get; }
-        
+
+        // ==================== BROWSER-LEVEL METHODS ====================
+
+        /// <summary>
+        /// Gets the current browser page title.
+        /// </summary>
+        /// <returns>Page title as string.</returns>
+        public string GetPageTitle() => Driver.Title;
+
+        /// <summary>
+        /// Gets the current browser URL.
+        /// </summary>
+        /// <returns>URL as string.</returns>
+        public string GetCurrentUrl() => Driver.Url;
+
+        // ==================== ELEMENT HELPERS ====================
         protected IWebElement Find(By by)
         {
             return Wait.Until(d => d.FindElement(by));
@@ -35,7 +50,7 @@ namespace SauceDemo.UI.Base
 
         protected IReadOnlyCollection<IWebElement> FindAll(By by)
         {
-            return Wait.Until(d => d.FindElements(by));
+            return Driver.FindElements(by);
         }
         
         protected void NavigateTo(string url)
@@ -77,9 +92,6 @@ namespace SauceDemo.UI.Base
         {
             var element = WaitForElementVisible(locator);
             element.Clear();
-            element.SendKeys(" ");
-            element.SendKeys(Keys.Backspace);
-            element.SendKeys(Keys.Tab);
         }
 
         protected IWebElement WaitForElementClickable(By locator)

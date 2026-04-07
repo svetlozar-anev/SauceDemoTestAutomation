@@ -1,4 +1,4 @@
-﻿// <copyright file="ProductDetailPage.cs" company="PlaceholderCompany">
+﻿// <copyright file="ProductDetailComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -11,9 +11,13 @@ namespace SauceDemo.UI.Pages
     /// <summary>
     /// Page Object Model for the product detail page.
     /// </summary>
-    public class ProductDetailPage : BasePage
+    public class ProductDetailComponent : BaseComponent
     {
-        public ProductDetailPage(IWebDriver driver) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductDetailComponent"/> class.
+        /// </summary>
+        /// <param name="driver">The Selenium WebDriver.</param>
+        public ProductDetailComponent(IWebDriver driver) 
             : base(driver)
         {
         }

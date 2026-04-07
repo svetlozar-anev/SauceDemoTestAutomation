@@ -49,6 +49,7 @@ The solution is organized into three projects with clear separation of concerns:
 │   └── Users.cs
 ├── Utilities/
 │   ├── Logger.cs
+│   ├── ViewportManager.cs
 │   └── WebDriverFactory.cs
 └── SauceDemo.Core.csproj
 
