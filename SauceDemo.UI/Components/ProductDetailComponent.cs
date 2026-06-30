@@ -1,7 +1,7 @@
 ﻿// <copyright file="ProductDetailComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.UI.Pages
 {
     using OpenQA.Selenium;
@@ -84,3 +84,4 @@ namespace SauceDemo.UI.Pages
         }
     }
 }
+#pragma warning restore SA1600

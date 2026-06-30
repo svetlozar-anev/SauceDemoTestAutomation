@@ -1,13 +1,12 @@
 // <copyright file="SauceLabsComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600 
 namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
     using SauceDemo.UI.Base;
 
-#pragma warning disable SA1600 // ElementsMustBeDocumented
     public class SauceLabsComponent : BaseComponent
     {
         public SauceLabsComponent(IWebDriver driver)
@@ -25,5 +24,5 @@ namespace SauceDemo.UI.Components
             Wait.Until(d => d.Url.Contains("saucelabs.com"));
         }
     }
-#pragma warning disable SA1600 // ElementsMustBeDocumented
 }
+#pragma warning disable SA1600

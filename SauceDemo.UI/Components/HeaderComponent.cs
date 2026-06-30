@@ -1,13 +1,12 @@
 // <copyright file="HeaderComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
     using SauceDemo.UI.Base;
 
-#pragma warning disable SA1600 // ElementsMustBeDocumented
     public class HeaderComponent : BaseComponent
     {
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
@@ -40,5 +39,5 @@ namespace SauceDemo.UI.Components
             Click(By.CssSelector(".shopping_cart_link"));
         }
     }
-#pragma warning restore SA1600 // ElementsMustBeDocumented
 }
+#pragma warning disable SA1600

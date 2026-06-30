@@ -1,7 +1,7 @@
 ﻿// <copyright file="DashboardComponent.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
@@ -9,9 +9,6 @@ namespace SauceDemo.UI.Components
     using SauceDemo.Core.Utilities;
     using SauceDemo.UI.Base;
 
-    /// <summary>
-    /// Page Object Model for the Dashboard page ("Swag Labs").
-    /// </summary>
     public class DashboardComponent : BaseComponent
     {
         /// <summary>
@@ -26,19 +23,10 @@ namespace SauceDemo.UI.Components
             Products = new DashboardProducts(driver);
         }
         
-        /// <summary>
-        /// Gets the header component for the dashboard.
-        /// </summary>
         public HeaderComponent Header { get; }
-
-        /// <summary>
-        /// Gets the navigation menu component of the dashboard.
-        /// </summary>
+        
         public DashboardMenu Menu { get; }
         
-        /// <summary>
-        /// Gets the products section component of the dashboard.
-        /// </summary>
         public DashboardProducts Products { get; }
 
         // === CONSTANTS ===
@@ -50,22 +38,12 @@ namespace SauceDemo.UI.Components
         private readonly By cartBadge = By.CssSelector(".shopping_cart_badge");
 
         // === PAGE ACTIONS ===
-
-        /// <summary>
-        /// Opens the dashboard page.
-        /// </summary>
-        /// <returns>The loaded <see cref="DashboardComponent"/>.</returns>
         public DashboardComponent Open()
         {
             NavigateTo(TestConfig.BaseUrl + "/inventory.html");
             return this;
         }
-
-        /// <summary>
-        /// Waits until the dashboard page is fully loaded.
-        /// Checks that the logo is visible, product cards exist, and each card has a name, price, and image.
-        /// </summary>
-        /// <param name="timeoutSeconds">Maximum wait time in seconds (default 10).</param>
+        
         public void WaitForDashboardToLoad(int timeoutSeconds = 10)
         {
             Wait.Until(d =>
@@ -73,13 +51,10 @@ namespace SauceDemo.UI.Components
                 Products.GetAllCards().Any());
         }
         
-        /// <summary>
-        /// Checks if the user is on the Swag Labs dashboard by verifying the logo is visible.
-        /// </summary>
-        /// <returns>True if the dashboard logo is visible; otherwise, false.</returns>
         public bool IsAtDashboard()
         {
             return IsElementDisplayed(appLogo);
         }
     }
 }
+#pragma warning restore SA1600

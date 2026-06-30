@@ -1,7 +1,7 @@
 // <copyright file="DashboardMenu.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
     using OpenQA.Selenium;
@@ -29,21 +29,12 @@ namespace SauceDemo.UI.Components
         private readonly By menuItems = By.CssSelector(".bm-item.menu-item");
         private readonly By aboutLink = By.Id("about_sidebar_link");
 
-        /// <summary>
-        /// Opens the dashboard side menu by clicking the burger menu button
-        /// and waits until the menu items are loaded and visible.
-        /// </summary>
         public void Open()
         {
             Click(menuButton);
             Wait.Until(d => d.FindElements(menuItems).Count > 0);
         }
 
-        /// <summary>
-        /// Checks if the dashboard menu (burger menu) is currently visible on the page.
-        /// </summary>
-        /// <param name="timeoutSeconds">Maximum time to wait for the menu to appear.</param>
-        /// <returns>True if the menu button is visible within the timeout.</returns>
         public bool IsMenuVisible(int timeoutSeconds = 5)
         {
             try
@@ -61,10 +52,6 @@ namespace SauceDemo.UI.Components
             }
         }
 
-        /// <summary>
-        ///  Gets all the menu options in the dashboard menu.
-        /// </summary>
-        /// <return>Returns all the captured menu options in the dashboard.</return>
         public IList<string> GetOptions()
         {
             Wait.Until(d =>
@@ -75,29 +62,19 @@ namespace SauceDemo.UI.Components
                 .ToList();
         }
 
-        /// <summary>
-        /// Waits until the "About" menu option is visible.
-        /// </summary>
-        /// <returns>The <see cref="WebDriverWait"/> used for waiting.</returns>
         public WebDriverWait WaitAboutToLoad()
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
             wait.Until(d => GetOptions().Contains("About"));
             return wait;
         }
-
-        /// <summary>
-        /// Clicks the "About" link in the Dashboard menu.
-        /// </summary>
+        
         public void ClickAbout()
         {
             var element = Wait.Until(d => d.FindElement(aboutLink));
             element.Click();
         }
-
-        /// <summary>
-        /// Opens the side menu and then clicks the logout link to log the current user out.
-        /// </summary>
+        
         public void Logout()
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
@@ -109,3 +86,4 @@ namespace SauceDemo.UI.Components
         }
     }
 }
+#pragma warning restore SA1600
