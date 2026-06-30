@@ -1,7 +1,7 @@
 // <copyright file="DashboardProducts.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
     using System.Globalization;
@@ -34,71 +34,39 @@ namespace SauceDemo.UI.Components
         private readonly By sortDropdown = By.CssSelector(".product_sort_container");
 
         // === PRODUCT ACTIONS ===
-
-        /// <summary>
-        /// Gets the product name (title text) at the specified index.
-        /// Useful for validating detail page content.
-        /// </summary>
-        /// <param name="index">Zero-based index.</param>
-        /// <returns>Product name as shown on the dashboard.</returns>
         public string GetNameByIndex(int index)
         {
             return FindAll(productNames).ToList()[index].Text.Trim();
         }
-
-        /// <summary>
-        /// Clicks a product image by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product image to click.</param>
+        
         public void ClickImageByIndex(int index)
         {
             var elements = FindAll(productImages).ToList();
             elements[index].Click();
         }
-
-        /// <summary>
-        /// Clicks a product title by its index in the product list.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product to click.</param>
+        
         public void ClickTitleByIndex(int index)
         {
             var elements = FindAll(productNames).ToList();
             elements[index].Click();
         }
         
-        /// <summary>
-        /// Clicks the "Add to cart" button for the product at the given index.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product whose button will be clicked.</param>
         public void AddItemToCart(int index)
         {
             FindAll(addToCartButtons).ToList()[index].Click();
         }
 
-        /// <summary>
-        /// Clicks Remove button (index based).
-        /// </summary>
-        /// <param name="index">Index.</param>
         public void ClickRemoveByIndex(int index)
         {
             var buttons = FindAll(By.CssSelector(".inventory_item button"));
             buttons.ToList()[index].Click();
         }
-
-        /// <summary>
-        /// Retrieves the label text of the "Add to cart" button for the product at the given index.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product.</param>
-        /// <returns>The trimmed button label.</returns>
+        
         public string GetAddToCartButtonLabel(int index)
         {
             return FindAll(addToCartButtons).ToList()[index].Text.Trim();
         }
-
-        /// <summary>
-        /// Returns product prices as decimals (USD-aware).
-        /// </summary>
-        /// <returns>Returns list of decimal values.</returns>
+        
         public List<decimal> GetPricesAsDecimal()
         {
             var elements = FindAll(productPrices);
@@ -127,13 +95,6 @@ namespace SauceDemo.UI.Components
             return list;
         }
         
-        /// <summary>
-        /// Waits until the "Add to cart" button for the product at the specified index
-        /// displays the expected label.
-        /// </summary>
-        /// <param name="index">Zero-based index of the product.</param>
-        /// <param name="expected">Expected button label.</param>
-        /// <param name="timeoutSeconds">Number of seconds to wait before timing out.</param>
         public void WaitForButtonLabel(int index, string expected, int timeoutSeconds = 5)
         {
             var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeoutSeconds));
@@ -154,37 +115,17 @@ namespace SauceDemo.UI.Components
             });
         }
 
-        /// <summary>
-        /// Gets all product cards.
-        /// </summary>
-        /// <returns>List of product card IWebElement objects.</returns>
         public IList<IWebElement> GetAllCards() => FindAll(productCards).ToList();
 
-        /// <summary>
-        /// Gets all product names.
-        /// </summary>
-        /// <returns>List of all product names.</returns>
         public IList<string> GetAllNames() =>
             FindAll(productNames).Select(e => e.Text).ToList();
 
-        /// <summary>
-        /// Gets all product prices.
-        /// </summary>
-        /// <returns>List of all product prices.</returns>
         public IList<string> GetAllPrices() =>
             FindAll(productPrices).Select(e => e.Text).ToList();
 
-        /// <summary>
-        /// Gets all product image elements.
-        /// </summary>
-        /// <returns>List of all product images.</returns>
         public IReadOnlyCollection<IWebElement> GetAllImages() =>
             FindAll(productImages);
-
-        /// <summary>
-        /// Returns all product images after ensuring they are fully loaded.
-        /// </summary>
-        /// <returns>Collection of fully loaded image elements.</returns>
+        
         public IReadOnlyCollection<IWebElement> GetAllImagesLoaded()
         {
             var images = GetAllImages();
@@ -207,18 +148,7 @@ namespace SauceDemo.UI.Components
 
             return images;
         }
-
-        /// <summary>
-        /// Selects a sort option from the product sort dropdown.
-        /// </summary>
-        /// /// <param name="visibleText">
-        /// The exact visible text of the dropdown option to select.
-        /// Valid options include:
-        /// - "Name (A to Z)"
-        /// - "Name (Z to A)"
-        /// - "Price (low to high)"
-        /// - "Price (high to low)".
-        /// </param>
+        
         public void SelectSortOption(string visibleText)
         {
             var dropdown = Find(sortDropdown);
@@ -226,31 +156,16 @@ namespace SauceDemo.UI.Components
             select.SelectByText(visibleText);
         }
         
-        /// <summary>
-        /// Clicks the "Add to cart" button for the specified product by its name.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
         public void ClickAddToCartByName(string productName)
         {
             GetProductButton(productName).Click();
         }
-
-        /// <summary>
-        /// Retrieves the label text of the "Add to cart" or "Remove" button
-        /// for the specified product.
-        /// </summary>
-        /// <param name="productName">The exact or partial name of the product as displayed on the dashboard.</param>
-        /// <returns>The trimmed text of the button, typically "Add to cart" or "Remove".</returns>
+        
         public string GetButtonLabel(string productName)
         {
             return GetProductButton(productName).Text.Trim();
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public bool IsItemInCart(int index)
         {
             return GetAddToCartButtonLabel(index) == "Remove";
@@ -270,3 +185,4 @@ namespace SauceDemo.UI.Components
         }
     }
 }
+#pragma warning disable SA1600
