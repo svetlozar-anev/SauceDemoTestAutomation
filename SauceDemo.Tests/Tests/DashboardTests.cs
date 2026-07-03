@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using SauceDemo.Tests.Steps;
+
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
@@ -20,6 +22,7 @@ namespace SauceDemo.Tests.Tests
         private const string LogScope = "DashboardTests";
         private LoginComponent? loginPage;
         private DashboardComponent? dashboardPage;
+        private LoginSteps? loginSteps;
 
         /// <summary>
         /// Initializes the required page objects and navigates to the dashboard page before each test.
@@ -29,8 +32,8 @@ namespace SauceDemo.Tests.Tests
         {
             loginPage = new LoginComponent(WebDriverFactory.Driver);
             dashboardPage = new DashboardComponent(WebDriverFactory.Driver);
-            loginPage?.Open();
-            loginPage?.Login("standard_user", "secret_sauce");
+            loginSteps?.OpenLoginPage();
+            loginSteps?.SubmitCredentials("standard_user", "secret_sauce");
 
             Logger.NUnitLog?.Information("[{Scope}] Logged in as standard_user for Dashboard tests", LogScope);
         }
@@ -413,7 +416,7 @@ namespace SauceDemo.Tests.Tests
             dashboardPage.Menu.Logout();
 
             // Login again
-            loginPage!.Login("standard_user", "secret_sauce");
+            loginSteps!.SubmitCredentials("standard_user", "secret_sauce");
 
             dashboardPage.WaitForDashboardToLoad();
 

@@ -2,129 +2,37 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using SauceDemo.Core.Config;
+
+#pragma warning disable SA1600
 namespace SauceDemo.Tests.Base
 {
-    using System.Diagnostics;
     using OpenQA.Selenium;
-    using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
-    using SauceDemo.UI.Components;
-    using SauceDemo.UI.Pages;
-
+    
     /// <summary>
     /// Provides common setup and teardown logic for NUnit-based UI tests.
     /// Handles WebDriver lifecycle, logging, and performance timing.
     /// </summary>
     public class BaseTest
     {
-        private Stopwatch? stopwatch;
+        protected IWebDriver Driver;
+        protected TestContext Context;
 
-        // === PAGE PROPERTIES ===
-#pragma warning disable SA1516 // Elements should be separated by blank line
-#pragma warning disable SA1600 // ElementsMustBeDocumented
-        protected CartComponent CartComponent { get; private set; } = null!;
-        protected DashboardComponent DashboardComponent { get; private set; } = null!;
-        protected DashboardMenu DashboardMenu { get; private set; } = null!;
-        protected DashboardProducts DashboardProducts { get; private set; } = null!;
-        protected HeaderComponent HeaderComponent { get; private set; } = null!;
-        protected LoginComponent LoginComponent { get; private set; } = null!;
-        protected ProductDetailComponent ProductDetailComponent { get; private set; } = null!;
-        protected SauceLabsComponent SauceLabsComponent { get; private set; } = null!;
-#pragma warning disable SA1516 // Elements should be separated by blank line
-#pragma warning disable SA1600 // Elements must be documented        
-
-        /// <summary>
-        /// Initializes the logging infrastructure before the entire test run begins.
-        /// This method is executed only once.
-        /// </summary>
-        [OneTimeSetUp]
-        public static void OneTimeSetup()
-        {
-            Logger.Init();
-        }
-
-        /// <summary>
-        /// Ensures all pending logs are flushed after the test suite completes.
-        /// </summary>
-        [OneTimeTearDown]
-        public static void OneTimeTearDown()
-        {
-            Serilog.Log.CloseAndFlush();
-        }
-
-        /// <summary>
-        /// Initializes the WebDriver and page objects before each test.
-        /// </summary>
         [SetUp]
         public void Setup()
         {
-            stopwatch = Stopwatch.StartNew();
-            Logger.NUnitLog?.Information("=== SETUP for test: {TestName} ===", TestContext.CurrentContext.Test.Name);
-
-            WebDriverFactory.QuitDriver();
             WebDriverFactory.InitDriver(TestConfig.Browser);
 
-            InitializePages();
+            Driver = WebDriverFactory.Driver;
+            Context = new TestContext(Driver);
         }
 
-        /// <summary>
-        /// Cleans up the WebDriver after each test.
-        /// </summary>
         [TearDown]
         public void TearDown()
         {
-            stopwatch?.Stop();
-            var duration = stopwatch?.ElapsedMilliseconds ?? 0;
-            var testName = TestContext.CurrentContext.Test.Name;
-            var result = TestContext.CurrentContext.Result.Outcome.Status;
-
-            if (result == NUnit.Framework.Interfaces.TestStatus.Passed)
-            {
-                Logger.NUnitLog?.Information("=== Test PASSED: {TestName} in {Duration}ms ===\n", testName, duration);
-            }
-            else
-            {
-                Logger.NUnitLog?.Error(
-                    "=== Test FAILED: {TestName} in {Duration}ms ===\nMessage: {Message}",
-                    testName,
-                    duration,
-                    TestContext.CurrentContext.Result.Message);
-            }
-
-            WebDriverFactory.QuitDriver();
-            ResetPages();
+            Driver.Quit();
         }
-
-        /// <summary>
-        /// Initializes all page objects with the current WebDriver instance.
-        /// </summary>
-        private void InitializePages()
-        {
-            CartComponent = new CartComponent(WebDriverFactory.Driver);
-            DashboardComponent = new DashboardComponent(Driver);
-            DashboardMenu = new DashboardMenu(WebDriverFactory.Driver);
-            DashboardProducts = new DashboardProducts(WebDriverFactory.Driver);
-            HeaderComponent = new HeaderComponent(WebDriverFactory.Driver);
-            LoginComponent = new LoginComponent(Driver);
-            ProductDetailComponent = new ProductDetailComponent(WebDriverFactory.Driver);
-            SauceLabsComponent = new SauceLabsComponent(WebDriverFactory.Driver);
-        }
-
-        /// <summary>
-        /// Resets page object references after teardown.
-        /// </summary>
-        private void ResetPages()
-        {
-            CartComponent = null!;
-            DashboardComponent = null!;
-            DashboardMenu = null!;
-            DashboardProducts = null!;
-            HeaderComponent = null!;
-            LoginComponent = null!;
-            ProductDetailComponent = null!;
-            SauceLabsComponent = null!;
-        }
-
-        protected IWebDriver Driver => WebDriverFactory.Driver;
     }
 }
+#pragma warning restore SA1600

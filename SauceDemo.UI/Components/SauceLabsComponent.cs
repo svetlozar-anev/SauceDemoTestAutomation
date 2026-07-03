@@ -24,5 +24,5 @@ namespace SauceDemo.UI.Components
             Wait.Until(d => d.Url.Contains("saucelabs.com"));
         }
     }
+#pragma warning disable SA1600 // ElementsMustBeDocumented
 }
-#pragma warning disable SA1600

@@ -1,7 +1,7 @@
 // <copyright file="LoginTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
+#pragma warning disable SA1600
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
@@ -24,149 +24,85 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void TestSetUp()
         {
-            this.LoginComponent?.Open();
+            Context.LoginSteps.OpenLoginPage();
         }
 
-        /// <summary>
-        /// Verifies that submitting the login form with both username and password empty
-        /// shows the appropriate 'Username is required' error message.
-        /// </summary>
-        [Test]
-        [Description("UC-001: Login fails with empty credentials")]
-        public void UC_001_Login_WithEmptyCredentials_ShowsUsernameRequiredError()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-001: Login fails with empty credentials", LogScope);
-
-            this.LoginComponent?.EnterUsername(TestUsers.Standard);
-            this.LoginComponent?.EnterPassword(TestUsers.Password);
-            this.LoginComponent?.ClearUsername();
-            this.LoginComponent?.ClearPassword();
-
-            this.LoginComponent?.ClickLogin();
-
-            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
-        }
-
-        /// <summary>
-        /// Verifies that submitting the login form without a password
-        /// shows the appropriate 'Password is required' error message.
-        /// </summary>
-        [Test]
-        [Description("UC-002: Login fails with missing password")]
-        public void UC_002_Login_WithMissingPassword_ShowsPasswordRequiredError()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-002: Login fails with missing password", LogScope);
-
-            this.LoginComponent?.EnterUsername("standard_user");
-            this.LoginComponent?.EnterPassword("secret_sauce");
-            this.LoginComponent?.ClearPassword();
-
-            this.LoginComponent?.ClickLogin();
-
-            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Password is required");
-        }
-
-        /// <summary>
-        /// Verifies that valid login credentials navigate the user to the dashboard page.
-        /// </summary>
-        /// <param name="username">The username to be used for login.</param>
-        /// <param name="password">The password to be used for login.</param>
         [Test]
         [TestCase(TestUsers.Standard, TestUsers.Password)]
         [TestCase(TestUsers.Problem, TestUsers.Password)]
         [TestCase(TestUsers.PerformanceGlitch, TestUsers.Password)]
         [TestCase(TestUsers.Error, TestUsers.Password)]
         [TestCase(TestUsers.Visual, TestUsers.Password)]
-        [Description("UC-003: Login with valid credentials shows Dashboard")]
-        public void UC_003_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
+        [Description("LOGIN001: Login with valid credentials shows Dashboard")]
+        public void LOGIN001_Login_WithValidCredentials_NavigatesToDashboard(string username, string password)
         {
-            Logger.NUnitLog?.Information(
-                "[{Scope}] Executing UC-003: Valid login with user: {Username} shows Dashboard", LogScope, username);
-
-            this.LoginComponent?.Login(username, password);
-            Logger.NUnitLog?.Information("[{Scope}] Login submitted", LogScope);
-
-            var isAtDashboard = this.DashboardComponent?.IsAtDashboard() ?? false;
-            Logger.NUnitLog?.Information("[{Scope}] Is at dashboard: {Result}", LogScope, isAtDashboard);
-
-            isAtDashboard.Should().BeTrue("the user should be redirected to the dashboard");
-            this.DashboardComponent?.GetPageTitle().Should().Be("Swag Labs");
+            Context.LoginSteps.SubmitCredentials(username, password);
+            
+            Context.DashboardAssertions.ShouldBeDisplayed();
         }
 
-        /// <summary>
-        /// Verifies that login with a locked out user shows the appropriate error message.
-        /// </summary>
         [Test]
-        [Description("UC-004: Login fails with locked out user")]
-        public void UC_004_Login_WithLockedOutUser_ShowsLockedOutError()
+        [Description("LOGIN002: Login fails with empty credentials")]
+        public void LOGIN002_Login_WithEmptyCredentials_ShowsUsernameRequiredError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-004: Login fails with locked out user", LogScope);
-
-            this.LoginComponent?.Login(TestUsers.LockedOut, TestUsers.Password);
-
-            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Sorry, this user has been locked out.");
+            Context.LoginSteps.SubmitEmptyCredentials(TestUsers.Standard, TestUsers.Password);
+            
+            Context.LoginAssertions.ShouldRequireUsername();
         }
 
-        /// <summary>
-        /// Verifies that login with incorrect password shows the appropriate error message.
-        /// </summary>
         [Test]
-        [Description("UC-005: Login fails with wrong password")]
-        public void UC_005_Login_WithIncorrectPassword_ShowsNoMatchInServiceError()
+        [Description("LOGIN003 Login fails with missing username")]
+        public void LOGIN003_Login_WithEmptyUsername_ShowsUsernameRequiredError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-005: Login fails with wrong password", LogScope);
+            Context.LoginSteps.LoginWithEmptyUsername(TestUsers.Password);
 
-            this.LoginComponent?.Login(TestUsers.Standard, TestUsers.WrongPassword);
-
-            this.LoginComponent?.GetErrorMessage().Should()
-                .Be("Epic sadface: Username and password do not match any user in this service");
+            Context.LoginAssertions.ShouldRequireUsername();
+        }
+        
+        [Test]
+        [Description("LOGIN004: Login fails with missing password")]
+        public void LOGIN004_Login_WithMissingPassword_ShowsPasswordRequiredError()
+        {
+            Context.LoginSteps.LoginWithEmptyPassword(TestUsers.Standard);
+            
+            Context.LoginAssertions.ShouldRequirePassword();
+        }
+        
+        [Test]
+        [Description("LOGIN005: Login fails with locked out user")]
+        public void LOGIN005_Login_WithLockedOutUser_ShowsLockedOutError()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.LockedOut, TestUsers.Password);
+            
+            Context.LoginAssertions.ShouldShowLockedOutUserMessage();
         }
 
-        /// <summary>
-        /// Verifies that login with empty username and valid password shows 'Username is required'.
-        /// </summary>
         [Test]
-        [Description("UC-006 Login fails with missing username")]
-        public void UC_006_Login_WithEmptyUsername_ShowsUsernameRequiredError()
+        [Description("LOGIN006: Login fails with wrong password")]
+        public void LOGIN006_Login_WithIncorrectPassword_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-006 Login fails with missing username", LogScope);
-
-            this.LoginComponent?.EnterPassword("secret_sauce");
-            this.LoginComponent?.ClickLogin();
-
-            this.LoginComponent?.GetErrorMessage().Should().Be("Epic sadface: Username is required");
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.WrongPassword);
+            
+            Context.LoginAssertions.ShouldRejectCredentials();
         }
 
-        /// <summary>
-        /// Verifies that login with special characters in username and password shows invalid credentials error.
-        /// </summary>
         [Test]
-        [Description("UC-007: Login fails with special characters in username and password")]
-        public void UC_007_Login_WithSpecialCharacters_ShowsNoMatchInServiceError()
+        [Description("LOGIN007: Login fails with special characters in username and password")]
+        public void LOGIN007_Login_WithSpecialCharacters_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information(
-                "[{Scope}] Executing UC-007: Login fails with special characters in username and password", LogScope);
-
-            this.LoginComponent?.Login("!@#$%^&*()", "!@#$%^&*()");
-
-            this.LoginComponent?.GetErrorMessage().Should()
-                .Be("Epic sadface: Username and password do not match any user in this service");
+            Context.LoginSteps.SubmitCredentials(TestUsers.SpecialChars, TestUsers.SpecialChars);
+            
+            Context.LoginAssertions.ShouldRejectCredentials();
         }
 
-        /// <summary>
-        /// Verifies that login with whitespace-only credentials fails with invalid credentials error.
-        /// </summary>
         [Test]
-        [Description("UC-008: Login fails with whitespace-only username and password")]
-        public void UC_008_Login_WithWhitespaceOnlyCredentials_ShowsNoMatchInServiceError()
+        [Description("LOGIN008: Login fails with whitespace-only username and password")]
+        public void LOGIN008_Login_WithWhitespaceOnlyCredentials_ShowsNoMatchInServiceError()
         {
-            Logger.NUnitLog?.Information(
-                "[{Scope}] Executing UC-008: Login fails with whitespace-only username and password", LogScope);
-
-            this.LoginComponent?.Login("    ", "    ");
-
-            this.LoginComponent?.GetErrorMessage().Should()
-                .Be("Epic sadface: Username and password do not match any user in this service");
+            Context.LoginSteps.SubmitCredentials(TestUsers.EmptyString, TestUsers.EmptyString);
+            
+            Context.LoginAssertions.ShouldRejectCredentials();
         }
     }
 }
+#pragma warning restore SA1600

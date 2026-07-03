@@ -24,66 +24,53 @@ namespace SauceDemo.UI.Components
         }
 
         // === LOCATORS ===
-        private readonly By usernameInput = By.CssSelector("#user-name");
-        private readonly By passwordInput = By.CssSelector("#password");
-        private readonly By loginButton = By.CssSelector("#login-button");
-        private readonly By errorMessage = By.CssSelector("h3[data-test='error']");
+        private static readonly By UsernameInput = By.CssSelector("#user-name");
+        private static readonly By PasswordInput = By.CssSelector("#password");
+        private static readonly By LoginButton = By.CssSelector("#login-button");
+        private static readonly By ErrorMessage = By.CssSelector("h3[data-test='error']");
 
         // === ACTIONS ===
         public void Open()
         {
             NavigateTo(TestConfig.BaseUrl);
             
-            Wait.Until(d => d.FindElement(loginButton).Displayed);
+            Wait.Until(d => d.FindElement(LoginButton).Displayed);
         }
         
         public void EnterUsername(string username)
         {
-            TypeText(usernameInput, username);
+            TypeText(UsernameInput, username);
         }
         
         public void EnterPassword(string password)
         {
-            TypeText(passwordInput, password);
+            TypeText(PasswordInput, password);
         }
         
         public void ClearUsername()
         {
-            ClearField(usernameInput);
+            ClearField(UsernameInput);
         }
         
         public void ClearPassword()
         {
-            ClearField(passwordInput);
+            ClearField(PasswordInput);
         }
         
         public void ClickLogin()
         {
-            Click(loginButton);
-        }
-        
-        public void Login(string username, string password)
-        {
-            EnterUsername(username);
-            EnterPassword(password);
-            ClickLogin();
-        }
-        
-        public DashboardComponent LoginAs(string username, string password)
-        {
-            Login(username, password);
-            return new DashboardComponent(Driver);
+            Click(LoginButton);
         }
 
         public string GetErrorMessage()
         {
-            return GetElementText(errorMessage);
+            return GetElementText(ErrorMessage);
         }
         
         public bool IsLoaded()
         {
             return Driver.Url.Contains("saucedemo.com") &&
-                   Driver.FindElements(loginButton).Any();
+                   Driver.FindElements(LoginButton).Any();
         }
     }
 }

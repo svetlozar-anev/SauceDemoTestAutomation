@@ -46,7 +46,7 @@ The solution is organized into three projects with clear separation of concerns:
 │   ├── appsettings.json
 │   └── TestConfig.cs
 ├── TestData/
-│   └── Users.cs
+│   └── TestUsers.cs
 ├── Utilities/
 │   ├── Logger.cs
 │   ├── ViewportManager.cs
