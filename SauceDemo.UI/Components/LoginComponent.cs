@@ -18,7 +18,7 @@ namespace SauceDemo.UI.Components
         /// Initializes a new instance of the <see cref="LoginComponent"/> class.
         /// </summary>
         /// <param name="driver">The Selenium WebDriver instance to be used by this page object.</param>
-        public LoginComponent(IWebDriver driver) 
+        public LoginComponent(IWebDriver driver)
             : base(driver)
         {
         }
@@ -33,30 +33,30 @@ namespace SauceDemo.UI.Components
         public void Open()
         {
             NavigateTo(TestConfig.BaseUrl);
-            
+
             Wait.Until(d => d.FindElement(LoginButton).Displayed);
         }
-        
+
         public void EnterUsername(string username)
         {
             TypeText(UsernameInput, username);
         }
-        
+
         public void EnterPassword(string password)
         {
             TypeText(PasswordInput, password);
         }
-        
+
         public void ClearUsername()
         {
             ClearField(UsernameInput);
         }
-        
+
         public void ClearPassword()
         {
             ClearField(PasswordInput);
         }
-        
+
         public void ClickLogin()
         {
             Click(LoginButton);
@@ -66,11 +66,26 @@ namespace SauceDemo.UI.Components
         {
             return GetElementText(ErrorMessage);
         }
-        
+
         public bool IsLoaded()
         {
             return Driver.Url.Contains("saucedemo.com") &&
                    Driver.FindElements(LoginButton).Any();
+        }
+
+        public void Refresh()
+        {
+            Driver.Navigate().Refresh();
+        }
+
+        public bool HasErrorMessage()
+        {
+            return Driver.FindElements(ErrorMessage).Any();
+        }
+
+        public void NavigateToInventory()
+        {
+            NavigateTo($"{TestConfig.BaseUrl}/inventory.html");
         }
     }
 }

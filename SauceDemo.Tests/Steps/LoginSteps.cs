@@ -48,6 +48,16 @@ namespace SauceDemo.Tests.Steps
             login.EnterPassword(password);
             login.ClickLogin();
         }
+
+        public void RefreshPage()
+        {
+            login.Refresh();
+        }
+
+        public void NavigateToInventoryPage()
+        {
+            login.NavigateToInventory();
+        }
     }
 }
 #pragma warning restore SA1600

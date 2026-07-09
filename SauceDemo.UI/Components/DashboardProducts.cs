@@ -1,6 +1,9 @@
 // <copyright file="DashboardProducts.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
+
+using SauceDemo.Core.TestData;
+
 #pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
@@ -147,6 +150,20 @@ namespace SauceDemo.UI.Components
             }
 
             return images;
+        }
+        
+        public void SelectSort(ProductSort sort)
+        {
+            var option = sort switch
+            {
+                ProductSort.NameAscending => "Name (A to Z)",
+                ProductSort.NameDescending => "Name (Z to A)",
+                ProductSort.PriceAscending => "Price (low to high)",
+                ProductSort.PriceDescending => "Price (high to low)",
+                _ => throw new ArgumentOutOfRangeException(nameof(sort))
+            };
+
+            SelectSortOption(option);
         }
         
         public void SelectSortOption(string visibleText)

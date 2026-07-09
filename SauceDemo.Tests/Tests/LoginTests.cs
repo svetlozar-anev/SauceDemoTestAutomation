@@ -103,6 +103,122 @@ namespace SauceDemo.Tests.Tests
             
             Context.LoginAssertions.ShouldRejectCredentials();
         }
+
+        [Test]
+        [Description("LOGIN009: Login fails with unknown username")]
+        public void LOGIN009_Login_WithUnknownUsername_ShowsNoMatchInServiceError()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Unknown, TestUsers.Password);
+            
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+        
+        [Test]
+        [Description("LOGIN010: Login fails with invalid username and password")]
+        public void LOGIN010_Login_WithInvalidUsernameAndPassword_ShowsNoMatchInServiceError()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Unknown, TestUsers.WrongPassword);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+        
+        [Test]
+        [Description("LOGIN011: Login fails when username casing is incorrect")]
+        public void LOGIN011_Login_WithUppercaseUsername_ShowsNoMatchInServiceError()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard.ToUpperInvariant(), TestUsers.Password);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+        
+        [Test]
+        [Description("LOGIN012: Login fails when password casing is incorrect")]
+        public void LOGIN012_Login_WithUppercasePassword_ShowsNoMatchInServiceError()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.Password.ToUpperInvariant());
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+        
+        [Test]
+        [TestCase($" {TestUsers.Standard}", TestUsers.Password)]
+        [TestCase(TestUsers.Standard, $" {TestUsers.Password}")]
+        [TestCase($" {TestUsers.Standard}",$" {TestUsers.Password}")]
+        [Description("LOGIN013: Login fails with leading whitespace in username or password")]
+        public void LOGIN013_Login_WithLeadingWhitespace_ShowsNoMatchInServiceError(string username, string password)
+        {
+            Context.LoginSteps.SubmitCredentials(username, password);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+        
+        [Test]
+        [TestCase($"{TestUsers.Standard} ", TestUsers.Password)]
+        [TestCase(TestUsers.Standard, $"{TestUsers.Password} ")]
+        [TestCase($"{TestUsers.Standard} ",$"{TestUsers.Password} ")]
+        [Description("LOGIN014: Login fails with trailing whitespace in username or password")]
+        public void LOGIN014_Login_TrailingWhitespace_ShowsNoMatchInServiceError(string username, string password)
+        {
+            Context.LoginSteps.SubmitCredentials(username, password);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+
+        [Test]
+        [Description("LOGIN015: Successful login after failed login")]
+        public void LOGIN015_Login_AfterFailedAttempt_NavigatesToDashboard()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.WrongPassword);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.Password);
+
+            Context.DashboardAssertions.ShouldBeDisplayed();
+        }
+
+        [Test]
+        [Description("LOGIN016: Direct navigation to inventory redirects to login")]
+        public void LOGIN016_DirectInventoryNavigation_RedirectsToLogin()
+        {
+            Context.LoginSteps.NavigateToInventoryPage();
+
+            Context.LoginAssertions.ShouldBeOnLoginPage();
+            Context.LoginAssertions.ShouldShowNoAccessToInventoryMessage();
+        }
+        
+        [Test]
+        [Description("LOGIN017: Refresh after failed login")]
+        public void LOGIN017_RefreshAfterFailedLogin_ClearsErrorMessage()
+        {
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.WrongPassword);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+
+            Context.LoginSteps.RefreshPage();
+
+            Context.LoginAssertions.ShouldNotShowError();
+        }
+
+        [Test]
+        [Description("LOGIN018: Login fails with extremely long username")]
+        public void LOGIN018_Login_WithVeryLongUsername_ShowsNoMatchInServiceError()
+        {
+            var longUsername = new string('a', 1000);
+            Context.LoginSteps.SubmitCredentials(longUsername, TestUsers.Password);
+
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
+
+        [Test]
+        [Description("LOGIN019: Login fails with extremely long password")]
+        public void LOGIN019_Login_WithVeryLongPassword_ShowsNoMatchInServiceError()
+        {
+            var longPassword = new string('a', 1000);
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, longPassword);
+            
+            Context.LoginAssertions.ShouldRejectCredentials();
+        }
     }
 }
 #pragma warning restore SA1600

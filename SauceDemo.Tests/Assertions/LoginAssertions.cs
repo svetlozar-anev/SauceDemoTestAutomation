@@ -20,6 +20,11 @@ namespace SauceDemo.Tests.Assertions
             this.login = login;
         }
 
+        public void ShouldBeOnLoginPage()
+        {
+            login.IsLoaded().Should().BeTrue();
+        }
+
         public void ShouldRequireUsername()
         {
             login.GetErrorMessage().Should().Be(LoginErrors.UsernameRequired);
@@ -38,6 +43,16 @@ namespace SauceDemo.Tests.Assertions
         public void ShouldShowLockedOutUserMessage()
         {
             login.GetErrorMessage().Should().Be(LoginErrors.LockedOut);
+        }
+
+        public void ShouldShowNoAccessToInventoryMessage()
+        {
+            login.GetErrorMessage().Should().Be(LoginErrors.NoAccessToInventory);
+        }
+
+        public void ShouldNotShowError()
+        {
+            login.HasErrorMessage().Should().BeFalse();
         }
     }
 }
