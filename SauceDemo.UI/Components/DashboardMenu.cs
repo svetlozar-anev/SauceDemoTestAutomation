@@ -55,7 +55,7 @@ namespace SauceDemo.UI.Components
         public IList<string> GetOptions()
         {
             Wait.Until(d =>
-                d.FindElements(menuItems).Count >= 4);
+                d.FindElements(menuItems).Count > 0);
 
             return Driver.FindElements(menuItems)
                 .Select(e => e.Text.Trim())

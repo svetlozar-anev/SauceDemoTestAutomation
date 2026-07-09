@@ -46,7 +46,7 @@ The solution is organized into three projects with clear separation of concerns:
 │   ├── appsettings.json
 │   └── TestConfig.cs
 ├── TestData/
-│   └── Users.cs
+│   └── TestUsers.cs
 ├── Utilities/
 │   ├── Logger.cs
 │   ├── ViewportManager.cs
@@ -65,14 +65,16 @@ The solution is organized into three projects with clear separation of concerns:
 
 🖥️ SauceDemo.UI/
 ├── Base/
-│   └── BasePage.cs
-├── Pages/
-│   ├── CartPage.cs
+│   └── BaseComponent.cs
+├── Components/
+│   ├── CartComponent.cs
+│   ├── DashboardComponent.cs
 │   ├── DashboardMenu.cs
-│   ├── DashboardPage.cs
 │   ├── DashboardProducts.cs
-│   ├── LoginPage.cs
-│   └── ProductDetailPage.cs
+│   ├── HeaderComponent.cs
+│   ├── LoginComponent.cs
+│   ├── ProductDetailComponent.cs
+│   └── SauceLabsComponent.cs
 └── SauceDemo.UI.csproj
 
 📁 Root Solution Files:

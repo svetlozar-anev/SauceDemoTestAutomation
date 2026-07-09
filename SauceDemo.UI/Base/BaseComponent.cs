@@ -41,6 +41,8 @@ namespace SauceDemo.UI.Base
         /// </summary>
         /// <returns>URL as string.</returns>
         public string GetCurrentUrl() => Driver.Url;
+        
+        public void RefreshPage() => Driver.Navigate().Refresh();
 
         // ==================== ELEMENT HELPERS ====================
         protected IWebElement Find(By by)

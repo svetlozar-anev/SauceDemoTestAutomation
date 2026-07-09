@@ -17,7 +17,7 @@ namespace SauceDemo.Core.Utilities
         /// </summary>
         public static void SetMobile(IWebDriver driver)
         {
-            driver.Manage().Window.Size = new Size(375, 812);
+            SetViewport(driver, 390, 844);
         }
         
         /// <summary>
@@ -25,7 +25,7 @@ namespace SauceDemo.Core.Utilities
         /// </summary>
         public static void SetTablet(IWebDriver driver)
         {
-            driver.Manage().Window.Size = new Size(768, 1024);
+            SetViewport(driver, 768, 1024);
         }
         
         /// <summary>
@@ -33,7 +33,18 @@ namespace SauceDemo.Core.Utilities
         /// </summary>
         public static void SetDesktop(IWebDriver driver)
         {
-            driver.Manage().Window.Maximize();
+            SetViewport(driver, 1920, 1080);
+        }
+        
+        private static void SetViewport(
+            IWebDriver driver,
+            int width,
+            int height)
+        {
+            var js = (IJavaScriptExecutor)driver;
+
+            js.ExecuteScript(
+                $"window.resizeTo({width},{height});");
         }
     }
 }

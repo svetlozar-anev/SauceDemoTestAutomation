@@ -2,11 +2,15 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using SauceDemo.Core.TestData;
+
+#pragma warning disable SA1600
 namespace SauceDemo.Tests.Tests
 {
     using FluentAssertions;
     using SauceDemo.Core.Utilities;
     using SauceDemo.Tests.Base;
+    using SauceDemo.Tests.Steps;
     using SauceDemo.UI.Components;
     using SauceDemo.UI.Pages;
 
@@ -20,6 +24,7 @@ namespace SauceDemo.Tests.Tests
         private const string LogScope = "DashboardTests";
         private LoginComponent? loginPage;
         private DashboardComponent? dashboardPage;
+        private LoginSteps? loginSteps;
 
         /// <summary>
         /// Initializes the required page objects and navigates to the dashboard page before each test.
@@ -27,507 +32,217 @@ namespace SauceDemo.Tests.Tests
         [SetUp]
         public void TestSetUp()
         {
-            loginPage = new LoginComponent(WebDriverFactory.Driver);
-            dashboardPage = new DashboardComponent(WebDriverFactory.Driver);
-            loginPage?.Open();
-            loginPage?.Login("standard_user", "secret_sauce");
-
-            Logger.NUnitLog?.Information("[{Scope}] Logged in as standard_user for Dashboard tests", LogScope);
+            Context.LoginSteps.OpenLoginPage();
+            Context.LoginSteps.SubmitCredentials("standard_user", "secret_sauce");
         }
 
-        /// <summary>
-        /// UC-009: Verifies that all product items are displayed with name, price, and image.
-        /// </summary>
         [Test]
-        [Description("UC-009: All product items are displayed")]
-        public void UC_009_AllProductItemsAreDisplayed()
+        [Description("DASHBOARD001: All product items are displayed")]
+        public void DASHBOARD001_AllProductItemsAreDisplayed()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-009: All product items are displayed", LogScope);
-
-            var productCards = dashboardPage?.Products.GetAllCards();
-            var productNames = dashboardPage?.Products.GetAllNames();
-
-            var productPrices = dashboardPage?.Products.GetAllPrices();
-            var productImages = dashboardPage?.Products.GetAllImages();
-
-            Logger.NUnitLog?.Information("[{Scope}] Found {Count} product cards", LogScope, productCards?.Count ?? 0);
-
-            // Assert: 6 product items are displayed
-            productCards?.Count.Should().Be(6, because: "there should be 6 products displayed on the dashboard");
-
-            // Assert: Each product has a name
-            productNames.Should().NotBeNullOrEmpty(because: "each product should have a name");
-            productNames.Should().OnlyContain(
-                name => !string.IsNullOrWhiteSpace(name),
-                because: "product names should not be empty");
-
-            // Assert: Each product has a valid price
-            productPrices.Should().NotBeNullOrEmpty(because: "each product should have a price");
-            productPrices.Should().OnlyContain(
-                price => price.StartsWith("$"),
-                because: "product prices should be formatted correctly");
-
-            // Assert: Each product has an image displayed
-            productImages.Should().NotBeNullOrEmpty("each product should have an image element");
-            foreach (var img in productImages)
-            {
-                img.GetAttribute("src").Should()
-                    .NotBeNullOrEmpty("each product image should have a valid src attribute");
-            }
+            Context.DashboardAssertions.ShouldDisplaySixProducts();
+            Context.DashboardAssertions.ShouldDisplayProductNames();
+            Context.DashboardAssertions.ShouldDisplayProductPrices();
+            Context.DashboardAssertions.ShouldDisplayProductImages();
         }
 
-        /// <summary>
-        /// UC-010: Verifies that sort dropdown is functional.
-        /// </summary>
         [Test]
-        [Description("UC-010: Product sort dropdown is present and functional")]
-        public void UC_010_ProductSortDropdown_WorksCorrectly()
+        [Description("DASHBOARD002: Product sort dropdown is present and functional")]
+        public void DASHBOARD002_ProductSorting_WorksCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-010: Product sort dropdown is functional", LogScope);
+            Context.DashboardSteps.SortProductsByNameAscending();
+            Context.DashboardAssertions.ShouldBeSortedByNameAscending();
 
-            // Sort by Name (A to Z)
-            dashboardPage?.Products.SelectSortOption("Name (A to Z)");
-            var namesAsc = dashboardPage?.Products.GetAllNames();
-            namesAsc.Should().BeInAscendingOrder(because: "products should be sorted by name A to Z");
+            Context.DashboardSteps.SortProductsByNameDescending();
+            Context.DashboardAssertions.ShouldBeSortedByNameDescending();
 
-            // Sort by Name (Z to A)
-            dashboardPage?.Products.SelectSortOption("Name (Z to A)");
-            var namesDesc = dashboardPage?.Products.GetAllNames();
-            namesDesc.Should().BeInDescendingOrder(because: "products should be sorted by name Z to A");
+            Context.DashboardSteps.SortProductsByPriceAscending();
+            Context.DashboardAssertions.ShouldBeSortedByPriceAscending();
 
-            // Sort by Price (low to high)
-            dashboardPage?.Products.SelectSortOption("Price (low to high)");
-            var pricesAsc = dashboardPage?.Products.GetPricesAsDecimal();
-            pricesAsc.Should().BeInAscendingOrder(because: "products should be sorted by price low to high");
-
-            // Sort by Price (high to low)
-            dashboardPage?.Products.SelectSortOption("Price (high to low)");
-            var pricesDesc = dashboardPage?.Products.GetPricesAsDecimal();
-            pricesDesc.Should().BeInDescendingOrder(because: "products should be sorted by price high to low");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-010 completed successfully", LogScope);
+            Context.DashboardSteps.SortProductsByPriceDescending();
+            Context.DashboardAssertions.ShouldBeSortedByPriceDescending();
         }
 
-        /// <summary>
-        /// UC-011: Ensures each product tile opens its corresponding detail page,
-        /// and verifies successful navigation back to the dashboard.
-        /// </summary>
         [Test]
-        [Description("UC-011: Clicking a product opens its detail page")]
-        public void UC_011_AllProductDetailPageOpensCorrectly()
+        [Description("DASHBOARD003: Clicking a product opens its detail page")]
+        public void DASHBOARD003_AllProductDetailPage_OpensCorrectly()
         {
-            Logger.NUnitLog?.Information(
-                "[{Scope}] Executing UC-011: Clicking a product opens its detail page",
-                LogScope);
-
-            // Ensure dashboard is ready
-            dashboardPage!.WaitForDashboardToLoad();
-
-            // Pick the first product (reliable, stable)
-            int index = 0;
-
-            string expectedName = dashboardPage.Products.GetNameByIndex(index);
-            Logger.NUnitLog?.Information("[{Scope}] Clicking product: {Name}", LogScope, expectedName);
-
-            // Click the product title (or image; title is the most stable)
-            dashboardPage.Products.ClickTitleByIndex(index);
-
-            // Create detail page object and let it handle its own wait
-            var detailPage = new ProductDetailComponent(WebDriverFactory.Driver);
-            detailPage.IsLoaded().Should().BeTrue(because: "the detail page must load before validation");
-
-            // Validate content
-            detailPage.GetTitle().Should().Be(expectedName, "the detail page must show the correct product name");
-
-            Logger.NUnitLog?.Information("[{Scope}] Verified detail page for: {Name}", LogScope, expectedName);
-
-            // Return to dashboard safely
-            detailPage.ReturnToDashboard();
-
-            // Make sure we're back where we think we are
-            dashboardPage.WaitForDashboardToLoad();
-            Logger.NUnitLog?.Information("[{Scope}] UC-011 completed successfully", LogScope);
-        }
-
-        /// <summary>
-        /// UC-012: Verifies that clicking "Add to cart" for a specific item
-        /// changes the button label to "Remove" and increments the cart badge.
-        /// </summary>
-        [Test]
-        [Description("UC-012: Add to cart button works per item")]
-        public void UC_012_AddToCart_WorksPerItem()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Running UC-012: Add to cart button works per item", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var index = 0;
-
-            dashboardPage.Products.IsItemInCart(index)
-                .Should().BeFalse("items should initially not be in the cart");
-
-            var cartBefore = dashboardPage.Header.GetCartCount();
-
-            dashboardPage.Products.AddItemToCart(index);
-
-            dashboardPage.Products.IsItemInCart(index)
-                .Should().BeTrue("item should now be in the cart");
-
-            dashboardPage.Header.GetCartCount()
-                .Should().Be(cartBefore + 1, "adding one item increments the cart");
-        }
-
-        /// <summary>
-        /// UC-013: Verifies that multiple products can be added to the cart
-        /// and that the cart badge correctly reflects the number of items added.
-        /// </summary>
-        [Test]
-        [Description("UC-013: Multiple items can be added to cart")]
-        public void UC_013_MultipleItemsCanBeAddedToCart()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Running UC-013: Multiple items can be added to cart", LogScope);
-
-            // Ensure the dashboard is fully loaded
-            dashboardPage!.WaitForDashboardToLoad();
-
-            // Pick the first 3 product names from the UI
-            var productsToAdd = dashboardPage.Products.GetAllNames().Take(3).ToList();
-
-            if (productsToAdd.Count < 3)
-            {
-                Assert.Fail("Not enough products loaded on the page to run UC-013.");
-            }
-
-            int expectedCartCount = dashboardPage.Header.GetCartCount();
-
-            foreach (var productName in productsToAdd)
-            {
-                // Ensure the button starts as "Add to cart"
-                dashboardPage.Products.GetButtonLabel(productName)
-                    .Should().Be("Add to cart", because: $"{productName} should be un-added initially");
-
-                // Add to cart by name
-                dashboardPage.Products.ClickAddToCartByName(productName);
-
-                // Wait until button shows "Remove"
-                //  dashboardPage.WaitForButtonLabel(productName);
-
-                // Confirm button updated
-                dashboardPage.Products.GetButtonLabel(productName)
-                    .Should().Be("Remove", because: $"{productName} must show 'Remove' after adding");
-
-                // Increment expected cart count
-                expectedCartCount++;
-
-                // Confirm cart badge updated
-                dashboardPage.Header.GetCartCount()
-                    .Should().Be(expectedCartCount, because: "cart badge should increment after each item");
-            }
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-013 completed successfully", LogScope);
-        }
-
-        /// <summary>
-        /// UC-014: Verifies that the burger menu is visible and contains expected options.
-        /// </summary>
-        [Test]
-        [Description("UC-014: Navigation menu (burger menu) appears and functions")]
-        public void UC_014_BurgerMenu_WorksCorrectly()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-014: Burger menu validation", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            dashboardPage.Menu.Open();
-
-            dashboardPage.Menu.IsMenuVisible();
-
-            var options = dashboardPage.Menu.GetOptions();
-
-            options.Should().Contain("About");
-            options.Should().Contain("Logout");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-014 completed successfully", LogScope);
-        }
-
-        /// <summary>
-        /// UC-015: Verifies removing an item from the cart updates UI correctly.
-        /// </summary>
-        [Test]
-        [Description("UC-015: Removing an item from the cart via Dashboard page")]
-        public void UC_015_RemoveItemFromCart_WorksCorrectly()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-015: Remove item from cart", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
             const int index = 0;
 
-            dashboardPage.Products.AddItemToCart(index);
-            dashboardPage.Products.WaitForButtonLabel(index, "Remove");
+            var expectedName =
+                Context.DashboardComponent.Products
+                    .GetNameByIndex(index); // think about moving this to DashboardSteps..?
 
-            var cartAfterAdd = dashboardPage.Header.GetCartCount();
+            Context.DashboardSteps.OpenProductDetailPage(index);
 
-            dashboardPage.Products.ClickRemoveByIndex(index);
-            dashboardPage.Products.WaitForButtonLabel(index, "Add to cart");
+            Context.ProductDetailAssertions.ShouldBeDisplayed();
 
-            dashboardPage.Header.GetCartCount()
-                .Should().Be(cartAfterAdd - 1, because: "removing item should decrement cart");
+            Context.ProductDetailAssertions.ShouldDisplayProduct(expectedName);
 
-            dashboardPage.Products.GetAddToCartButtonLabel(index)
-                .Should().Be("Add to cart", because: "item should return to initial state");
+            Context.ProductDetailSteps.ReturnToDashboard();
 
-            Logger.NUnitLog?.Information("[{Scope}] UC-015 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldBeDisplayed();
         }
 
-        /// <summary>
-        /// UC-016: Verifies that cart icon navigates to the cart page.
-        /// </summary>
         [Test]
-        [Description("UC-016: Cart icon navigates to Cart page")]
-        public void UC_016_CartNavigation_WorksCorrectly()
+        [Description("DASHBOARD004: Add to cart button works per item")]
+        public void DASHBOARD004_AddToCart_WorksPerItem()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-016: Cart navigation", LogScope);
+            const int index = 0;
 
-            dashboardPage!.WaitForDashboardToLoad();
+            Context.DashboardAssertions.ShouldNotContainProductInCart(index);
 
-            var product = dashboardPage.Products.GetAllNames().First();
+            var cartCountBefore = Context.DashboardSteps.GetCartCount();
 
-            dashboardPage.Products.ClickAddToCartByName(product);
+            Context.DashboardSteps.AddProductToCart(index);
 
-            dashboardPage.Header.ClickCartIcon();
-
-            var cartPage = new CartComponent(WebDriverFactory.Driver);
-
-            cartPage.IsLoaded().Should().BeTrue();
-            cartPage.GetCartItems()
-                .Should().Contain(product);
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-016 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldContainProductInCart(index);
+            Context.DashboardAssertions.ShouldIncreaseCartCount(cartCountBefore);
         }
 
-        /// <summary>
-        /// UC-017: Verifies logout functionality from dashboard.
-        /// </summary>
         [Test]
-        [Description("UC-017: Logout from the Dashboard page")]
-        public void UC_017_Logout_WorksCorrectly()
+        [Description("DASHBOARD005: Multiple products can be added to cart")]
+        public void DASHBOARD005_MultipleProductsCanBeAddedToCart()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-017: Logout", LogScope);
+            const int numberOfProducts = 3;
 
-            dashboardPage!.WaitForDashboardToLoad();
+            var products = Context.DashboardSteps.GetFirstProducts(numberOfProducts);
+            var previousCartCount = Context.DashboardSteps.GetCartCount();
 
-            dashboardPage.Menu.Open();
-            dashboardPage.Menu.Logout();
-
-            loginPage!.IsLoaded().Should().BeTrue();
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-017 completed successfully", LogScope);
-        }
-
-        /// <summary>
-        /// UC-018: Verifies product images are valid and not broken.
-        /// </summary>
-        [Test]
-        [Description("UC-018: Product images load correctly")]
-        public void UC_018_ProductImages_AreValid()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var images = dashboardPage.Products.GetAllImagesLoaded();
-
-            foreach (var img in images)
+            foreach (var product in products)
             {
-                img.GetAttribute("src").Should().NotBeNullOrEmpty();
+                Context.DashboardAssertions.ShouldNotContainProductInCart(product);
+
+                Context.DashboardSteps.AddProductToCart(product);
+
+                Context.DashboardAssertions.ShouldContainProductInCart(product);
+
+                previousCartCount++;
+
+                Context.DashboardAssertions.ShouldHaveCartCount(previousCartCount);
             }
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
         }
 
-        /// <summary>
-        /// UC-019: Verifies price format and currency consistency.
-        /// </summary>
         [Test]
-        [Description("UC-019: Price format and currency consistency")]
-        public void UC_019_Prices_AreFormattedCorrectly()
+        [Description("DASHBOARD006: Navigation menu (burger menu) appears and functions")]
+        public void DASHBOARD006_BurgerMenu_WorksCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-019: Price format validation", LogScope);
+            Context.DashboardSteps.OpenMenu();
 
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var prices = dashboardPage.Products.GetAllPrices();
-
-            prices.Should().OnlyContain(
-                price =>
-                    System.Text.RegularExpressions.Regex.IsMatch(price, @"^\$\d+\.\d{2}$"),
-                because: "prices should follow $xx.xx format");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-019 completed successfully", LogScope);
+            Context.DashboardMenuAssertions.ShouldShowMenu();
+            Context.DashboardMenuAssertions.ShouldContainAboutOption();
+            Context.DashboardMenuAssertions.ShouldContainLogoutOption();
         }
 
-        /// <summary>
-        /// UC-020: Verifies About link navigates correctly.
-        /// </summary>
         [Test]
-        [Description("UC-020: About link in menu navigates correctly")]
-        public void UC_020_About_LinkInMenu_WorksCorrectly()
+        [Description("DASHBOARD007: Removing item from cart updates UI correctly")]
+        public void DASHBOARD007_RemoveItemFromCart_WorksCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-020: About navigation", LogScope);
+            const int index = 0;
+            this.Context.DashboardSteps.AddProductToCart(index);
 
-            dashboardPage!.WaitForDashboardToLoad();
-            dashboardPage.Menu.Open();
+            var cartAfterAdd = Context.DashboardSteps.GetCartCount();
 
-            dashboardPage.Menu.WaitAboutToLoad();
-            dashboardPage.Menu.ClickAbout();
+            Context.DashboardSteps.RemoveProductFromCart(index);
 
-            var saucePage = new SauceLabsComponent(Driver);
-            saucePage.WaitForPageToLoad();
-
-            // Assert the URL
-            Driver.Url.Should().Contain(
-                "https://saucelabs.com",
-                because: "clicking About should navigate to Sauce Labs site");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldDecrementCartCount(cartAfterAdd);
+            Context.DashboardAssertions.ShouldShowProductAsNotInCart(index);
         }
 
-        /// <summary>
-        /// UC-021: Verifies cart is reset after logout and login.
-        /// </summary>
         [Test]
-        [Description("UC-021: Cart badge persists after logout and login")]
-        public void UC_021_CartPersistsAfterLogout()
+        [Description("DASHBOARD008: Cart icon navigates to Cart page")]
+        public void DASHBOARD008_CartNavigation_WorksCorrectly()
         {
-            dashboardPage!.WaitForDashboardToLoad();
+            var product = Context.DashboardSteps.AddFirstProductToCart();
 
-            // Add item
-            dashboardPage.Products.AddItemToCart(0);
-            dashboardPage.Products.WaitForButtonLabel(0, "Remove");
+            Context.DashboardSteps.OpenCart();
 
-            var oldCartCount = dashboardPage.Header.GetCartCount();
-
-            // Logout
-            dashboardPage.Menu.Open();
-            dashboardPage.Menu.Logout();
-
-            // Login again
-            loginPage!.Login("standard_user", "secret_sauce");
-
-            dashboardPage.WaitForDashboardToLoad();
-
-            // Assert cart reset
-            dashboardPage.Header.GetCartCount().Should().Be(oldCartCount);
+            Context.CartAssertions.ShouldBeDisplayed();
+            Context.CartAssertions.ShouldContainProduct(product);
         }
 
-        /// <summary>
-        /// UC-022: Verifies cart persists after page refresh.
-        /// </summary>
         [Test]
-        [Description("UC-022: Cart persists after refresh")]
-        public void UC_022_CartPersistsAfterRefresh()
+        [Description("DASHBOARD009: Logout from the Dashboard page")]
+        public void DASHBOARD009_Logout_WorksCorrectly()
         {
-            dashboardPage!.WaitForDashboardToLoad();
+            Context.DashboardAssertions.ShouldBeDisplayed();
+            Context.DashboardSteps.Logout();
 
-            dashboardPage.Products.AddItemToCart(0);
-            dashboardPage.Products.WaitForButtonLabel(0, "Remove");
-
-            var cartBefore = dashboardPage.Header.GetCartCount();
-            dashboardPage.WaitForDashboardToLoad();
-
-            dashboardPage.Header.GetCartCount().Should().Be(cartBefore);
-            dashboardPage.Products.GetAddToCartButtonLabel(0).Should().Be("Remove");
+            Context.LoginAssertions.ShouldBeOnLoginPage();
         }
 
-        /// <summary>
-        /// UC-023: Verifies multiple sorting combinations.
-        /// </summary>
         [Test]
-        [Description("UC-023: Multiple sorting combinations")]
-        public void UC_023_MultipleSorting_WorksCorrectly()
+        [Description("DASHBOARD010: Card badge persists after logout and login")]
+        public void DASHBOARD010_CardPersistsAfterLogout()
         {
-            dashboardPage!.WaitForDashboardToLoad();
+            Context.DashboardAssertions.ShouldBeDisplayed();
 
-            dashboardPage.Products.SelectSortOption("Name (A to Z)");
-            dashboardPage.Products.GetAllNames().Should().BeInAscendingOrder();
+            var product = Context.DashboardSteps.AddFirstProductToCart();
+            var cartCount = Context.DashboardSteps.GetCartCount();
 
-            dashboardPage.Products.SelectSortOption("Price (high to low)");
-            dashboardPage.Products.GetPricesAsDecimal().Should().BeInDescendingOrder();
+            Context.DashboardSteps.Logout();
 
-            dashboardPage.Products.SelectSortOption("Name (Z to A)");
-            dashboardPage.Products.GetAllNames().Should().BeInDescendingOrder();
+            Context.LoginAssertions.ShouldBeOnLoginPage();
 
-            dashboardPage.Products.SelectSortOption("Price (low to high)");
-            dashboardPage.Products.GetPricesAsDecimal().Should().BeInAscendingOrder();
+            Context.LoginSteps.SubmitCredentials(TestUsers.Standard, TestUsers.Password);
+
+            Context.CartAssertions.ShouldContainProduct(product);
+            Context.DashboardAssertions.ShouldHaveCartCount(cartCount);
         }
 
-        /// <summary>
-        /// UC-024: Verifies item cannot be added multiple times.
-        /// </summary>
         [Test]
-        [Description("UC-024: Prevent duplicate add to cart")]
-        public void UC_024_AddToCart_IsIdempotent()
+        [Description("DASHBOARD011: Product images are loaded correctly")]
+        public void DASHBOARD011_ProductImages_AreLoaded()
         {
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var index = 0;
-
-            var before = dashboardPage.Header.GetCartCount();
-
-            // Only click if item is not yet in cart
-            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
-            {
-                dashboardPage.Products.AddItemToCart(index);
-                dashboardPage.Products.WaitForButtonLabel(index, "Remove");
-            }
-
-            var afterFirst = dashboardPage.Header.GetCartCount();
-
-            // Second click attempt should not change cart
-            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
-            {
-                dashboardPage.Products.AddItemToCart(index);
-            }
-
-            var afterSecond = dashboardPage.Header.GetCartCount();
-
-            afterFirst.Should().Be(before + 1);
-            afterSecond.Should().Be(afterFirst);
-
-            dashboardPage.Products.GetAddToCartButtonLabel(index)
-                .Should().Be("Remove");
+            Context.DashboardAssertions.ShouldDisplayValidProductImages();
         }
 
-        /// <summary>
-        /// UC-025: Verifies dashboard layout adapts to mobile screen size.
-        /// </summary>
         [Test]
-        [Description("UC-025: Responsive layout check for Dashboard page")]
-        public void UC_025_ResponsiveLayout_WorksCorrectly()
+        [Description("DASHBOARD012: Price format and currency consistency")]
+        public void DASHBOARD012_Prices_AreFormattedCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-025: Responsive layout", LogScope);
+            Context.DashboardAssertions.ShouldDisplayValidPriceFormat();
+        }
 
-            dashboardPage!.WaitForDashboardToLoad();
+        [Test]
+        [Description("DASHBOARD013: About menu option navigates to Sauce Labs")]
+        public void DASHBOARD013_AboutLink_NavigatesToSauceLabs()
+        {
+            Context.DashboardMenuSteps.OpenAboutPage();
 
-            // Set mobile viewport (clean abstraction)
-            ViewportManager.SetMobile(Driver);
+            Context.SauceLabsAssertions.ShouldBeDisplayed();
+        }
 
-            // Wait for layout to stabilize (important!)
-            dashboardPage.WaitForDashboardToLoad();
+        [Test]
+        [Description("DASHBOARD014: Cart persists after refresh")]
+        public void DASHBOARD014_CartPersistsAfterRefresh()
+        {
+            const int index = 0;
 
-            // Verify products are still visible
-            dashboardPage.Products.GetAllCards().Should().NotBeEmpty("products should remain visible on mobile layout");
+            Context.DashboardSteps.AddProductToCart(index);
 
-            // Verify burger menu works
-            dashboardPage.Menu.Open();
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
 
-            var options = dashboardPage.Menu.GetOptions();
+            var cartCount = Context.HeaderComponent.GetCartCount();
 
-            options.Should().Contain("About");
-            options.Should().Contain("Logout");
+            Context.DashboardSteps.RefreshPage();
 
-            Logger.NUnitLog?.Information("[{Scope}] UC-025 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldShowCartCount(cartCount);
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
+        }
+
+        [Test]
+        [Description("DASHBOARD015: Product cannot be added multiple times")]
+        public void DASHBOARD015_ProductCannotBeAddedMultipleTimes()
+        {
+            const int index = 0;
+            var initCount = Context.DashboardSteps.GetCartCount();
+            Context.DashboardSteps.AddProductToCart(index);
+
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
+            Context.DashboardAssertions.ShouldShowCartCount(initCount + 1);
+            Context.DashboardAssertions.ShouldNotAllowDuplicateAdd(index);
         }
     }
 }
+#pragma warning restore SA1600
