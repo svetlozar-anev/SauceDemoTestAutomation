@@ -61,7 +61,7 @@ namespace SauceDemo.Tests.Base
            // Steps
            CartSteps = new CartSteps(CartComponent);
            DashboardMenuSteps = new DashboardMenuSteps(DashboardMenu);
-           DashboardSteps = new DashboardSteps(DashboardComponent);
+           DashboardSteps = new DashboardSteps(DashboardComponent, driver);
            LoginSteps = new LoginSteps(LoginComponent);
            ProductDetailSteps = new ProductDetailSteps(ProductDetailComponent);
            

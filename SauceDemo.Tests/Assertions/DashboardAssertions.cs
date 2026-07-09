@@ -148,6 +148,13 @@ namespace SauceDemo.Tests.Assertions
                 .Should()
                 .BeTrue();
         }
+        
+        public void ShouldNotAllowDuplicateAdd(int index)
+        {
+            dashboard.Products.GetAddToCartButtonLabel(index)
+                .Should()
+                .Be("Remove", "product already added should not have an Add to cart button");
+        }
 
         public void ShouldDisplayValidProductImages()
         {

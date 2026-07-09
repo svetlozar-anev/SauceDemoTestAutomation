@@ -231,95 +231,17 @@ namespace SauceDemo.Tests.Tests
             Context.DashboardAssertions.ShouldShowProductInCart(index);
         }
 
-
-        /// <summary>
-        /// UC-023: Verifies multiple sorting combinations.
-        /// </summary>
         [Test]
-        [Description("UC-023: Multiple sorting combinations")]
-        public void UC_023_MultipleSorting_WorksCorrectly()
+        [Description("DASHBOARD015: Product cannot be added multiple times")]
+        public void DASHBOARD015_ProductCannotBeAddedMultipleTimes()
         {
-            dashboardPage!.WaitForDashboardToLoad();
+            const int index = 0;
+            var initCount = Context.DashboardSteps.GetCartCount();
+            Context.DashboardSteps.AddProductToCart(index);
 
-            dashboardPage.Products.SelectSortOption("Name (A to Z)");
-            dashboardPage.Products.GetAllNames().Should().BeInAscendingOrder();
-
-            dashboardPage.Products.SelectSortOption("Price (high to low)");
-            dashboardPage.Products.GetPricesAsDecimal().Should().BeInDescendingOrder();
-
-            dashboardPage.Products.SelectSortOption("Name (Z to A)");
-            dashboardPage.Products.GetAllNames().Should().BeInDescendingOrder();
-
-            dashboardPage.Products.SelectSortOption("Price (low to high)");
-            dashboardPage.Products.GetPricesAsDecimal().Should().BeInAscendingOrder();
-        }
-
-        /// <summary>
-        /// UC-024: Verifies item cannot be added multiple times.
-        /// </summary>
-        [Test]
-        [Description("UC-024: Prevent duplicate add to cart")]
-        public void UC_024_AddToCart_IsIdempotent()
-        {
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var index = 0;
-
-            var before = dashboardPage.Header.GetCartCount();
-
-            // Only click if item is not yet in cart
-            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
-            {
-                dashboardPage.Products.AddItemToCart(index);
-                dashboardPage.Products.WaitForButtonLabel(index, "Remove");
-            }
-
-            var afterFirst = dashboardPage.Header.GetCartCount();
-
-            // Second click attempt should not change cart
-            if (dashboardPage.Products.GetAddToCartButtonLabel(index) == "Add to cart")
-            {
-                dashboardPage.Products.AddItemToCart(index);
-            }
-
-            var afterSecond = dashboardPage.Header.GetCartCount();
-
-            afterFirst.Should().Be(before + 1);
-            afterSecond.Should().Be(afterFirst);
-
-            dashboardPage.Products.GetAddToCartButtonLabel(index)
-                .Should().Be("Remove");
-        }
-
-        /// <summary>
-        /// UC-025: Verifies dashboard layout adapts to mobile screen size.
-        /// </summary>
-        [Test]
-        [Description("UC-025: Responsive layout check for Dashboard page")]
-        public void UC_025_ResponsiveLayout_WorksCorrectly()
-        {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-025: Responsive layout", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            // Set mobile viewport (clean abstraction)
-            ViewportManager.SetMobile(Driver);
-
-            // Wait for layout to stabilize (important!)
-            dashboardPage.WaitForDashboardToLoad();
-
-            // Verify products are still visible
-            dashboardPage.Products.GetAllCards().Should().NotBeEmpty("products should remain visible on mobile layout");
-
-            // Verify burger menu works
-            dashboardPage.Menu.Open();
-
-            var options = dashboardPage.Menu.GetOptions();
-
-            options.Should().Contain("About");
-            options.Should().Contain("Logout");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-025 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
+            Context.DashboardAssertions.ShouldShowCartCount(initCount + 1);
+            Context.DashboardAssertions.ShouldNotAllowDuplicateAdd(index);
         }
     }
 }

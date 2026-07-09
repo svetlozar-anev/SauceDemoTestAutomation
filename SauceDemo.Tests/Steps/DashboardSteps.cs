@@ -2,6 +2,9 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using OpenQA.Selenium;
+using SauceDemo.Core.Utilities;
+
 #pragma warning disable SA1600
 namespace SauceDemo.Tests.Steps
 {
@@ -11,10 +14,12 @@ namespace SauceDemo.Tests.Steps
     public class DashboardSteps
     {
         private readonly DashboardComponent dashboard;
+        private readonly IWebDriver driver;
         
-        public DashboardSteps(DashboardComponent dashboard)
+        public DashboardSteps(DashboardComponent dashboard, IWebDriver driver)
         {
             this.dashboard = dashboard;
+            this.driver = driver;
         }
 
         public void RefreshPage()
