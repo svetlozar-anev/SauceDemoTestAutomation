@@ -28,6 +28,7 @@ namespace SauceDemo.Tests.Base
        
        // Steps
        public CartSteps CartSteps { get; }
+       public DashboardMenuSteps DashboardMenuSteps { get;  }
        public DashboardSteps DashboardSteps { get; }
        public LoginSteps LoginSteps { get; }
        public ProductDetailSteps ProductDetailSteps { get; }
@@ -38,7 +39,8 @@ namespace SauceDemo.Tests.Base
        public DashboardMenuAssertions DashboardMenuAssertions { get; }
        public LoginAssertions LoginAssertions { get; }
        public ProductDetailAssertions ProductDetailAssertions { get; }
-
+       public SauceLabsAssertions SauceLabsAssertions { get; }
+       
        private IWebDriver Driver { get; }
        #pragma warning restore SA1516
         
@@ -58,6 +60,7 @@ namespace SauceDemo.Tests.Base
            
            // Steps
            CartSteps = new CartSteps(CartComponent);
+           DashboardMenuSteps = new DashboardMenuSteps(DashboardMenu);
            DashboardSteps = new DashboardSteps(DashboardComponent);
            LoginSteps = new LoginSteps(LoginComponent);
            ProductDetailSteps = new ProductDetailSteps(ProductDetailComponent);
@@ -68,6 +71,7 @@ namespace SauceDemo.Tests.Base
            DashboardMenuAssertions = new DashboardMenuAssertions(DashboardMenu);
            LoginAssertions = new LoginAssertions(LoginComponent);
            ProductDetailAssertions = new ProductDetailAssertions(ProductDetailComponent);
+           SauceLabsAssertions = new SauceLabsAssertions(SauceLabsComponent);
        }
        
     }

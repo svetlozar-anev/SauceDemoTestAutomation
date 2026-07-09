@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using SauceDemo.Core.TestData;
+using System.Text.RegularExpressions;
 
 #pragma warning disable SA1600
 namespace SauceDemo.UI.Components
@@ -10,6 +10,7 @@ namespace SauceDemo.UI.Components
     using System.Globalization;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
+    using SauceDemo.Core.TestData;
     using SauceDemo.UI.Base;
 
     /// <summary>
@@ -171,6 +172,12 @@ namespace SauceDemo.UI.Components
             var dropdown = Find(sortDropdown);
             var select = new SelectElement(dropdown);
             select.SelectByText(visibleText);
+        }
+        
+        public bool ArePricesFormattedCorrectly()
+        {
+            return GetAllPrices()
+                .All(price => Regex.IsMatch(price, @"^\$\d+\.\d{2}$"));
         }
         
         public void ClickAddToCartByName(string productName)

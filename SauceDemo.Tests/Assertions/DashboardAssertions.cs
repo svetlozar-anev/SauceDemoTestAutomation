@@ -131,6 +131,23 @@ namespace SauceDemo.Tests.Assertions
         {
             dashboard.Products.GetPricesAsDecimal().Should().BeInDescendingOrder();
         }
+        
+        public void ShouldShowCartCount(int expectedCount)
+        {
+            dashboard.Header.GetCartCount().Should().Be(expectedCount);
+        }
+        
+        public void ShouldShowProductInCart(int index)
+        {
+            dashboard.Products.IsItemInCart(index).Should().BeTrue();
+        }
+        
+        public void ShouldDisplayValidPriceFormat()
+        {
+            dashboard.Products.ArePricesFormattedCorrectly()
+                .Should()
+                .BeTrue();
+        }
 
         public void ShouldDisplayValidProductImages()
         {

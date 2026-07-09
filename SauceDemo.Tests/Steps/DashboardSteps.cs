@@ -16,7 +16,13 @@ namespace SauceDemo.Tests.Steps
         {
             this.dashboard = dashboard;
         }
-        
+
+        public void RefreshPage()
+        {
+            dashboard.RefreshPage();
+            dashboard.WaitForDashboardToLoad();
+        }
+
         public void AddProductToCart(int index)
         {
             dashboard.Products.AddItemToCart(index);

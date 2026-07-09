@@ -197,92 +197,40 @@ namespace SauceDemo.Tests.Tests
             Context.DashboardAssertions.ShouldDisplayValidProductImages();
         }
 
-        /// <summary>
-        /// UC-018: Verifies product images are valid and not broken.
-        /// </summary>
         [Test]
-        [Description("UC-018: Product images load correctly")]
-        public void UC_018_ProductImages_AreValid()
+        [Description("DASHBOARD012: Price format and currency consistency")]
+        public void DASHBOARD012_Prices_AreFormattedCorrectly()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-018: Image validation", LogScope);
-
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var images = dashboardPage.Products.GetAllImagesLoaded();
-
-            foreach (var img in images)
-            {
-                img.GetAttribute("src").Should().NotBeNullOrEmpty();
-            }
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-018 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldDisplayValidPriceFormat();
         }
 
-        /// <summary>
-        /// UC-019: Verifies price format and currency consistency.
-        /// </summary>
         [Test]
-        [Description("UC-019: Price format and currency consistency")]
-        public void UC_019_Prices_AreFormattedCorrectly()
+        [Description("DASHBOARD013: About menu option navigates to Sauce Labs")]
+        public void DASHBOARD013_AboutLink_NavigatesToSauceLabs()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-019: Price format validation", LogScope);
+            Context.DashboardMenuSteps.OpenAboutPage();
 
-            dashboardPage!.WaitForDashboardToLoad();
-
-            var prices = dashboardPage.Products.GetAllPrices();
-
-            prices.Should().OnlyContain(
-                price =>
-                    System.Text.RegularExpressions.Regex.IsMatch(price, @"^\$\d+\.\d{2}$"),
-                because: "prices should follow $xx.xx format");
-
-            Logger.NUnitLog?.Information("[{Scope}] UC-019 completed successfully", LogScope);
+            Context.SauceLabsAssertions.ShouldBeDisplayed();
         }
 
-        /// <summary>
-        /// UC-020: Verifies About link navigates correctly.
-        /// </summary>
         [Test]
-        [Description("UC-020: About link in menu navigates correctly")]
-        public void UC_020_About_LinkInMenu_WorksCorrectly()
+        [Description("DASHBOARD014: Cart persists after refresh")]
+        public void DASHBOARD014_CartPersistsAfterRefresh()
         {
-            Logger.NUnitLog?.Information("[{Scope}] Executing UC-020: About navigation", LogScope);
+            const int index = 0;
 
-            dashboardPage!.WaitForDashboardToLoad();
-            dashboardPage.Menu.Open();
+            Context.DashboardSteps.AddProductToCart(index);
 
-            dashboardPage.Menu.WaitAboutToLoad();
-            dashboardPage.Menu.ClickAbout();
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
 
-            var saucePage = new SauceLabsComponent(Driver);
-            saucePage.WaitForPageToLoad();
+            var cartCount = Context.HeaderComponent.GetCartCount();
 
-            // Assert the URL
-            Driver.Url.Should().Contain(
-                "https://saucelabs.com",
-                because: "clicking About should navigate to Sauce Labs site");
+            Context.DashboardSteps.RefreshPage();
 
-            Logger.NUnitLog?.Information("[{Scope}] UC-020 completed successfully", LogScope);
+            Context.DashboardAssertions.ShouldShowCartCount(cartCount);
+            Context.DashboardAssertions.ShouldShowProductInCart(index);
         }
 
-        /// <summary>
-        /// UC-022: Verifies cart persists after page refresh.
-        /// </summary>
-        [Test]
-        [Description("UC-022: Cart persists after refresh")]
-        public void UC_022_CartPersistsAfterRefresh()
-        {
-            dashboardPage!.WaitForDashboardToLoad();
-
-            dashboardPage.Products.AddItemToCart(0);
-            dashboardPage.Products.WaitForButtonLabel(0, "Remove");
-
-            var cartBefore = dashboardPage.Header.GetCartCount();
-            dashboardPage.WaitForDashboardToLoad();
-
-            dashboardPage.Header.GetCartCount().Should().Be(cartBefore);
-            dashboardPage.Products.GetAddToCartButtonLabel(0).Should().Be("Remove");
-        }
 
         /// <summary>
         /// UC-023: Verifies multiple sorting combinations.
