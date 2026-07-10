@@ -2,12 +2,12 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.Text.RegularExpressions;
-
 #pragma warning disable SA1600
 namespace SauceDemo.UI.Components
 {
     using System.Globalization;
+    using System.Text.RegularExpressions;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
     using SauceDemo.Core.TestData;

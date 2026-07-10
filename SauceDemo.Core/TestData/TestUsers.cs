@@ -15,7 +15,7 @@ namespace SauceDemo.Core.TestData
         public const string PerformanceGlitch = "performance_glitch_user";
         public const string Error = "error_user";
         public const string Visual = "visual_user";
-        public const string Unknown = "this_user_does_not_exist";
+        public const string Unknown = "unknown_user";
 
         // Common password for all demo users
         public const string Password = "secret_sauce";

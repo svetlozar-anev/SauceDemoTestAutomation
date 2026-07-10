@@ -6,53 +6,120 @@ This document details the main test automation use cases covered by the SauceDem
 
 ## Login Scenarios
 
-### UC-001: Login fails with empty credentials
+### LOGIN001: Login with valid credentials shows Dashboard
+- Fill in valid username (`standard_user`, `problem_user`, `performance_glitch_user`, `error_user`, `visual_user`)
+- Enter password: `secret_sauce`
+- Click **Login**
+- Assert dashboard page should be displayed
+
+### LOGIN002: Login fails with empty credentials
 - Fill in **any** text in username and password fields
 - Clear both fields
 - Click **Login**
 - Assert error message: `"Epic sadface: Username is required"`
 
-### UC-002: Login fails with missing password
+### LOGIN003: Login fails with missing username
+- Fill in a password
+- Click **Login**
+- Assert error message: `"Epic sadface: Username is required"`
+
+### LOGIN004: Login fails with missing password
 - Fill in a username
-- Fill in password
-- Clear only the password
 - Click **Login**
 - Assert error message: `"Epic sadface: Password is required"`
 
-### UC-003: Login with valid credentials shows Dashboard
-- Fill in valid username (`standard_user`, `problem_user`, `performance_glitch_user`, `error_user`, `visual_user`)
-- Enter password: `secret_sauce`
-- Click **Login**
-- Assert URL is `/inventory.html`
-- Assert dashboard title: `"Swag Labs"`
-- Assert page header contains `"Products"`
-
-### UC-004: Login fails with locked out user
+### LOGIN005: Login fails with locked out user
 - Fill in locked out username: `locked_out_user`
 - Enter password: `secret_sauce`
 - Click **Login**
 - Assert error message: `"Epic sadface: Sorry, this user has been locked out."`
 
-### UC-005: Login fails with wrong password
+### LOGIN006: Login fails with wrong password
 - Fill in valid username: `standard_user`
 - Enter wrong password: `wrong_password`
 - Click **Login**
 - Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
 
-### UC-006: Login fails with missing username
-- Enter password: `secret_sauce`
-- Click **Login**
-- Assert error message: `"Epic sadface: Username is required"`
-
-### UC-007: Login fails with special characters in username and password
+### LOGIN007: Login fails with special characters in username and password
 - Fill in username: `!@#$%^&*()`
 - Enter password: `!@#$%^&*()`
 - Click **Login**
 - Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
 
-### UC-008: Login fails with whitespace-only username and password
+### LOGIN008: Login fails with whitespace-only username and password
 - Fill in empty username: `    `
 - Enter empty password: `    `
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN009: Login fails with unknown username
+- Fill in unknown username: `unknown_user`
+- Enter valid password: `secret_sauce`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN010: Login fails with invalid username and password
+- Fill in unknown username: `unknown_user`
+- Enter wrong password: `wrong_password`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN011: Login fails when username casing is incorrect
+- Fill in username: `STANDARD_USER`
+- Enter password: `secret_sauce`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN012: Login fails when password casing is incorrect
+- Fill in username: `standard_user`
+- Enter password: `SECRET_SAUCE`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN013: Login fails with leading whitespace in username or password
+- Fill in username: ` standard_user`
+- Enter password: ` secret_sauce`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN014: Login fails with trailing whitespace in username or password
+- Fill in username: `standard_user `
+- Enter password: `secret_sauce `
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN015: Successful login after failed login
+- Fill in username: `standard_user`
+- Enter password: `wrong_password`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+- Fill in username: `standard_user`
+- Enter password: `secret_sauce`
+- Click **Login**
+- Assert dashboard should be displayed
+
+### LOGIN016: Direct navigation to inventory redirects to login
+- Navigate directly to `/inventory.html`
+- Assert login page is displayed
+- Assert error message `"Epic sadface: You can only access '/inventory.html' when you are logged in."`
+
+### LOGIN017: Refresh after failed login
+- Fill in username: `standard_user`
+- Enter password: `wrong_password`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+- Refresh the page
+- Assert no error message is displayed
+
+### LOGIN018: Login fails with extremely long username
+- Fill in username consisting of 1000 characters
+- Enter password: `secret_sauce`
+- Click **Login**
+- Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
+
+### LOGIN019: Login fails with extremely long password
+- Fill in username: `standard_user`
+- Enter password consisting of 1000 characters
 - Click **Login**
 - Assert error message: `"Epic sadface: Username and password do not match any user in this service"`
 
@@ -60,87 +127,95 @@ This document details the main test automation use cases covered by the SauceDem
 
 ## Dashboard Scenarios
 
-### UC-009: All product items are displayed
+### DASHBOARD001: All product items are displayed
 - Verify presence of all six product cards
 - Each product has a name, price, and image
 
-### UC-010: Product sort dropdown is present and functional
-- Validate options: Name (A to Z), Name (Z to A), Price (low to high), Price (high to low)
-- Select each and verify correct order
+### DASHBOARD002: Product sort dropdown is present and functional
+- Select **Name (A to Z)**
+- Assert products are sorted alphabetically ascending
+- Select **Name (Z to A)**
+- Assert products are sorted alphabetically descending
+- Select **Price (low to high)**
+- Assert products are sorted by ascending price
+- Select **Price (high to low)**
+- Assert products are sorted by descending price
 
-### UC-011: Clicking a product opens its detail page
-- Click title or image of a product
-- Assert product detail page loads with correct info
+### DASHBOARD003: Clicking a product opens its detail page
+- Click a product
+- Assert the Product Details page is displayed
+- Verify the selected product information is shown
+- Return to the Dashboard
+- Assert the Dashboard page is displayed
 
-### UC-012: Add to cart button works per item
-- Click “Add to cart” for one item
-- Button changes to “Remove”
-- Cart icon updates with item count
+### DASHBOARD004: Add to cart button works per item
+- Verify the selected product is not already in the cart
+- Click **Add to cart**
+- Assert the product is marked as added to the cart
+- Assert the cart badge increases by one
 
-### UC-013: Multiple items can be added to cart
-- Add multiple products to cart
-- Cart count matches number of items added
+### DASHBOARD005: Multiple products can be added to cart
+- Add multiple products to the cart
+- Verify each product changes to **Remove**
+- Verify the cart badge increments after each addition
 
-### UC-014: Navigation menu (burger menu) appears and functions
-- Click ☰ menu
-- Verify options: All Items, About, Logout
+### DASHBOARD006: Navigation menu (burger menu) appears and functions
+- Open the burger menu
+- Verify the menu is displayed
+- Verify the **About** option is present
+- Verify the **Logout** option is present
 
-### UC-015: Removing an item from the cart via Dashboard page
+### DASHBOARD007: Removing an item from the cart updates the UI
 - Add a product to the cart
-- Click “Remove” button for that product
-- Verify cart count updates correctly
-- Verify product returns to “Add to cart” state
+- Click **Remove**
+- Verify the cart badge decreases by one
+- Verify the product returns to the **Add to cart** state
 
-### UC-016: Cart icon navigates to Cart page
-- Add at least one item to the cart
-- Click cart icon
-- Assert navigation to `/cart.html`
-- Verify correct items are displayed in the cart
+### DASHBOARD008: Cart icon navigates to Cart page
+- Add a product to the cart
+- Click the cart icon
+- Assert the Cart page is displayed
+- Verify the selected product is present in the cart
 
-### UC-017: Logout from the Dashboard page
-- Open burger menu
-- Click “Logout”
-- Verify redirection to login page
-- Assert previous session is ended (cannot access `/inventory.html` without logging in)
+### DASHBOARD009: Logout from the Dashboard page
+- Open the burger menu
+- Click **Logout**
+- Assert the Login page is displayed
 
-### UC-018: Product images load correctly
-- Verify all product images have valid `src` attributes
-- Check if `naturalWidth` > 0 to ensure no broken images
+### DASHBOARD010: Cart persists after logout and login
+- Add a product to the cart
+- Record the cart badge count
+- Logout
+- Login again with the same user
+- Verify the previously added product is still present
+- Verify the cart badge count is unchanged
 
-### UC-019: Price format and currency consistency
-- Verify all product prices follow $\d+\.\d{2} format
-- Assert all prices use USD currency symbol
+### DASHBOARD011: Product images are loaded correctly
+- Verify every product image is displayed
+- Verify every image is loaded successfully
 
-### UC-020: About link in menu navigates correctly
-- Open burger menu
-- Click “About”
-- Verify navigation to Sauce Labs About page
 
-<<<<<<< tests-26-35
-### UC-021: Adding items to cart persists on Dashboard logout
-=======
-### UC-021: Cart badge resets after logout and login
->>>>>>> main
-- Add items to cart
-- Logout from Dashboard page
-- Login again with valid credentials
-- Verify cart badge shows same number of items
+### DASHBOARD012: Price format and currency consistency
+- Verify every product price follows the expected currency format
+- Verify all prices use the dollar (`$`) currency symbol
 
-### UC-022: Adding items to cart persists on page refresh
-- Add one or more items to cart
-- Refresh the Dashboard page
-- Verify cart count and “Remove” buttons persist correctly
+### DASHBOARD013: About menu option navigates to Sauce Labs
+- Open the burger menu
+- Click **About**
+- Assert the Sauce Labs page is displayed
 
-### UC-023: Sorting products updates display order correctly with multiple sorts
-- Sort by Name (A to Z), verify order
-- Sort by Price (high to low), verify order
-- Sort by Name (Z to A), verify order
-- Sort by Price (low to high), verify order
+### DASHBOARD014: Cart persists after page refresh
+- Add a product to the cart
+- Verify the product is marked as added
+- Refresh the page
+- Verify the cart badge remains unchanged
+- Verify the product is still marked as added
 
-### UC-024: Prevent adding same item multiple times (idempotency)
-- Click “Add to cart” for an item multiple times
-- Verify cart count increments only once per unique item
-- Button text remains “Remove” after first click
+### DASHBOARD015: Product cannot be added multiple times
+- Add a product to the cart
+- Verify the cart badge increases by one
+- Verify the product remains in the **Remove** state
+- Verify the same product cannot be added again
 
 <<<<<<< tests-26-35
 ### UC-025: Responsive layout check for Dashboard page

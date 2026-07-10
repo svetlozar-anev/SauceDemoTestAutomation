@@ -2,12 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using OpenQA.Selenium;
-using SauceDemo.Core.Utilities;
-
 #pragma warning disable SA1600
 namespace SauceDemo.Tests.Steps
 {
+    using OpenQA.Selenium;
     using SauceDemo.Core.TestData;
     using SauceDemo.UI.Components;
 

@@ -46,6 +46,8 @@ The solution is organized into three projects with clear separation of concerns:
 │   ├── appsettings.json
 │   └── TestConfig.cs
 ├── TestData/
+│   ├── LoginErrors.cs
+│   ├── ProductSort.cs
 │   └── TestUsers.cs
 ├── Utilities/
 │   ├── Logger.cs
@@ -54,8 +56,22 @@ The solution is organized into three projects with clear separation of concerns:
 └── SauceDemo.Core.csproj
 
 🧪 SauceDemo.Tests/
+├── Assertions/
+│   ├── CartAssertions.cs
+│   ├── DashboardAssertions.cs
+│   ├── DashboardMenuAssertions.cs
+│   ├── LoginAssertions.cs
+│   ├── ProductDetailAssertions.cs
+│   └── SauceLabsAssertions.cs
 ├── Base/
-│   └── BaseTest.cs
+│   ├── BaseTest.cs
+│   └── TestContext.cs
+├── Steps/
+│   ├── CartSteps.cs
+│   ├── DashboardMenuSteps.cs
+│   ├── DashboardSteps.cs
+│   ├── LoginSteps.cs
+│   └── ProductDetailSteps.cs
 ├── Tests/
 │   ├── DashboardTests.cs
 │   ├── ...Tests.cs
