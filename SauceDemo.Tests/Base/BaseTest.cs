@@ -2,12 +2,11 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using SauceDemo.Core.Config;
-
 #pragma warning disable SA1600
 namespace SauceDemo.Tests.Base
 {
     using OpenQA.Selenium;
+    using SauceDemo.Core.Config;
     using SauceDemo.Core.Utilities;
     
     /// <summary>
@@ -16,22 +15,22 @@ namespace SauceDemo.Tests.Base
     /// </summary>
     public class BaseTest
     {
-        protected IWebDriver Driver;
-        protected TestContext Context;
+        protected IWebDriver driver;
+        protected TestContext context;
 
         [SetUp]
         public void Setup()
         {
             WebDriverFactory.InitDriver(TestConfig.Browser);
 
-            Driver = WebDriverFactory.Driver;
-            Context = new TestContext(Driver);
+            driver = WebDriverFactory.Driver;
+            context = new TestContext(driver);
         }
 
         [TearDown]
         public void TearDown()
         {
-            Driver.Quit();
+            driver.Quit();
         }
     }
 }

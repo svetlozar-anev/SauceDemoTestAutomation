@@ -9,18 +9,18 @@ namespace SauceDemo.Tests.Steps
 
     public class DashboardMenuSteps
     {
-        private readonly DashboardMenu DashboardMenu;
+        private readonly DashboardMenu dashboardMenu;
 
-        public DashboardMenuSteps(DashboardMenu DashboardMenu)
+        public DashboardMenuSteps(DashboardMenu dashboardMenu)
         {
-            this.DashboardMenu = DashboardMenu;
+            this.dashboardMenu = dashboardMenu;
         }
 
         public void OpenAboutPage()
         {
-            DashboardMenu.Open();
-            DashboardMenu.WaitAboutToLoad();
-            DashboardMenu.ClickAbout();
+            dashboardMenu.Open();
+            dashboardMenu.WaitAboutToLoad();
+            dashboardMenu.ClickAbout();
         }
     }
 }

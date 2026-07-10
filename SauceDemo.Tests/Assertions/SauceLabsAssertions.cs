@@ -2,12 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using FluentAssertions;
-
 #pragma warning disable SA1600
 namespace SauceDemo.Tests.Assertions
 {
-    
+    using FluentAssertions;
     using SauceDemo.UI.Components;
     
     public class SauceLabsAssertions
